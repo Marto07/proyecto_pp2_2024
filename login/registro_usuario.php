@@ -1,15 +1,9 @@
-<?php 
-
-require_once("../config/database/conexion.php");
-$sql_perfil = "SELECT id_perfil,descripcion_perfil FROM perfil;";
-$registros = $conexion->query($sql_perfil);
-?>
 
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Document</title>
+	<title>Registro usuario</title>
 	<link rel="stylesheet" type="text/css" href="../css/style.css">
 </head>
 <body>
@@ -19,32 +13,48 @@ $registros = $conexion->query($sql_perfil);
 
 
 
-    <form class="login-form" action="resgistro_usuario_aplicar_alta.php" method="POST">
+    <form class="login-form" action="verificacion_correo/register.php" method="POST">
 
         <h1>Registrar Usuario</h1>
 
         <div class="form-group">
+            <label for="nombre">Nombre</label>
+            <input type="text" id="nombre" name="nombre" >
+        </div>
+
+        <div class="form-group">
+            <label for="apellido">Apellido</label>
+            <input type="text" id="apellido" name="apellido" >
+        </div>
+
+        <div class="form-group">
+            <label for="dni">Dni</label>
+            <input type="text" id="dni" name="dni" >
+        </div>
+
+         <div class="form-group">
+            <label for="email">Correo</label>
+            <input type="text" id="email" name="email" >
+        </div>
+
+        <div class="form-group">
             <label for="username">Usuario</label>
-            <input type="text" id="username" name="usuario" >
+            <input type="text" id="username" name="username" >
         </div>
 
         <div class="form-group">
             <label for="password">Contraseña</label>
-            <input type="password" id="password" name="contrasena" >
+            <input type="password" id="password" name="password" >
         </div>
 
         <div class="form-group">
+            <label for="password">Confirmar Contraseña</label>
+            <input type="password" id="password2" name="confirmar-contrasena" >
+        </div>		
 
-        	<label for="perfil">Perfil:</label>
-			<select name="perfil" id="perfil">
-				<option value="" disabled selected required>Seleccione un Perfil...</option>
-				<?php foreach ($registros as $reg) { ?>
-					<option value="<?php echo $reg['id_perfil']; ?>"><?php echo $reg['descripcion_perfil']; ?></option>
-				<?php } ?>
-			</select>
-			
-		</div>
-			
+        <div style="text-align: center;">
+            <span id="mensaje-error"></span>	
+        </div>
 
         <button type="submit">Ingresar</button>
 
@@ -55,72 +65,200 @@ $registros = $conexion->query($sql_perfil);
 $(document).ready(function() {
 
     //inicializamos los pan para ocultarlos
-    var spanUsuario      = $('span:eq(0)');
-    var spancontrasena  = $('span:eq(1)');
 
-    spanUsuario     .hide();
-    spancontrasena  .hide();
+    var spanerror = $('#mensaje-error');
+    spanerror.hide();
 
     $('form').on('submit', function(event) {
       //obtenemos variables para operar la validacion
-        var usuarioInput    = $('#username'); 
-        var contrasenaInput = $('#password');
+        var nombreInput         = $('#nombre'); 
+        var apellidoInput       = $('#apellido'); 
+        var dniInput            = $('#dni'); 
+        var emailInput          = $('#email');
+
+        var usuarioInput        = $('#username'); 
+        var contrasenaInput     = $('#password');
+        var contrasenaInput2    = $('#password2');
 
         //ocultamos por defecto los span PREVIO a su validacion
+        var nombre      = nombreInput        .val();
+        var apellido    = apellidoInput      .val();
+        var dni         = dniInput           .val();
+        var email       = emailInput         .val();
 
-        var usuario = usuarioInput.val();
-        var contrasena = contrasenaInput.val();
+        var usuario     = usuarioInput      .val();
+        var contrasena  = contrasenaInput   .val();
+        var contrasena2 = contrasenaInput2  .val();
 
         var regexusuario    = /^(?=.*[a-zA-Z])[a-zA-Z\d]{5,}$/;
         var regexcontrasena = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+        var regexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
-        if (!regexusuario.test(usuario)) {
+
+        if (nombre == '') {
+
             event.preventDefault();
-            usuarioInput.css('border', '2px solid #FF4500');
-            spanUsuario.css({
+            nombreInput.css('border', '2px solid #FF4500');
+            spanerror.css({
                 'display'           : 'inline-block',
                 'background-color'  : '#FF4500',
                 'margin'            : '10px',
                 'color'             : 'white',
                 'padding'           : '10px'
             });
-            spanUsuario.html('Usuario Invalido.');
-            alert('El nombre de usuario debe tener almenos 5 caracteres. No utilice caracteres especiales');
+            spanerror.html('Ingrese un Nombre');
+
         } else {
-            usuarioInput.css('border', '2px solid green');
-            spanUsuario.css({
+            nombreInput.css('border', '2px solid green');
+        }
+
+        if (apellido == '') {
+
+            event.preventDefault();
+            apellidoInput.css('border', '2px solid #FF4500');
+            spanerror.css({
                 'display'           : 'inline-block',
-                'background-color'  : 'green',
+                'background-color'  : '#FF4500',
                 'margin'            : '10px',
                 'color'             : 'white',
                 'padding'           : '10px'
             });
-            spanUsuario.html('Ok.');
+            spanerror.html('Ingrese un Apellido');
+
+        } else {
+            apellidoInput.css('border', '2px solid green');
+        }
+
+        if (dni == '') {
+
+            event.preventDefault();
+            dniInput.css('border', '2px solid #FF4500');
+            spanerror.css({
+                'display'           : 'inline-block',
+                'background-color'  : '#FF4500',
+                'margin'            : '10px',
+                'color'             : 'white',
+                'padding'           : '10px'
+            });
+            spanerror.html('Ingrese un DNI');
+
+        } else {
+            dniInput.css('border', '2px solid green');
+        }
+
+        if (email == '') {
+
+            event.preventDefault();
+            emailInput.css('border', '2px solid #FF4500');
+            spanerror.css({
+                'display'           : 'inline-block',
+                'background-color'  : '#FF4500',
+                'margin'            : '10px',
+                'color'             : 'white',
+                'padding'           : '10px'
+            });
+            spanerror.html('Ingrese un Correo');
+
+
+
+        } else if(!regexEmail.test(email)) {
+
+            event.preventDefault();
+            emailInput.css('border', '2px solid #FF4500');
+            spanerror.css({
+                'display'           : 'inline-block',
+                'background-color'  : '#FF4500',
+                'margin'            : '10px',
+                'color'             : 'white',
+                'padding'           : '10px'
+            });
+            spanerror.html('Correo no Valido');
+
+        } else {
+
+            emailInput.css('border', '2px solid green');
+
+        }
+
+        if (!regexusuario.test(usuario)) {
+
+            event.preventDefault();
+            usuarioInput.css('border', '2px solid #FF4500');
+            spanerror.css({
+                'display'           : 'inline-block',
+                'background-color'  : '#FF4500',
+                'margin'            : '10px',
+                'color'             : 'white',
+                'padding'           : '10px'
+            });
+
+            spanerror.html('Usuario Invalido');
+            alert('El nombre de usuario debe tener almenos 5 caracteres. No utilice caracteres especiales');
+
+        } else {
+
+            usuarioInput.css('border', '2px solid green');
+
         }
 
         if (!regexcontrasena.test(contrasena)) {
+
             event.preventDefault();
             contrasenaInput.css('border', '2px solid #FF4500');
-            spancontrasena.css({
+            spanerror.css({
                 'display'           : 'inline-block',
                 'background-color'  : '#FF4500',
                 'margin'            : '10px',
                 'color'             : 'white',
                 'padding'           : '10px'
             });
-            spancontrasena.html('contrasena Invalida.');
+
+            spanerror.html('Contraseña no Valida');
             alert('La contraseña debe tener almenos 8 caracteres y 1 número.');
+
         } else {
+
             contrasenaInput.css('border', '2px solid green');
-            spancontrasena.css({
+            
+        }
+
+        if(contrasena !== contrasena2) {
+
+            event.preventDefault();
+            contrasenaInput.css('border', '2px solid #FF4500');
+            contrasenaInput2.css('border', '2px solid #FF4500');
+            spanerror.css({
                 'display'           : 'inline-block',
-                'background-color'  : 'green',
+                'background-color'  : '#FF4500',
                 'margin'            : '10px',
                 'color'             : 'white',
                 'padding'           : '10px'
             });
-            spancontrasena.html('Ok.');
+
+            spanerror.html('Las contraseñas no coinciden');
+
+        } else if (contrasena === "" || contrasena2 === "") {
+
+            event.preventDefault();
+            contrasenaInput.css('border', '2px solid #FF4500');
+            contrasenaInput2.css('border', '2px solid #FF4500');
+
+            spanerror.css({
+                'display'           : 'inline-block',
+                'background-color'  : '#FF4500',
+                'margin'            : '10px',
+                'color'             : 'white',
+                'padding'           : '10px'
+            });
+
+            spanerror.html('Rellene las contraseñas');
+
+        } else {
+
+            contrasenaInput2.css('border', '2px solid green');
+            
         }
+
     });
 });
 </script>

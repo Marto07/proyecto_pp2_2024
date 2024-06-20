@@ -24,7 +24,7 @@
             <div class="form-group">
                 <label for="password">Contraseña</label>
                 <input type="text" id="password" name="password" >
-                <span>Error Contraseña</span>
+                <span>Contraseña incorrecta</span>
             </div>
 
             <button type="submit">Ingresar</button>
@@ -36,13 +36,13 @@
           <?php if($_GET['error'] == '1') { ?>
             
             <span style="text-align: center; display: block;color:white; background-color:#FF4500; font-size: 25px;">
-                error: usuario incorrecto
+                Error: Usuario Incorrecto
             </span>
 
         <?php } else { ?>
 
             <span style="text-align: center; display: block;color:white; background-color:#FF4500; font-size: 25px;">
-              error: contraseña incorrecta
+                Error: Contraseña incorrecta
             </span>
           <?php } ?>
         <?php }?>

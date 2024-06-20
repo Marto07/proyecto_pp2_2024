@@ -1,0 +1,39 @@
+<?php
+
+require 'vendor/autoload.php';
+
+// Configurar conexión a la base de datos
+$dsn = 'mysql:host=localhost;dbname=proyecto_pp2';
+$usuario = 'root';
+$contrasena = '';
+
+try {
+    $pdo = new PDO($dsn, $usuario, $contrasena);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    if (isset($_GET['email']) && isset($_GET['token'])) {
+        $email = $_GET['email'];
+        $token = $_GET['token'];
+
+        // Verificar el token en la base de datos
+        $stmt = $pdo->prepare("SELECT * FROM usuarios u JOIN contacto c ON u.rela_contacto = c.id_contacto WHERE c.descripcion_contacto = ? AND u.token = ?");
+        $stmt->execute([$email, $token]);
+        $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($usuario) {
+            // Actualizar estado del usuario a 'verificado'
+            $stmt = $pdo->prepare("UPDATE usuarios u
+                                    JOIN contacto c ON u.rela_contacto = c.id_contacto
+                                    SET u.estado = 'verificado' WHERE c.descripcion_contacto = ?");
+            $stmt->execute([$email]);
+            echo '¡Tu correo electrónico ha sido verificado correctamente!';
+        } else {
+            echo 'Token inválido o correo electrónico no encontrado.';
+        }
+    } else {
+        echo 'Parámetros insuficientes para la verificación.';
+    }
+} catch (PDOException $e) {
+    echo 'Error: ' . $e->getMessage();
+}
+?>
