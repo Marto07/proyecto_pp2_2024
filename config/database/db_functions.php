@@ -1,0 +1,454 @@
+<?php 
+
+	require_once('conexion.php');
+
+	function obtenerModulos() {
+
+		global $conexion;
+
+		$sql = "SELECT 	
+						id_modulo,
+						descripcion_modulo
+					FROM
+						modulo";
+
+		if ($registros = $conexion->query($sql)) {
+			return $registros;
+		} else {
+			return false;
+		}
+
+	}
+
+	function obtenerPerfiles() {
+
+		global $conexion;
+
+		$sql = "SELECT 	
+						id_perfil,
+						descripcion_perfil
+					FROM
+						perfil";
+
+		if ($registros = $conexion->query($sql)) {
+			return $registros;
+		} else {
+			return false;
+		}
+
+	}
+
+	function obtenerPerfilesModulos() {
+
+		global $conexion;
+
+		$sql = "SELECT 	
+						id_asignacion_perfil_modulo,
+						descripcion_modulo,
+						descripcion_perfil
+					FROM
+						asignacion_perfil_modulo apm
+					JOIN
+						modulo m
+					ON
+						apm.rela_modulo = m.id_modulo
+					JOIN 
+						perfil p
+					ON
+						apm.rela_perfil = p.id_perfil";
+
+		if ($registros = $conexion->query($sql)) {
+			return $registros;
+		} else {
+			return false;
+		}
+
+	}
+
+	function obtenerEstadoReservas() {
+
+		global $conexion;
+
+		$sql = "SELECT 	
+						id_estado_reserva,
+						descripcion_estado_reserva
+					FROM
+						estado_reserva
+					WHERE
+						estado IN(1)";
+
+		if ($registros = $conexion->query($sql)) {
+			return $registros;
+		} else {
+			return false;
+		}
+
+	}
+
+	function obtenerControles() {
+
+		global $conexion;
+
+		$sql = "SELECT 	
+						id_estado_control,
+						descripcion_estado_control
+					FROM
+						estado_control
+					WHERE
+						estado IN(1)";
+
+		if ($registros = $conexion->query($sql)) {
+			return $registros;
+		} else {
+			return false;
+		}
+
+	}
+
+	function obtenerBarrios() {
+
+		global $conexion;
+
+		$sql = "SELECT 	
+						id_barrio,
+						descripcion_barrio,
+						descripcion_localidad
+					FROM
+						barrio
+					JOIN
+						localidad
+					ON
+						rela_localidad = id_localidad
+					WHERE
+						barrio.estado IN(1)";
+
+		if ($registros = $conexion->query($sql)) {
+			return $registros;
+		} else {
+			return false;
+		}
+
+	}
+
+	function obtenerFormatoDeportes() {
+
+		global $conexion;
+
+		$sql = "SELECT 	
+						id_formato_deporte,
+						descripcion_formato_deporte,
+						descripcion_deporte
+					FROM
+						formato_deporte
+					JOIN
+						deporte
+					ON
+						rela_deporte = id_deporte
+					WHERE
+						formato_deporte.estado IN(1)";
+
+		if ($registros = $conexion->query($sql)) {
+			return $registros;
+		} else {
+			return false;
+		}
+
+	}
+
+	function obtenerLocalidades() {
+
+		global $conexion;
+
+		$sql = "SELECT 	
+						id_localidad,
+						descripcion_localidad,
+						descripcion_provincia
+					FROM
+						localidad
+					JOIN
+						provincia
+					ON
+						rela_provincia = id_provincia
+					WHERE
+						localidad.estado IN(1)";
+
+		if ($registros = $conexion->query($sql)) {
+			return $registros;
+		} else {
+			return false;
+		}
+
+	}
+
+	function obtenerProvincias() {
+
+		global $conexion;
+
+		$sql = "SELECT 	
+						id_provincia,
+						descripcion_provincia
+					FROM
+						provincia
+					WHERE
+						estado IN(1)";
+
+		if ($registros = $conexion->query($sql)) {
+			return $registros;
+		} else {
+			return false;
+		}
+
+	}
+
+	function obtenerServicios() {
+
+		global $conexion;
+
+		$sql = "SELECT 	
+						id_servicio,
+						descripcion_servicio
+					FROM
+						servicio
+					WHERE
+						estado IN(1)";
+
+		if ($registros = $conexion->query($sql)) {
+			return $registros;
+		} else {
+			return false;
+		}
+
+	}
+
+	function obtenerSexos() {
+
+		global $conexion;
+
+		$sql = "SELECT 	
+						id_sexo,
+						descripcion_sexo
+					FROM
+						sexo
+					WHERE
+						estado IN(1)";
+
+		if ($registros = $conexion->query($sql)) {
+			return $registros;
+		} else {
+			return false;
+		}
+
+	}
+
+	function obtenerTipoContactos() {
+
+		global $conexion;
+
+		$sql = "SELECT 	
+						id_tipo_contacto,
+						descripcion_tipo_contacto
+					FROM
+						tipo_contacto
+					WHERE
+						estado IN(1)";
+
+		if ($registros = $conexion->query($sql)) {
+			return $registros;
+		} else {
+			return false;
+		}
+
+	}
+
+	function obtenerTipoDocumentos() {
+
+		global $conexion;
+
+		$sql = "SELECT 	
+						id_tipo_documento,
+						descripcion_tipo_documento
+					FROM
+						tipo_documento
+					WHERE
+						estado IN(1)";
+
+		if ($registros = $conexion->query($sql)) {
+			return $registros;
+		} else {
+			return false;
+		}
+
+	}
+
+	function obtenerDeportes() {
+
+		global $conexion;
+
+		$sql = "SELECT 	
+						id_deporte,
+						descripcion_deporte
+					FROM
+						deporte
+					WHERE
+						estado IN(1)";
+
+		if ($registros = $conexion->query($sql)) {
+			return $registros;
+		} else {
+			return false;
+		}
+
+	}
+
+	function obtenerTipoTerrenos() {
+
+		global $conexion;
+
+		$sql = "SELECT 	
+						id_tipo_terreno,
+						descripcion_tipo_terreno
+					FROM
+						tipo_terreno
+					WHERE
+						estado IN(1)";
+
+		if ($registros = $conexion->query($sql)) {
+			return $registros;
+		} else {
+			return false;
+		}
+
+	}
+
+	function obtenerPersonas() {
+		global $conexion;
+
+		$sql = "SELECT 	nombre,
+						apellido,
+						dni,	
+						fecha_nacimiento
+					FROM
+						persona
+					WHERE
+						estado IN(1)";
+
+		if ($registros = $conexion->query($sql)) {
+			return $registros;
+		} else {
+			return false;
+		}
+	}
+
+	function obtenerComplejos() {
+		global $conexion;
+		
+		$sql = "SELECT 	descripcion_complejo,
+						direccion						
+					FROM
+						complejo
+					WHERE
+						estado IN(1)";
+
+		if ($registros = $conexion->query($sql)) {
+			return $registros;
+		} else {
+			return false;
+		}
+	}
+
+	function obtenerZonasFutbol() {
+		global $conexion;
+
+		$sql = "SELECT 	
+						id_zona,
+						descripcion_zona,
+                        dimension,
+						terreno,
+						tipo_futbol,
+						descripcion_complejo						
+					FROM
+						zona
+					JOIN
+						servicio
+					ON
+						zona.rela_servicio = servicio.id_servicio
+                    JOIN 
+                    	complejo
+					ON 
+						zona.rela_complejo = complejo.id_complejo
+					WHERE
+						descripcion_servicio LIKE 'cancha'
+					AND
+						zona.estado IN(1)
+					ORDER BY (zona.id_zona)";
+
+		if ($registros = $conexion->query($sql)) {
+			return $registros;
+		} else {
+			return false;
+		}
+	}
+
+	function obtenerInsumos() {
+		global $conexion;
+
+		$sql = "SELECT 	
+						insumo.id_insumo,
+						insumo.descripcion_insumo,
+						insumo.cantidad,
+						insumo.fecha_alta,
+						insumo.categoria,
+						estado_insumo.descripcion_estado_insumo					
+					FROM
+						insumo
+					JOIN
+						estado_insumo
+					ON
+						insumo.rela_estado_insumo = estado_insumo.id_estado_insumo
+					WHERE
+						insumo.estado IN(1)
+					ORDER BY (id_insumo)";
+
+		if ($registros = $conexion->query($sql)) {
+			return $registros;
+		} else {
+			return false;
+		}
+
+	}
+
+	function obtenerEmpleados() {
+		global $conexion;
+
+		$sql = "SELECT 	
+						empleado.id_empleado,
+						persona.nombre,
+						persona.apellido,
+						persona.dni,
+						persona.cuil,
+						persona.fecha_nacimiento,
+						empleado.empleado_cargo,
+						empleado.fecha_alta,
+						complejo.descripcion_complejo
+					FROM
+						empleado
+					JOIN
+						persona
+					ON
+						empleado.rela_persona = persona.id_persona
+					JOIN
+						complejo
+					ON
+						empleado.rela_complejo = complejo.id_complejo
+					WHERE
+						empleado.estado IN(1)
+					ORDER BY (empleado.id_empleado)";
+
+		if ($registros = $conexion->query($sql)) {
+			return $registros;
+		} else {
+			return false;
+		}
+
+	}
+ ?>

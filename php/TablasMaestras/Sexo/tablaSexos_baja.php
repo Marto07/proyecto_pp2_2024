@@ -1,0 +1,53 @@
+<?php 
+require_once('../../../config/database/conexion.php');
+    session_start();
+
+    if (!isset($_SESSION['usuario']) || !isset($_SESSION['id_perfil'])) {
+        header("Location: ../../../error403.php");
+        exit();
+    }
+
+    $modulo = "Personas";
+
+    $sql_acceso = "SELECT COUNT(*) AS tiene_acceso
+                    FROM 
+                        asignacion_perfil_modulo asp
+                    JOIN 
+                        perfil p 
+                    ON 
+                        asp.rela_perfil = p.id_perfil
+                    JOIN 
+                        modulo m ON asp.rela_modulo = m.id_modulo
+                    WHERE 
+                        p.descripcion_perfil 
+                    LIKE 
+                        '{$_SESSION['perfil']}' 
+                    AND 
+                        m.descripcion_modulo 
+                    LIKE 
+                        '{$modulo}'";
+
+    $resultado = $conexion->query($sql_acceso);
+
+    if ($reg = $resultado->fetch_assoc()) {
+        if ($reg['tiene_acceso'] == 0) {
+            header("Location: ../../../error403.php");
+            exit();
+        }
+    }
+
+$id = $_GET['id_sexo'];
+
+//eliminar el producto
+$sql = "UPDATE sexo 
+        	SET
+        		estado = 0
+        	WHERE id_sexo = $id;";
+
+//ejecutar la consulta o error
+if ($conexion->query($sql)) {
+    header("Location: tablasexos.php"); 
+} else {
+    echo "error al actualizar el registro: " . $conexion->error;
+}
+?>
