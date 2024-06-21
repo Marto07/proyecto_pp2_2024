@@ -1,11 +1,12 @@
 <?php 
 
-	#URL BASE PARA CSS
-	$nombreProyecto = "PROYECTO_PP1_2023";
-	define('BASE_URL', 'http://'. $_SERVER['HTTP_HOST']. '/'. $nombreProyecto. '/');
+$ubicacionActualPath = __DIR__;
+$nombreDirectorio  = 'PROYECTO_PP2_2024';
 
-	#RUTA RAIZ PARA INCLUDES Y TODA ESA MADRE
-	$rutaActual = __DIR__;
-	define('RAIZ', realpath($rutaActual . '/..' . '/'));
+define('RUTA', $ubicacionActualPath . '/' .'../');
 
- ?>
+define('BASE_URL', 'HTTP://' . $_SERVER['HTTP_HOST'] . '/' .$nombreDirectorio. '/'); 
+
+
+
+?>

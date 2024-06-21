@@ -37,13 +37,49 @@
     }
 
 
-    //VALIDACION DE PERMISOS SIN BASE DE DATOS
-    /*$perfiles_permitidos = ['administrador', 'Personal Administrativo'];
-    if (!in_array($_SESSION['perfil'], $perfiles_permitidos)) {
-        echo "Acceso denegado. No tienes permiso para acceder a esta página.";
-        exit();
-    }*/
+    $sql = "SELECT
+    			persona.nombre,
+    			persona.apellido,
+    			documento.descripcion_documento,
+    			sexo.descripcion_sexo
+    		FROM
+    			persona 
+    		JOIN 
+    			contacto
+    		ON
+    			contacto.rela_persona = persona.id_persona
+            JOIN 
+    			documento
+    		ON
+    			persona.rela_documento = documento.id_documento
+    		JOIN
+    			sexo
+    		ON
+    			persona.rela_sexo = sexo.id_sexo
+    		WHERE
+				contacto.descripcion_contacto = ?
+    		";
+
+    $stmt = $conexion->prepare($sql);
+    $stmt->bind_param('i', $_SESSION['email']);
+    $stmt->execute();
+    $resultado = $stmt->get_result();
+    $datos_personales = $resultado->fetch_assoc();
+
+    if($datos_personales) {
+
+    	$nombre 	= $datos_personales['nombre'];
+    	$apellido 	= $datos_personales['apellido'];
+    	$documento 	= $datos_personales['descripcion_documento'];
+    	$sexo 		= $datos_personales['descripcion_sexo'];
+
+    }
+
+    $stmt->close();
+    $conexion->close();
+
  ?>
+
 
 <!DOCTYPE html>
 <html>
@@ -113,22 +149,60 @@
 	<form>
 		<h1>Datos de Usuario</h1>
 
-		<div class="modificar">
-			<a href="modificar_mis_datos.php"><img src="../../assets/icons/editar_amarillo.png"></a>
+		
+
+		<fieldset>
+			<legend align="center">Informacion Personal</legend>
+
+			<div class="modificar">
+				<a href="modificar_mis_datos.php?datos_personales"><img src="../../assets/icons/editar_azul.png"></a>
+				<br>
+			</div>
+
+			<label for="nombre">nombre:</label>
+			<h3 name="nombre"><?php echo $nombre; ?></h3>
+			<br>
+
+			<label for="apellido">apellido:</label>
+			<h3 name="apellido"><?php echo $apellido; ?></h3>
+			<br>
+
+			<label for="dni">dni:</label>
+			<h3 name="dni"><?php echo $documento; ?></h3>
+			<br>
+
+			<label for="sexo">sexo:</label>
+			<h3 name="sexo"><?php echo $sexo; ?></h3>
+			<br>
+
+		</fieldset>
+
+		<fieldset>
+			<legend align="center">Datos del Usuario</legend>
+
+			<div class="modificar">
+				<a href="modificar_mis_datos.php?datos_de_usuario"><img src="../../assets/icons/editar_azul.png"></a>
+				<br>
+			</div>
+
+			<label for="email">Email:</label>
+			<h3 name="email"><?php echo $_SESSION['email']; ?></h3>
+			<br>
+
+			<label for="usuario">Usuario:</label>
+			<h3 name="usuario"><?php echo $_SESSION['usuario']; ?></h3>
+			<br>
+
+			<label for="perfil">Perfil:</label>
+			<h3 name="perfil"><?php echo $_SESSION['perfil']; ?></h3>
+			<br>
+
+		</fieldset>
+
+		<div class="modificar" style="text-align: center; margin: 10px">
+			<a href="modificar_mis_datos.php" >Cambiar contrase&ntilde;a</a>
 			<br>
 		</div>
-
-		<label for="usuario">Usuario:</label>
-		<h3 name="usuario"><?php echo $_SESSION['usuario']; ?></h3>
-		<br>
-
-		<label for="perfil">Perfil:</label>
-		<h3 name="perfil"><?php echo $_SESSION['perfil']; ?></h3>
-		<br>
-
-		<label for="contrasena">Contraseña:</label>
-		<h3 name="contrasena">*********</h3>
-		<br>
 
 
 	</form>

@@ -7,7 +7,7 @@
         exit();
     }
 
-    $modulo = "Personas";
+    $modulo = "Inicio";
 
     $sql_acceso = "SELECT COUNT(*) AS tiene_acceso
                     FROM 
@@ -36,13 +36,6 @@
         }
     }
 
-
-    //VALIDACION DE PERMISOS SIN BASE DE DATOS
-    /*$perfiles_permitidos = ['administrador', 'Personal Administrativo'];
-    if (!in_array($_SESSION['perfil'], $perfiles_permitidos)) {
-        echo "Acceso denegado. No tienes permiso para acceder a esta página.";
-        exit();
-    }*/
 ?>
 
 <!DOCTYPE html>

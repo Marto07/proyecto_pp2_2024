@@ -36,13 +36,17 @@
         }
     }
 
+    if(isset($_GET['datos_personales'])) {
+    	echo "datos personales";
+    	die;
+    }
 
-    //VALIDACION DE PERMISOS SIN BASE DE DATOS
-    /*$perfiles_permitidos = ['administrador', 'Personal Administrativo'];
-    if (!in_array($_SESSION['perfil'], $perfiles_permitidos)) {
-        echo "Acceso denegado. No tienes permiso para acceder a esta página.";
-        exit();
-    }*/
+    if(isset($_GET['datos_de_usuario'])) {
+    	echo "datos de usuario";
+    	die;
+    }
+
+
 ?>
 
 <!DOCTYPE html>

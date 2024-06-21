@@ -1,12 +1,24 @@
 <?php
 require_once('../config/database/conexion.php');
-$user       = $_POST['username'];
+$email       = $_POST['email'];
 $password   = $_POST['password'];
 
 //echo $user;
 //echo $name;
 
-$sql="SELECT * FROM usuario WHERE nombre_usuario LIKE '{$user}'";
+$sql="SELECT 
+            usuarios.id_usuario,
+            usuarios.password
+        FROM 
+            usuarios
+        JOIN
+            contacto
+        ON
+            usuarios.rela_contacto = contacto.id_contacto
+        WHERE 
+            contacto.descripcion_contacto LIKE '{$email}'
+        AND
+            usuarios.estado LIKE 'verificado'";
 
 $datos = $conexion->query($sql);
 
@@ -15,23 +27,28 @@ if($datos->num_rows == 1) {
 
     $row = $datos->fetch_assoc();
 
-    if(password_verify($password, $row['contrasena'])) {
+    if(password_verify($password, $row['password'])) {
 
-        $sql = "SELECT id_usuario ,nombre_usuario ,id_perfil, descripcion_perfil 
+        $sql = "SELECT id_usuario ,username ,id_perfil, descripcion_perfil, descripcion_contacto 
             FROM 
-                usuario 
+                usuarios 
             JOIN 
                 perfil
             ON
-                rela_perfil = id_perfil
+                usuarios.rela_perfil = perfil.id_perfil
+            JOIN
+                contacto
+            ON 
+                usuarios.rela_contacto = contacto.id_contacto
             WHERE 
-                nombre_usuario LIKE '{$user}'";
+                contacto.descripcion_contacto LIKE '{$email}'";
 
         $datos = $conexion->query($sql);
 
         while ($reg = $datos->fetch_assoc()) {
         	$id_usuario = $reg['id_usuario'];
-            $usuario    = $reg['nombre_usuario'];
+            $usuario    = $reg['username'];
+            $email      = $reg['descripcion_contacto'];
             $id_perfil  = $reg['id_perfil'];
             $perfil     = $reg['descripcion_perfil'];
 
@@ -41,6 +58,7 @@ if($datos->num_rows == 1) {
 
         $_SESSION['id_usuario'] =   $id_usuario;
         $_SESSION['usuario']    =   $usuario;
+        $_SESSION['email']      =   $email;
         $_SESSION['id_perfil']  =   $id_perfil;
         $_SESSION['perfil']     =   $perfil;
 

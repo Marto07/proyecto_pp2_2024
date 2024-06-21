@@ -40,7 +40,7 @@ try {
         $stmt->execute([$email, $id_persona, 1]);
         $id_contacto = $pdo->lastInsertId();
 
-        // Insertar usuario en la base de datos
+        // Insertar el usuario
         $stmt = $pdo->prepare("INSERT INTO usuarios (username, password,token, rela_contacto, rela_perfil) VALUES (?, ?, ?, ?, ?)");
         $stmt->execute([$username, $contrasena_hasheada,$token, $id_contacto, 1]);
 
@@ -66,7 +66,7 @@ try {
         $mail->Body    = $message;
 
         $mail->send();
-        echo 'Registro exitoso. Por favor, verifica tu correo electrónico.';
+        header("Location: ../inicio_sesion.php?correo_enviado");
     }
 } catch (PDOException $e) {
     echo 'Error: ' . $e->getMessage();
