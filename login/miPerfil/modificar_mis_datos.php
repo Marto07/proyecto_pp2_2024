@@ -1,5 +1,6 @@
 <?php   
     require_once("../../config/database/conexion.php");
+    require_once("../../config/database/db_functions.php");
     session_start();
 
     if (!isset($_SESSION['usuario']) || !isset($_SESSION['id_perfil'])) {
@@ -36,49 +37,9 @@
         }
     }
 
-    if(isset($_GET['datos_personales'])) {
-    	$formulario = 
+    
 
-    		'<form action="aplicar_modificar_mis_datos.php" method="POST">
-				<h1>Modificar mis Datos</h1>
-				<input type="hidden" name="tipo_formulario" value="datos_personales">
-	    		<label for="nombre">nombre:</label>
-				<input type="text" id="username" name="nombre" value="' . $_SESSION['datos_personales']['nombre'] . '">
-				<br>
-
-				<label for="apellido">apellido:</label>
-				<input type="text" id="username" name="apellido" value="' . $_SESSION['datos_personales']['apellido'] .'">
-				<br>
-
-				<label for="documento">documento:</label>
-				<input type="text" id="username" name="documento" value="' . $_SESSION['datos_personales']['descripcion_documento'] . '">
-				<br>
-
-				<label for="sexo">sexo:</label>
-				<input type="text" id="username" name="sexo" value="' . $_SESSION['datos_personales']['descripcion_sexo'] . '">
-				<br>
-				<button type="submit">Enviar</button>
-			</form>';
-    }
-
-    if(isset($_GET['datos_de_usuario'])) {
-    	$formulario = 
-    		'<form action="aplicar_modificar_mis_datos.php" method="POST">
-				<h1>Modificar mis Datos</h1>
-				<input type="hidden" name="tipo_formulario" value="datos_de_usuario">
-
-				<label for="email">E-mail:</label>
-				<input type="text" id="email" name="email" value="' . $_SESSION['email'] .'">
-				<br>
-
-	    		<label for="username">Usuario:</label>
-				<input type="text" id="username" name="username" value="' . $_SESSION['usuario'] . '">
-				<br>
-
-				
-				<button type="submit">Enviar</button>
-			</form>';
-    }
+    
 
 
 ?>
@@ -141,6 +102,17 @@
 		  box-shadow: 0px 0px 10px rgba(138, 195, 74, 0.2);
 		}
 
+		form select {
+		    width: 100%; /* Ancho completo del div form-group */
+		    padding: 10px; /* Espacio interno */
+		    font-size: 16px; /* Tamaño de fuente */
+		    border: 1px solid #ccc; /* Borde delgada gris */
+		    border-radius: 5px; /* Bordes redondeados */
+		    background-color: #f9f9f9; /* Color de fondo */
+		    color: #333; /* Color de texto */
+		    outline: none; /* Quita el contorno al enfocar */
+		    transition: border-color 0.3s ease; /* Transición suave para el borde */
+		}
 		/* Estilos para el botón de tipo "submit" */
 		button[type="submit"] {
 		  background-color: #8BC34A;
@@ -179,9 +151,58 @@
 <body>
 <a class="back-button" href="../../index_tincho.php">Volver</a>
 
+		<?php 
+			if(isset($_GET['datos_personales'])) { 
+    	 	$registros_sexo = obtenerSexos(); 
+    	?>
+    	
+    		<form action="aplicar_modificar_datos_personales.php" method="POST">
+				<h1>Modificar mis Datos</h1>
+				<input type="hidden" name="tipo_formulario" value="datos_personales">
+	    		<label for="nombre">nombre:</label>
+				<input type="text" id="username" name="nombre" value="<?php echo $_SESSION['datos_personales']['nombre'];?>">
+				<br>
 
+				<label for="apellido">apellido:</label>
+				<input type="text" id="username" name="apellido" value="<?php echo $_SESSION['datos_personales']['apellido'];?>">
+				<br>
 
-		<?php echo $formulario; ?>
+				<label for="documento">documento:</label>
+				<input type="text" id="username" name="documento" value="<?php echo $_SESSION['datos_personales']['descripcion_documento'];?>">
+				<br>
+
+				<label for="sexo">sexo:</label>
+				<select name="sexo">
+					<option selected value="" disabled>Seleccione un sexo...</option>
+					<?php foreach($registros_sexo as $reg) { ?>
+						<option value="<?php echo $reg['id_sexo'];?>" <?php if($reg['descripcion_sexo'] == $_SESSION['datos_personales']['descripcion_sexo']) {echo 'selected';} ?>> <?php echo $reg['descripcion_sexo'];?></option>  
+					<?php } ?> 
+
+				</select>
+				<br>
+
+				<button type="submit">Enviar</button>
+			</form>
+    	<?php } ?>
+
+    	<?php if(isset($_GET['datos_de_usuario'])) { ?>
+
+    		<form action="aplicar_modificar_mis_datos.php" method="POST">
+				<h1>Modificar mis Datos</h1>
+				<input type="hidden" name="tipo_formulario" value="datos_de_usuario">
+
+				<label for="email">E-mail:</label>
+				<input type="text" id="email" name="email" value=" <?php echo $_SESSION['email'];?>">
+				<br>
+
+	    		<label for="username">Usuario:</label>
+				<input type="text" id="username" name="username" value="<?php echo $_SESSION['usuario'];?>">
+				<br>
+
+				
+				<button type="submit">Enviar</button>
+			</form>
+    	<?php } ?>
 
 		
 

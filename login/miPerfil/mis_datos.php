@@ -6,6 +6,7 @@
         header("Location: ../../error403.php");
         exit();
     }
+    echo $_SERVER['PHP_SELF'];
 
     $modulo = "Personas";
 
