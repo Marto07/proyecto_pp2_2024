@@ -187,7 +187,7 @@
 
     	<?php if(isset($_GET['datos_de_usuario'])) { ?>
 
-    		<form action="aplicar_modificar_mis_datos.php" method="POST">
+    		<form action="aplicar_modificar_datos_de_usuario.php" method="POST">
 				<h1>Modificar mis Datos</h1>
 				<input type="hidden" name="tipo_formulario" value="datos_de_usuario">
 
