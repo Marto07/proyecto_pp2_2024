@@ -37,13 +37,47 @@
     }
 
     if(isset($_GET['datos_personales'])) {
-    	echo "datos personales";
-    	die;
+    	$formulario = 
+
+    		'<form action="aplicar_modificar_mis_datos.php" method="POST">
+				<h1>Modificar mis Datos</h1>
+				<input type="hidden" name="tipo_formulario" value="datos_personales">
+	    		<label for="nombre">nombre:</label>
+				<input type="text" id="username" name="nombre" value="' . $_SESSION['datos_personales']['nombre'] . '">
+				<br>
+
+				<label for="apellido">apellido:</label>
+				<input type="text" id="username" name="apellido" value="' . $_SESSION['datos_personales']['apellido'] .'">
+				<br>
+
+				<label for="documento">documento:</label>
+				<input type="text" id="username" name="documento" value="' . $_SESSION['datos_personales']['descripcion_documento'] . '">
+				<br>
+
+				<label for="sexo">sexo:</label>
+				<input type="text" id="username" name="sexo" value="' . $_SESSION['datos_personales']['descripcion_sexo'] . '">
+				<br>
+				<button type="submit">Enviar</button>
+			</form>';
     }
 
     if(isset($_GET['datos_de_usuario'])) {
-    	echo "datos de usuario";
-    	die;
+    	$formulario = 
+    		'<form action="aplicar_modificar_mis_datos.php" method="POST">
+				<h1>Modificar mis Datos</h1>
+				<input type="hidden" name="tipo_formulario" value="datos_de_usuario">
+
+				<label for="email">E-mail:</label>
+				<input type="text" id="email" name="email" value="' . $_SESSION['email'] .'">
+				<br>
+
+	    		<label for="username">Usuario:</label>
+				<input type="text" id="username" name="username" value="' . $_SESSION['usuario'] . '">
+				<br>
+
+				
+				<button type="submit">Enviar</button>
+			</form>';
     }
 
 
@@ -145,24 +179,11 @@
 <body>
 <a class="back-button" href="../../index_tincho.php">Volver</a>
 
-	<form action="verificar_contrasena.php" method="POST">
-		<h1>Modificacion de Usuario</h1>
 
 
-		<label for="usuario">Usuario:</label>
-		<input type="text" id="username" name="usuario" value="<?php echo $_SESSION['usuario']; ?>">
-		<br>
+		<?php echo $formulario; ?>
 
-		<label for="contrasena_actual">Contraseña Acutal:</label>
-		<input type="text" id="password1" name="contrasena_actual">
-		<br>
-
-		<label for="contrasena_nueva">Nueva Contraseña:</label>
-		<input type="text" id="password2" name="contrasena_nueva">
-		<br>
-
-		<button type="submit">Enviar</button>
-	</form>
+		
 
 	<?php if(isset($_GET["error"])) { ?>
 
@@ -181,54 +202,36 @@
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script>
-$(document).ready(function() {
+	$(document).ready(function() {
 
-    $('form').on('submit', function(event) {
+	    $('form').on('submit', function(event) {
 
-      //obtenemos variables para operar la validacion
-        var usuarioInput    = $('#username'); 
-        var contrasena1Input = $('#password1');
-        var contrasena2Input = $('#password2');
+	      //obtenemos variables para operar la validacion
+	        var usuarioInput    = $('#username'); 
+	        
 
-        //ocultamos por defecto los span PREVIO a su validacion
+	        //ocultamos por defecto los span PREVIO a su validacion
 
-        var usuario = usuarioInput.val();
-        var contrasena1 = contrasena1Input.val();
-        var contrasena2 = contrasena2Input.val();
+	        var usuario = usuarioInput.val();
+	       
 
-        var regexusuario    = /^(?=.*[a-zA-Z])[a-zA-Z\d]{5,}$/;
-        var regexcontrasena1 = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
-        var regexcontrasena2 = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+	        var regexusuario    = /^(?=.*[a-zA-Z])[a-zA-Z\d]{5,}$/;
+	        
+/*
+	        if (!regexusuario.test(usuario)) {
+	            event.preventDefault();
+	            usuarioInput.css('border', '2px solid #FF4500');
+	           
+	    
+	            alert('Almenos 5 caracteres. No utilice caracteres especiales');
+	        } else {
+	            usuarioInput.css('border', '2px solid green');
+	           
+	        }*/
 
-        if (!regexusuario.test(usuario)) {
-            event.preventDefault();
-            usuarioInput.css('border', '2px solid #FF4500');
-           
-    
-            alert('Almenos 5 caracteres. No utilice caracteres especiales');
-        } else {
-            usuarioInput.css('border', '2px solid green');
-           
-        }
-
-        if (!regexcontrasena1.test(contrasena1)) {
-            event.preventDefault();
-            contrasena1Input.css('border', '2px solid #FF4500');
-            
-            alert('La contraseña debe tener almenos 8 caracteres y 1 número.');
-        } else {
-            contrasena1Input.css('border', '2px solid green');
-        }
-
-        if (!regexcontrasena2.test(contrasena2)) {
-            event.preventDefault();
-            contrasena2Input.css('border', '2px solid #FF4500');
-            alert('La nueva contraseña debe tener almenos 8 caracteres y 1 número.');
-        } else {
-            contrasena2Input.css('border', '2px solid green');
-        }
-    });
-});
+	        
+	    });
+	});
 </script>
 </body>
 </html>

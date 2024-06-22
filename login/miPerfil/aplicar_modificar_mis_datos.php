@@ -1,12 +1,19 @@
 <?php 
 	session_start();
 	require_once("../../config/database/conexion.php");
-	echo $_SESSION['usuario'];
+	
+	if ($_GET['datos_personales']) {
+		$nombre 	= $_POST['nombre'];
+		$apellido 	= $_POST['apellido'];
+		$dni 		= $_POST['documento'];
+		$sexo 		= $_POST['sexo'];
+	}
 
-	$usuario    = $_POST['usuario'];
-	$contrasena = $_POST['contrasena_nueva'];
-
-	$contrasena_hasheada = password_hash($contrasena, PASSWORD_DEFAULT);
+	if($_GET['datos_de_usuario']) {
+		$email 		= $_POST['email'];
+		$usuario	= $_POST['username'];
+	}
+	
 
 
 	$sql = "UPDATE usuario SET 
