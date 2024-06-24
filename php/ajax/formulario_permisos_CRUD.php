@@ -1,3 +1,23 @@
+
+
+<?php 
+
+    require_once("../../config/database/conexion.php");
+    require_once("../../config/database/db_functions.php");
+
+    $id_perfil = 1;
+    $perfiles = obtenerPerfiles();
+    $modulos = obtenerModulos();
+    $sql_permisos = "SELECT rela_modulo FROM asignacion_perfil_modulo WHERE rela_perfil = ?";
+    $stmt_permisos = $conexion->prepare($sql_permisos);
+    $stmt_permisos->bind_param("i", $id_perfil);
+    $stmt_permisos->execute();
+    $result_permisos = $stmt_permisos->get_result();
+    $permisos = $result_permisos->fetch_all(MYSQLI_ASSOC);
+    $modulos_permitidos = array_column($permisos, 'rela_modulo');
+
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,20 +27,20 @@
 <body>
     <h2>Gestión de Permisos</h2>
     <form id="permisosForm">
-        <label for="rol">Seleccionar Rol:</label>
-        <select id="rol" name="rol" onchange="cargarPermisos(this.value)">
-            <?php while($rol = $result_roles->fetch_assoc()): ?>
-                <option value="<?php echo $rol['id']; ?>" <?php if($rol['id'] == $rol_id) echo 'selected'; ?>>
-                    <?php echo $rol['nombre']; ?>
+        <label for="perfil">Seleccionar perfil:</label>
+        <select id="perfil" name="perfil" onchange="cargarPermisos(this.value)">
+            <?php while($perfil = $perfiles->fetch_assoc()): ?>
+                <option value="<?php echo $perfil['id_perfil']; ?>" >
+                    <?php echo $perfil['descripcion_perfil']; ?>
                 </option>
             <?php endwhile; ?>
         </select>
 
         <div id="modulos">
-            <?php while($modulo = $result_modulos->fetch_assoc()): ?>
+            <?php while($modulo = $modulos->fetch_assoc()): ?>
                 <div>
-                    <input type="checkbox" name="modulos[]" value="<?php echo $modulo['id']; ?>">
-                    <?php echo $modulo['nombre']; ?>
+                    <input type="checkbox" name="modulos[]" value="<?php echo $modulo['id_modulo']; ?>">
+                    <?php echo $modulo['descripcion_modulo']; ?>
                 </div>
             <?php endwhile; ?>
         </div>
@@ -29,12 +49,11 @@
     </form>
 
     <script>
-        // Incluir aquí el script jQuery
-        function cargarPermisos(rolId) {
+        function cargarPermisos(idPerfil) {
             $.ajax({
-                url: 'obtener_permisos.php',
+                url: 'modulos_por_perfil.php',
                 type: 'GET',
-                data: { rol: rolId },
+                data: { id_perfil: idPerfil },
                 success: function(response) {
                     var permisos = JSON.parse(response);
                     $('input[type="checkbox"]').each(function() {
@@ -62,10 +81,12 @@
             });
         }
 
-        // Cargar los permisos al cargar la página
+        // Cargar los permisos del primer perfil seleccionado al cargar la página
         $(document).ready(function() {
-            var rolId = $('#rol').val();
-            cargarPermisos(rolId);
+            var idPerfil = $('#perfil').val();
+            if (idPerfil) {
+                cargarPermisos(idPerfil);
+            }
         });
     </script>
 </body>
