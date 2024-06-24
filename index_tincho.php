@@ -226,6 +226,7 @@
 
     <header>
         <div class="menu">
+            <img src="prototipo_logo-Photoroom.png"  width="60px" height="60px">
 
             <ul class="cont-ul">
                 <li><a href="#">reclamos</a></li>
