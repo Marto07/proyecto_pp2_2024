@@ -1,14 +1,24 @@
-<?php
-// obtener_permisos.php
-require_once("../../config/database/conexion.php");
+<?php 
+$conexion = new mysqli("localhost","root", "","proyecto_pp2");
 
-$id_perfil = $_GET['id_perfil'];
-$permisos_result = $conexion->query("SELECT rela_modulo FROM asignacion_perfil_modulo WHERE rela_perfil = $id_perfil");
-
-$permisos = [];
-while ($permiso = $permisos_result->fetch_assoc()) {
-    $permisos[] = $permiso['rela_modulo'];
+function obtenerModulosPorPerfil($id_perfil) {
+	global $conexion;
+	$sql = "SELECT rela_modulo FROM asignacion_perfil_modulo JOIN perfil ON asignacion_perfil_modulo.rela_perfil = perfil.id_perfil WHERE perfil.id_perfil = {$id_perfil}";
+	$modulosPorPerfil = [];
+	$resultado = $conexion->query($sql);
+	foreach ($resultado as $reg){
+		$modulosPorPerfil[] = $reg;
+	}
+	return $modulosPorPerfil;
 }
 
-echo json_encode($permisos);
+if (isset($_GET['id_perfil'])) {
+
+	$id_perfil = $_GET['id_perfil'];
+} else {
+	$id_perfil = 1;
+}
+$modulos = obtenerModulosPorPerfil($id_perfil);
+header('Content-Type: application/json');
+echo json_encode($modulos);
 ?>
