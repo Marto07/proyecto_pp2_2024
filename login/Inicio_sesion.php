@@ -33,6 +33,10 @@
 
             <button type="submit">Ingresar</button>
 
+            <div style="text-align: center;">
+                <a href="recuperar_contrasena/formulario_recuperacion.php">¿Olvidaste tu contraseña?</a>
+            </div>
+
         </form>
 
         <?php if(isset($_GET["error"])) { ?>
@@ -68,6 +72,15 @@ $(document).ready(function() {
                 'padding'           : '10px'
         });
         spanerror.html('Verifique su Email');
+    <?php } else if (isset($_GET['correo_verificado'])) {?>
+        spanerror.css({
+                'display'           : 'inline-block',
+                'background-color'  : '#6EFF6B',
+                'margin'            : '10px',
+                'color'             : 'white',
+                'padding'           : '10px'
+        });
+        spanerror.html('Email Verificado');
     <?php } ?>
 
 

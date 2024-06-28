@@ -1,4 +1,7 @@
-
+<?php 
+    require_once('../config/database/db_functions.php'); 
+    $sexos = obtenerSexos();
+?>
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
@@ -30,6 +33,18 @@
         <div class="form-group">
             <label for="dni">Dni</label>
             <input type="text" id="dni" name="dni" >
+        </div>
+
+        <div class="form-group">
+            <label for="sexo">Sexo</label>
+            <select name="sexo">
+                <option disabled selected value="">Seleccione un sexo</option>
+                <?php foreach ($sexos as $reg) { ?>
+
+                    <option value="<?php echo $reg['id_sexo'];?>"><?php echo $reg['descripcion_sexo']; ?></option>
+
+                <?php }?>
+            </select>
         </div>
 
          <div class="form-group">

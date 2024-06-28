@@ -6,7 +6,6 @@
         header("Location: ../../error403.php");
         exit();
     }
-    echo $_SERVER['PHP_SELF'];
 
     $modulo = "Personas";
 
@@ -36,7 +35,6 @@
             exit();
         }
     }
-
 
     $sql = "SELECT
     			persona.nombre,
@@ -203,7 +201,7 @@
 		</fieldset>
 
 		<div class="modificar" style="text-align: center; margin: 10px">
-			<a href="modificar_mis_datos.php" >Cambiar contrase&ntilde;a</a>
+			<a href="cambiar_contrasena.php" >Cambiar contrase&ntilde;a</a>
 			<br>
 		</div>
 

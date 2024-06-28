@@ -16,7 +16,7 @@ try {
         $token = $_GET['token'];
 
         // Verificar el token en la base de datos
-        $stmt = $pdo->prepare("SELECT * FROM usuarios u JOIN contacto c ON u.rela_contacto = c.id_contacto WHERE c.descripcion_contacto = ? AND u.token = ?");
+        $stmt = $pdo->prepare("SELECT * FROM usuarios u JOIN contacto c ON u.rela_contacto = c.id_contacto WHERE c.descripcion_contacto = ? AND u.token = ? AND expiry > NOW()");
         $stmt->execute([$email, $token]);
         $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -27,8 +27,9 @@ try {
                                     SET u.estado = 'verificado' WHERE c.descripcion_contacto = ?");
             $stmt->execute([$email]);
             echo '¡Tu correo electrónico ha sido verificado correctamente!';
+            header("Location: ../inicio_sesion.php?correo_verificado");
         } else {
-            echo 'Token inválido o correo electrónico no encontrado.';
+            echo 'Token inválido, expirado o correo electrónico no encontrado. <br> <a href="../inicio_sesion.php">Volver al login</a>';
         }
     } else {
         echo 'Parámetros insuficientes para la verificación.';
