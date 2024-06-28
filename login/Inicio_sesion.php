@@ -33,6 +33,10 @@
 
             <button type="submit">Ingresar</button>
 
+            <div style="text-align: center;">
+                <a href="recuperar_contrasena/formulario_recuperacion.php">¿Olvidaste tu contraseña?</a>
+            </div>
+
         </form>
 
         <?php if(isset($_GET["error"])) { ?>

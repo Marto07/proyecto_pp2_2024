@@ -21,13 +21,10 @@ try {
         $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($usuario) {
-            // Actualizar estado del usuario a 'verificado'
-            $stmt = $pdo->prepare("UPDATE usuarios u
-                                    JOIN contacto c ON u.rela_contacto = c.id_contacto
-                                    SET u.estado = 'verificado' WHERE c.descripcion_contacto = ?");
-            $stmt->execute([$email]);
-            echo '¡Tu correo electrónico ha sido verificado correctamente!';
-            header("Location: ../inicio_sesion.php?correo_verificado");
+            $id_usuario = $usuario['id_usuario'];
+            
+            header("Location: formulario_reestablecimiento.php?id_usuario=$id_usuario");
+            
         } else {
             echo 'Token inválido, expirado o correo electrónico no encontrado. <br> <a href="../inicio_sesion.php">Volver al login</a>';
         }

@@ -1,9 +1,8 @@
 <?php 
 
-    session_start();
-    $id_usuario = $_SESSION['id_usuario'];  
-?>
+    $id_usuario = $_GET['id_usuario'];    
 
+?>
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
@@ -13,7 +12,7 @@
 </head>
 <body>
 
-    <form class="login-form" action="cambiar_contrasena_aplicar.php" method="POST">
+    <form class="login-form" action="modificar_contrasena.php" method="post">
 
         <h1>Registrar Usuario</h1>
 
@@ -27,7 +26,7 @@
             <input type="password" id="password2" name="confirmar-contrasena" >
         </div>
         <!-- ENVIAMOS EL USUARIO TAMBIEN EN EL FORMULARIO -->
-        <input type="hidden" name="id_usuario" value="<?php $id_usuario; ?>">	
+        <input type="hidden" name="id_usuario" value="<?php echo $id_usuario; ?>">	
 
         <div style="text-align: center;">
             <span id="mensaje-error"></span>	
