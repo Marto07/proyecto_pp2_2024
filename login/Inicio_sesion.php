@@ -68,6 +68,15 @@ $(document).ready(function() {
                 'padding'           : '10px'
         });
         spanerror.html('Verifique su Email');
+    <?php } else if (isset($_GET['correo_verificado'])) {?>
+        spanerror.css({
+                'display'           : 'inline-block',
+                'background-color'  : '#6EFF6B',
+                'margin'            : '10px',
+                'color'             : 'white',
+                'padding'           : '10px'
+        });
+        spanerror.html('Email Verificado');
     <?php } ?>
 
 

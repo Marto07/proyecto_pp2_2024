@@ -1,6 +1,7 @@
 <?php
 
 require_once('../../config/database/conexion.php');
+require_once('../../config/root_path.php');
 
 $sqlCancha  = "SELECT
                     id_zona,
@@ -73,6 +74,7 @@ $registrosPersona = $conexion->query($sqlPersona);
     </style>
 </head>
 <body>
+    <?php include(RUTA . 'includes/nav-bar.php'); ?>
     <h1 style="text-align: center; margin-top: 25px;">Modulo de Buscqueda de Reservas</h1>
     <form action="formularioReserva2.php" method="get">
         <h2>Buscar reservas por cancha y fecha</h2>

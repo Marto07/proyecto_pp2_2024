@@ -7,7 +7,7 @@
         exit();
     }
 
-    $modulo = "Domicilios";
+    $modulo = "domicilios";
 
     $sql_acceso = "SELECT COUNT(*) AS tiene_acceso
                     FROM 
@@ -37,7 +37,7 @@
     }
 	
 	require_once('../../../config/database/db_functions.php');
-
+	require_once('../../../config/root_path.php');
 	$registros = obtenerBarrios();
 ?>
 
@@ -126,6 +126,7 @@
 	</style>
 </head>
 <body>
+	<?php include(RUTA . 'includes/nav-bar.php'); ?>
 	<h1 style="text-align: center; margin-top: 25px; margin-bottom: 20px;">Modulo de barrios</h1>
 	<a class="back-button" href="../../../index_tincho.php">Volver</a>
 	<table>
