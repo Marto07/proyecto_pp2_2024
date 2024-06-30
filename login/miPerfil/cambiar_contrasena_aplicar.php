@@ -12,11 +12,18 @@
 		$sql = "UPDATE usuarios SET password = ? WHERE id_usuario = ?";
 		$stmt = $conexion->prepare($sql);
 		$stmt->bind_param("si", $contrasena_hasheada, $id_usuario);
-		$stmt->execute();
-		session_unset();
-		session_destroy();
-		header("Location: ../../index_tincho.php");
-		exit();
+		if($stmt->execute()) {
+			session_start();
+			session_unset();
+			session_destroy();
+			header("Location: ../../index_tincho.php");
+			exit();
+		} else {
+			echo "Error en el cambio de contraseña";
+			echo "<a href='" . BASE_URL . "index_tincho.php'>Inicio</a>";
+		}
+		
+		
 
 	} else {
 		echo "No tiene acceso a este modulo." . "<br>";

@@ -1,8 +1,9 @@
 <?php 
-require_once('../../config/database/conexion.php');
+session_start();
+require_once('conexion.php');
 $idHora     = $_GET['id_horario']; 
 $fecha      = $_GET['fecha_reserva'];
-$persona    = $_GET['id_persona'];
+$usuario    = $_SESSION['id'];
 $cancha     = $_GET['cancha'];
 
 $sql = "SELECT * FROM horario WHERE id_horario = $idHora";
@@ -13,13 +14,11 @@ if($reg = mysqli_fetch_assoc($resultado)) {
 	$horaFin    = $reg['horario_fin'];
 }
 
-$sqlPersona = "SELECT * FROM persona WHERE id_persona = $persona";
-$resultadoPersona = $conexion->query($sqlPersona);
+$sqlUsuario = "SELECT * FROM usuario WHERE id_usuario = $usuario";
+$resultadoUsuario = $conexion->query($sqlUsuario);
 
-if($reg = mysqli_fetch_assoc($resultadoPersona)) {
-    $nombre = $reg['nombre'];
-    $apellido    = $reg['apellido'];
-    $dni = $reg['dni'];
+if($reg = mysqli_fetch_assoc($resultadoUsuario)) {
+    $nombreUsuario = $reg['nombre_usuario'];
 }
 ?>
 <html>
@@ -78,12 +77,12 @@ if($reg = mysqli_fetch_assoc($resultadoPersona)) {
     			<li>Hora de inicio: <?php echo $horaInicio; ?></li>
     			<li>Hora de Fin: <?php echo $horaFin; ?></li>
     			<li>Fecha de reserva: <?php echo $fecha; ?></li>
-                <li>Titular: <?php echo $nombre . ' - '.$apellido.' - '.$dni; ?></li>
+                <li>Titular: <?php echo $nombreUsuario; ?></li>
     		</ul>
     	</div>
         <input type="hidden" name="id_hora" value="<?php echo $idHora; ?>">
         <input type="hidden" name="fecha" value="<?php echo $fecha; ?>">
-        <input type="hidden" name="persona" value="<?php echo $persona; ?>">
+        <input type="hidden" name="usuario" value="<?php echo $usuario; ?>">
         <input type="hidden" name="cancha" value="<?php echo $cancha; ?>">
 
         <button type="submit" name="aceptar">Aceptar</button>

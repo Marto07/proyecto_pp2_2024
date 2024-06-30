@@ -14,7 +14,7 @@
 
     <form class="login-form" action="modificar_contrasena.php" method="post">
 
-        <h1>Registrar Usuario</h1>
+        <h1>Restablecer Contrase&ntilde;a</h1>
 
         <div class="form-group">
             <label for="password">Contraseña</label>

@@ -1,43 +1,10 @@
 <?php
-
-require_once('../../config/database/conexion.php');
-require_once('../../config/root_path.php');
-
-$sqlCancha  = "SELECT
-                    id_zona,
-                    descripcion_zona,
-                    descripcion_complejo
-                FROM
-                    zona
-                JOIN 
-                    complejo
-                ON
-                    zona.rela_Complejo = complejo.id_complejo
-                JOIN 
-                    servicio
-                ON
-                    zona.rela_servicio = servicio.id_servicio
-                WHERE
-                    servicio.descripcion_servicio LIKE 'cancha'
-                AND
-                    zona.estado IN (1)";
-
-
-
-$sqlPersona = "SELECT
-                    id_persona,
-                    nombre,
-                    apellido
-                FROM 
-                    persona
-                WHERE 
-                    estado IN (1)";
-
-$registrosCancha  = $conexion->query($sqlCancha);
-$registrosPersona = $conexion->query($sqlPersona);
-
+    session_start();
+    require_once("../../config/root_path.php");
+    $ruta = RUTA;
+    require_once($ruta . "config/database/db_functions/zonas.php");
+    $registrosCancha = obtenerZonas();
 ?>
-
 <html>
 <head>
     <title>Buscar Reservas</title>
@@ -74,35 +41,20 @@ $registrosPersona = $conexion->query($sqlPersona);
     </style>
 </head>
 <body>
-    <?php include(RUTA . 'includes/nav-bar.php'); ?>
-    <h1 style="text-align: center; margin-top: 25px;">Modulo de Buscqueda de Reservas</h1>
+    <h1 style="text-align: center; margin-top: 25px;">Modulo de Busqueda de Reservas</h1>
+    <h2><?php echo "Hola ". $_SESSION['usuario']. " tu ID: ". $_SESSION['id_usuario']; ?></h2>
     <form action="formularioReserva2.php" method="get">
         <h2>Buscar reservas por cancha y fecha</h2>
-
-        <input type="date" name="fecha_reserva">
-
+        <input type="date" name="fecha_reserva" required>
         <select name="cancha" id="" required>
             <option value="" disabled selected>Eliga Cancha</option>
             <?php foreach ($registrosCancha as $reg) :?>
                 <option value="<?php echo $reg['id_zona']; ?> ">
-                    <?php echo $reg['descripcion_zona']. ' - '.$reg['descripcion_complejo'];?>
+                    <?php echo $reg['descripcion_zona']. ' - '.$reg['descripcion_sucursal']. ' - ' .$reg['descripcion_complejo'];?>
                 </option>
             <?php endforeach; ?>
         </select>
-
-        <select name="persona" id="" required>
-            <option value="" disabled selected>titular de reserva</option>
-            <?php foreach ($registrosPersona as $reg) :?>
-                <option value="<?php echo $reg['id_persona']; ?> ">
-                    <?php echo $reg['nombre']. ' - '.$reg['apellido'];?>
-                </option>
-            <?php endforeach; ?>
-        </select>
-
         <button type="submit">Buscar</button>
-
-
-
     </form>
 </body>
 </html>

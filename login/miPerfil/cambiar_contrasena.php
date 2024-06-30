@@ -27,7 +27,7 @@
             <input type="password" id="password2" name="confirmar-contrasena" >
         </div>
         <!-- ENVIAMOS EL USUARIO TAMBIEN EN EL FORMULARIO -->
-        <input type="hidden" name="id_usuario" value="<?php $id_usuario; ?>">	
+        <input type="hidden" name="id_usuario" value="<?php echo $id_usuario; ?>">	
 
         <div style="text-align: center;">
             <span id="mensaje-error"></span>	

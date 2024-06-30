@@ -189,6 +189,7 @@
             <ul class="cont-ul">
                 <li><a href="#">reclamos</a></li>
                 <li><a href="#">vistas</a></li>
+                <li><a href="#">Reservar</a></li>
                 <li><a href="#">Gestion del Sistema</a>
                     <ul>
                         <li><a href="#">Personas</a>
