@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 25-06-2024 a las 21:00:32
+-- Tiempo de generación: 02-07-2024 a las 23:39:23
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -39,12 +39,15 @@ CREATE TABLE `asignacion_perfil_modulo` (
 --
 
 INSERT INTO `asignacion_perfil_modulo` (`id_asignacion_perfil_modulo`, `estado`, `rela_perfil`, `rela_modulo`) VALUES
-(1, 1, 2, 2),
-(2, 1, 2, 1),
-(3, 1, 2, 3),
-(4, 1, 1, 1),
 (6, 1, 3, 1),
-(7, 1, 3, 3);
+(7, 1, 3, 3),
+(10, 1, 1, 1),
+(11, 1, 1, 2),
+(12, 1, 1, 3),
+(13, 1, 2, 1),
+(14, 1, 2, 2),
+(15, 1, 2, 3),
+(16, 1, 2, 4);
 
 -- --------------------------------------------------------
 
@@ -59,6 +62,13 @@ CREATE TABLE `asignacion_persona_complejo` (
   `rela_persona` int(11) DEFAULT NULL,
   `rela_complejo` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `asignacion_persona_complejo`
+--
+
+INSERT INTO `asignacion_persona_complejo` (`id_asignacion_persona_complejo`, `fecha_alta`, `estado`, `rela_persona`, `rela_complejo`) VALUES
+(1, '2024-07-01', 1, 18, 3);
 
 -- --------------------------------------------------------
 
@@ -125,6 +135,15 @@ CREATE TABLE `complejo` (
   `estado` tinyint(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `complejo`
+--
+
+INSERT INTO `complejo` (`id_complejo`, `descripcion_complejo`, `fecha_alta`, `estado`) VALUES
+(1, 'Complejo YPF', '2024-06-29', 1),
+(2, 'Complejo LeClub', '2024-06-29', 1),
+(3, 'Complejo Futbar', '2024-06-29', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -145,7 +164,9 @@ CREATE TABLE `contacto` (
 
 INSERT INTO `contacto` (`id_contacto`, `descripcion_contacto`, `estado`, `rela_tipo_contacto`, `rela_persona`) VALUES
 (11, ' Correo@prueba.com', 1, 1, 12),
-(12, 'Rinngley@gmail.com', 1, 1, 13);
+(12, 'Rinngley@gmail.com', 1, 1, 13),
+(13, 'Maurolezcano111@gmail.com', 1, 1, 15),
+(15, 'Maurinasd@gmail.com', 1, 1, 17);
 
 -- --------------------------------------------------------
 
@@ -175,6 +196,15 @@ CREATE TABLE `deporte` (
   `estado` tinyint(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `deporte`
+--
+
+INSERT INTO `deporte` (`id_deporte`, `descripcion_deporte`, `estado`) VALUES
+(1, 'Futbol', 1),
+(2, 'Volley', 1),
+(3, 'Basquet', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -194,7 +224,10 @@ CREATE TABLE `documento` (
 
 INSERT INTO `documento` (`id_documento`, `descripcion_documento`, `estado`, `rela_tipo_documento`) VALUES
 (13, '15.253.244', 1, 1),
-(14, '42757241', 1, 1);
+(14, '15.253.2441', 1, 1),
+(15, 'a', 1, 1),
+(17, '24454253', 1, 1),
+(18, '42757241', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -245,6 +278,15 @@ CREATE TABLE `estado_zona` (
   `estado` tinyint(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `estado_zona`
+--
+
+INSERT INTO `estado_zona` (`id_estado_zona`, `descripcion_estado_zona`, `estado`) VALUES
+(1, 'Buen estado', 1),
+(2, 'Regular', 1),
+(3, 'Mal estado', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -271,6 +313,14 @@ CREATE TABLE `formato_deporte` (
   `rela_deporte` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `formato_deporte`
+--
+
+INSERT INTO `formato_deporte` (`id_formato_deporte`, `descripcion_formato_deporte`, `estado`, `rela_deporte`) VALUES
+(1, 'Futbol 5', 1, 1),
+(2, 'Futbol 7', 1, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -284,6 +334,36 @@ CREATE TABLE `horario` (
   `fecha_alta` date DEFAULT NULL,
   `estado` tinyint(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `horario`
+--
+
+INSERT INTO `horario` (`id_horario`, `horario_inicio`, `horario_fin`, `fecha_alta`, `estado`) VALUES
+(1, '00:00:00', '01:00:00', '2024-06-29', 1),
+(2, '01:00:00', '02:00:00', '2024-06-29', 1),
+(3, '02:00:00', '03:00:00', '2024-06-29', 1),
+(4, '03:00:00', '04:00:00', '2024-06-29', 1),
+(5, '04:00:00', '05:00:00', '2024-06-29', 1),
+(6, '05:00:00', '06:00:00', '2024-06-29', 1),
+(7, '06:00:00', '07:00:00', '2024-06-29', 1),
+(8, '07:00:00', '08:00:00', '2024-06-29', 1),
+(9, '08:00:00', '09:00:00', '2024-06-29', 1),
+(10, '09:00:00', '10:00:00', '2024-06-29', 1),
+(11, '10:00:00', '11:00:00', '2024-06-29', 1),
+(12, '11:00:00', '12:00:00', '2024-06-29', 1),
+(13, '12:00:00', '13:00:00', '2024-06-29', 1),
+(14, '13:00:00', '14:00:00', '2024-06-29', 1),
+(15, '14:00:00', '15:00:00', '2024-06-29', 1),
+(16, '15:00:00', '16:00:00', '2024-06-29', 1),
+(17, '16:00:00', '17:00:00', '2024-06-29', 1),
+(18, '17:00:00', '18:00:00', '2024-06-29', 1),
+(19, '18:00:00', '19:00:00', '2024-06-29', 1),
+(20, '19:00:00', '20:00:00', '2024-06-29', 1),
+(21, '20:00:00', '21:00:00', '2024-06-29', 1),
+(22, '21:00:00', '22:00:00', '2024-06-29', 1),
+(23, '22:00:00', '23:00:00', '2024-06-29', 1),
+(24, '23:00:00', '00:00:00', '2024-06-29', 1);
 
 -- --------------------------------------------------------
 
@@ -317,7 +397,8 @@ CREATE TABLE `modulo` (
 INSERT INTO `modulo` (`id_modulo`, `descripcion_modulo`, `estado`) VALUES
 (1, 'inicio', 1),
 (2, 'personas', 1),
-(3, 'Domicilios', 1);
+(3, 'Domicilios', 1),
+(4, 'zonas', 1);
 
 -- --------------------------------------------------------
 
@@ -364,7 +445,10 @@ CREATE TABLE `persona` (
 
 INSERT INTO `persona` (`id_persona`, `nombre`, `apellido`, `cuil`, `fecha_nacimiento`, `fecha_alta`, `estado`, `rela_documento`, `rela_sexo`) VALUES
 (12, 'Nombre de prueba', 'Apellido de Prueba', NULL, NULL, NULL, 1, 13, 1),
-(13, 'edgar', 'coppa', NULL, NULL, NULL, 1, 14, 1);
+(13, 'edgar', 'coppa', NULL, NULL, NULL, 1, 14, 1),
+(15, 'martin', 'coppa', NULL, NULL, NULL, 1, 15, NULL),
+(17, 'martin', 'coppa', NULL, NULL, NULL, 1, 17, 2),
+(18, 'Roberto', 'Pelaez', NULL, '2000-07-05', '2024-07-01', 1, 18, 1);
 
 -- --------------------------------------------------------
 
@@ -396,6 +480,25 @@ CREATE TABLE `reserva` (
   `rela_horario` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `reserva`
+--
+
+INSERT INTO `reserva` (`id_reserva`, `descripcion_reserva`, `fecha_reserva`, `fecha_alta`, `estado`, `rela_estado_reserva`, `rela_persona`, `rela_zona`, `rela_horario`) VALUES
+(1, NULL, '2024-06-29', '2024-06-29', 1, NULL, 17, 3, 8),
+(3, NULL, '2024-06-29', '2024-06-30', 1, NULL, 17, 3, 1),
+(4, NULL, '2024-06-29', '2024-06-30', 1, NULL, 17, 3, 9),
+(5, NULL, '2024-06-29', '2024-06-30', 1, NULL, 17, 4, 24),
+(6, NULL, '2024-06-29', '2024-07-01', 1, NULL, 17, 3, 24),
+(9, NULL, '2024-06-29', '2024-07-01', 1, NULL, 17, 3, 2),
+(10, NULL, '2024-07-01', '2024-07-01', 1, NULL, 17, 3, 1),
+(11, NULL, '2024-06-29', '2024-07-01', 1, NULL, 13, 3, 6),
+(12, NULL, '2024-06-29', '2024-07-01', 1, NULL, 17, 3, 18),
+(13, NULL, '2024-07-05', '2024-07-01', 1, NULL, 17, 6, 19),
+(14, NULL, '2024-07-05', '2024-07-01', 1, NULL, 13, 6, 24),
+(15, NULL, '2024-07-10', '2024-07-02', 1, NULL, 13, 2, 1),
+(16, NULL, '2024-07-10', '2024-07-02', 1, NULL, 12, 1, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -407,6 +510,15 @@ CREATE TABLE `servicio` (
   `descripcion_servicio` varchar(50) DEFAULT NULL,
   `estado` tinyint(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `servicio`
+--
+
+INSERT INTO `servicio` (`id_servicio`, `descripcion_servicio`, `estado`) VALUES
+(1, 'Cancha', 1),
+(2, 'Parrillada', 1),
+(3, 'Bar', 1);
 
 -- --------------------------------------------------------
 
@@ -456,6 +568,19 @@ CREATE TABLE `sucursal` (
   `estado` tinyint(1) DEFAULT 1,
   `rela_complejo` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `sucursal`
+--
+
+INSERT INTO `sucursal` (`id_sucursal`, `descripcion_sucursal`, `direccion`, `estado`, `rela_complejo`) VALUES
+(1, 'Sucursal YPF 1', 'Avenida avellaneda 235', 1, 1),
+(2, 'Sucursal YPF 2', 'Avenida Napoleon 565', 1, 1),
+(3, 'Sucursal YPF 3', 'Barrio Don Bosco calle sarmiento 277', 1, 1),
+(4, 'LeClub 1', 'Avenida Gutniski', 1, 2),
+(5, 'LeClub 2', 'Calle Domingo sarmiento 200', 1, 2),
+(6, 'Sucursal FutBar1', 'Junin 728', 1, 3),
+(7, 'Sucursal FutBar2', 'Avenida Uriburu 900', 1, 3);
 
 -- --------------------------------------------------------
 
@@ -520,9 +645,17 @@ INSERT INTO `tipo_documento` (`id_tipo_documento`, `descripcion_tipo_documento`,
 
 CREATE TABLE `tipo_terreno` (
   `id_tipo_terreno` int(11) NOT NULL,
-  `descripcion_tipo_terreno` int(11) DEFAULT NULL,
+  `descripcion_tipo_terreno` varchar(50) DEFAULT NULL,
   `estado` tinyint(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `tipo_terreno`
+--
+
+INSERT INTO `tipo_terreno` (`id_tipo_terreno`, `descripcion_tipo_terreno`, `estado`) VALUES
+(1, 'Cesped', 1),
+(2, 'Piso', 1);
 
 -- --------------------------------------------------------
 
@@ -535,6 +668,7 @@ CREATE TABLE `usuarios` (
   `username` varchar(50) NOT NULL,
   `password` varchar(255) NOT NULL,
   `token` varchar(100) NOT NULL,
+  `expiry` datetime DEFAULT NULL,
   `estado` varchar(20) NOT NULL DEFAULT 'no verificado',
   `rela_contacto` int(11) NOT NULL,
   `rela_perfil` int(11) DEFAULT NULL
@@ -544,9 +678,11 @@ CREATE TABLE `usuarios` (
 -- Volcado de datos para la tabla `usuarios`
 --
 
-INSERT INTO `usuarios` (`id_usuario`, `username`, `password`, `token`, `estado`, `rela_contacto`, `rela_perfil`) VALUES
-(7, 'UserName Prueba', '$2y$10$EjZxH67afUdqvylIgoAgUO1Fog5Whi3ziEMZQR.WKUYRs5g3cV.h.', '', 'verificado', 11, 2),
-(8, 'rinngley', '$2y$10$LUo2AL/knShM5wrYy5Ody.rqAe/u4axw3dMKwC.dhF8jcUfoQuysS', 'fb21b596674f9fde250f257c12a8c833', 'verificado', 12, 1);
+INSERT INTO `usuarios` (`id_usuario`, `username`, `password`, `token`, `expiry`, `estado`, `rela_contacto`, `rela_perfil`) VALUES
+(7, 'UserName Prueba', '$2y$10$ktJka4TmKFFdWFf.u7fMsOQKVrG1Dsh0o7K3AXXxLPlurYOBzC8ra', 'asdsa', '2024-06-13 21:58:56', 'verificado', 11, 2),
+(8, 'rinngley', '$2y$10$sAyr1WYs6d7KzyM.9Azrguwp5W0DwiaVaDmSXTy7GeAnpSIMtHTxS', 'fb21b596674f9fde250f257c12a8c833', '2024-06-05 21:59:03', 'verificado', 12, 1),
+(9, 'martincito', '$2y$10$Q/TyJqvCcA8WDEi9YXmihOoD.oBTddFEwpSSHBKORpqdxfIAbC8VC', '7eb706de3dd7aaabfb0837362d1c8016', '2024-06-05 21:59:06', 'verificado', 13, 3),
+(11, 'maurinasd0001', '$2y$10$cm9TCyYPUoRNRdXxjbAcTuhk91ZvURe9RBfpt2QoeNlt0lxJK2XJO', 'b8eece7c33c2da2cb3e3edb2c50b475e', '2024-06-28 20:20:42', 'verificado', 15, 2);
 
 -- --------------------------------------------------------
 
@@ -565,6 +701,19 @@ CREATE TABLE `zona` (
   `rela_sucursal` int(11) DEFAULT NULL,
   `rela_servicio` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `zona`
+--
+
+INSERT INTO `zona` (`id_zona`, `descripcion_zona`, `dimension`, `estado`, `rela_tipo_terreno`, `rela_formato_deporte`, `rela_estado_zona`, `rela_sucursal`, `rela_servicio`) VALUES
+(1, 'Cancha 1', NULL, 1, 1, 1, 1, 1, 1),
+(2, 'Cancha 2', NULL, 1, 2, 2, 3, 1, 1),
+(3, 'cancha 1', NULL, 1, 1, 1, 1, 4, 1),
+(4, 'cancha 2', 'Cancha 2', 1, 2, 2, 1, 5, 1),
+(5, 'cancha 1', NULL, 1, 1, 2, 1, 2, 1),
+(6, 'cancha 1', NULL, 1, 1, 1, 1, 6, 1),
+(7, 'cancha 1', NULL, 1, 1, 1, 1, 3, 1);
 
 --
 -- Índices para tablas volcadas
@@ -821,13 +970,13 @@ ALTER TABLE `zona`
 -- AUTO_INCREMENT de la tabla `asignacion_perfil_modulo`
 --
 ALTER TABLE `asignacion_perfil_modulo`
-  MODIFY `id_asignacion_perfil_modulo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_asignacion_perfil_modulo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT de la tabla `asignacion_persona_complejo`
 --
 ALTER TABLE `asignacion_persona_complejo`
-  MODIFY `id_asignacion_persona_complejo` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_asignacion_persona_complejo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `asignacion_persona_domicilio`
@@ -857,13 +1006,13 @@ ALTER TABLE `barrio`
 -- AUTO_INCREMENT de la tabla `complejo`
 --
 ALTER TABLE `complejo`
-  MODIFY `id_complejo` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_complejo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `contacto`
 --
 ALTER TABLE `contacto`
-  MODIFY `id_contacto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id_contacto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT de la tabla `control`
@@ -875,13 +1024,13 @@ ALTER TABLE `control`
 -- AUTO_INCREMENT de la tabla `deporte`
 --
 ALTER TABLE `deporte`
-  MODIFY `id_deporte` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_deporte` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `documento`
 --
 ALTER TABLE `documento`
-  MODIFY `id_documento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id_documento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT de la tabla `equipo`
@@ -905,7 +1054,7 @@ ALTER TABLE `estado_reserva`
 -- AUTO_INCREMENT de la tabla `estado_zona`
 --
 ALTER TABLE `estado_zona`
-  MODIFY `id_estado_zona` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_estado_zona` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `evento`
@@ -917,13 +1066,13 @@ ALTER TABLE `evento`
 -- AUTO_INCREMENT de la tabla `formato_deporte`
 --
 ALTER TABLE `formato_deporte`
-  MODIFY `id_formato_deporte` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_formato_deporte` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `horario`
 --
 ALTER TABLE `horario`
-  MODIFY `id_horario` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_horario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT de la tabla `localidad`
@@ -935,7 +1084,7 @@ ALTER TABLE `localidad`
 -- AUTO_INCREMENT de la tabla `modulo`
 --
 ALTER TABLE `modulo`
-  MODIFY `id_modulo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_modulo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `perfil`
@@ -947,7 +1096,7 @@ ALTER TABLE `perfil`
 -- AUTO_INCREMENT de la tabla `persona`
 --
 ALTER TABLE `persona`
-  MODIFY `id_persona` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id_persona` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT de la tabla `provincia`
@@ -959,13 +1108,13 @@ ALTER TABLE `provincia`
 -- AUTO_INCREMENT de la tabla `reserva`
 --
 ALTER TABLE `reserva`
-  MODIFY `id_reserva` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_reserva` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT de la tabla `servicio`
 --
 ALTER TABLE `servicio`
-  MODIFY `id_servicio` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_servicio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `sexo`
@@ -983,7 +1132,7 @@ ALTER TABLE `socio`
 -- AUTO_INCREMENT de la tabla `sucursal`
 --
 ALTER TABLE `sucursal`
-  MODIFY `id_sucursal` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_sucursal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `tarifa`
@@ -1007,19 +1156,19 @@ ALTER TABLE `tipo_documento`
 -- AUTO_INCREMENT de la tabla `tipo_terreno`
 --
 ALTER TABLE `tipo_terreno`
-  MODIFY `id_tipo_terreno` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_tipo_terreno` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de la tabla `zona`
 --
 ALTER TABLE `zona`
-  MODIFY `id_zona` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_zona` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- Restricciones para tablas volcadas
