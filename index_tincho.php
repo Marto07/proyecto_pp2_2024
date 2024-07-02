@@ -303,6 +303,7 @@
                                 <li><a href="php/reservas/reserva_de_personal_administrativo/formularioReserva1.php">Reservar a un cliente</a></li>
                             </ul>
                         </li>
+                        <li><a href="php/ajax/index.php">Permisos</a></li>
                     </ul>
                 </li>
             </ul>

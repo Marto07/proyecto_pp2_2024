@@ -1,4 +1,5 @@
 <?php 
+    require_once("../../config/root_path.php");
     $conexion = new mysqli("localhost","root","","proyecto_pp2");
 
 
@@ -37,7 +38,7 @@
     <title>CHECKBOX</title>
     <style type="text/css">
         body {
-            display: flex;
+            /*display: flex;*/
             justify-content: center;
             align-items: center;
             height: 100vh;
@@ -46,6 +47,8 @@
             font-family: Arial, sans-serif;
         }
         form {
+            margin: auto;
+            margin-top: 15vh;
             background-color: #fff;
             padding: 20px;
             border-radius: 10px;
@@ -102,6 +105,7 @@
 </head>
 
 <body>
+    <a href="<?php echo BASE_URL. 'index_tincho.php'; ?>" class="volver">Volver al inicio</a>
     <form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
         <h2>Formulario de Inserci&oacute;n</h2>
         <!-- Otros campos del formulario -->

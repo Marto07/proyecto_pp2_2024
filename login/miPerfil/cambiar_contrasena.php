@@ -15,7 +15,7 @@
 
     <form class="login-form" action="cambiar_contrasena_aplicar.php" method="POST">
 
-        <h1>Registrar Usuario</h1>
+        <h1>Cambiar contrase&ntilde;a</h1>
 
         <div class="form-group">
             <label for="password">Contraseña</label>

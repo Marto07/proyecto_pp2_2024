@@ -43,6 +43,7 @@
     </style>
 </head>
 <body>
+    <a href="<?php echo BASE_URL. 'index_tincho.php'; ?>" class="volver">Volver al inicio</a>
     <form action="formularioReserva2.php" method="get">
         <h2>Buscar reservas por fecha</h2>
         <input type="date" name="fecha_reserva">

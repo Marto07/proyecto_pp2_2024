@@ -41,6 +41,7 @@
     </style>
 </head>
 <body>
+    <a href="<?php echo BASE_URL. 'index_tincho.php'; ?>" class="volver">Volver al inicio</a>
     <h1 style="text-align: center; margin-top: 25px;">Modulo de Busqueda de Reservas</h1>
     <h2><?php echo "Hola ". $_SESSION['usuario']. " tu ID: ". $_SESSION['id_usuario']; ?></h2>
     <form action="formularioReserva2.php" method="get">
