@@ -39,8 +39,7 @@
 
     }
 
-
-    function ObtenerHorariosDisponibles($id_zona, $fecha) {
+    function ObtenerHorariosDisponibles($id_zona=null, $fecha=null) {
     	global $conexion;
 
     	$sql = "SELECT 
@@ -84,5 +83,56 @@
 	        	$registros = $stmt->get_result();
 	        	return $registros;
 	        } 
+    }
+
+    function ObtenerHorario($id_horario=null){
+
+    	global $conexion;
+    	$sql = "SELECT 
+    				horario_inicio,
+    				horario_fin 
+    			FROM 
+    				horario 
+    			WHERE 
+    				id_horario = ?";
+
+    	$stmt = $conexion->prepare($sql);
+    	$stmt->bind_param("i",$id_horario);
+    	$registros = [];
+
+    	if($stmt->execute()) {
+    		$registros = $stmt->get_result();
+    		return $registros;
+    	}
+
+    }
+
+    
+
+    function insertarReserva($rela_horario,$fecha,$rela_zona,$rela_persona) {
+    	global $conexion;
+
+    	$sqlInsert = "INSERT INTO 
+					reserva(
+						fecha_reserva,
+						fecha_alta,
+						rela_persona,
+						rela_zona,
+						rela_horario
+					) 
+				VALUES(
+					?,
+					CURRENT_DATE(),
+					?,
+					?,
+					?);";
+		$stmt = $conexion->prepare($sqlInsert);
+		$stmt->bind_param("siii", $fecha, $rela_persona, $rela_zona, $rela_horario);
+
+		if($stmt->execute()) {
+			return true;
+		} else{
+			return false;
+		}
     }
 ?>

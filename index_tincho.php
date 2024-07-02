@@ -1,5 +1,7 @@
 <?php   
-    require_once("config/database/conexion.php");
+    require_once("config/root_path.php");
+    require_once(RUTA . "config/database/conexion.php");
+    require_once(RUTA . "config/database/db_functions/personas.php");
     session_start();
 
     if (!isset($_SESSION['usuario']) || !isset($_SESSION['id_perfil'])) {
@@ -34,6 +36,42 @@
             header("Location: error403.php");
             exit();
         }
+    }
+
+
+    $id_usuario = $_SESSION['id_usuario'];
+    $registros = obtenerPersonaPorUsuario($id_usuario);
+
+    if ($reg = $registros->fetch_assoc()) {
+        $id_persona = $reg['id_persona'];
+    }
+    function obtenerAcessoGestionCanchas($id_persona) {
+        global $conexion;
+
+        $sql = "SELECT 
+                    zona.id_zona,
+                    zona.descripcion_zona,
+                    persona.nombre,
+                    persona.apellido
+                    FROM asignacion_persona_complejo apc
+                    JOIN complejo ON apc.rela_complejo = complejo.id_complejo
+                    JOIN sucursal ON sucursal.rela_complejo = complejo.id_complejo
+                    JOIN zona ON zona.rela_sucursal = sucursal.id_sucursal
+                    JOIN persona ON persona.id_persona = apc.rela_persona
+                    WHERE apc.rela_persona = ?";
+
+        $stmt = $conexion->prepare($sql);
+        $stmt->bind_param("i", $id_persona);
+        $registros = [];
+
+        if($stmt->execute()) {
+            $registros = $stmt->get_result();
+            return $registros;
+        } 
+    }
+
+    if (obtenerAcessoGestionCanchas($id_persona)) {
+        echo "USTED TIENE UN COMPLEJO CON UNA CANCHA";
     }
 
 ?>
@@ -231,6 +269,8 @@
             <ul class="cont-ul">
                 <li><a href="#">reclamos</a></li>
                 <li><a href="#">vistas</a></li>
+                <li><a href="<?php echo BASE_URL . 'php/reservas/reserva_de_usuario/formularioReserva1.php' ?>">Reservar</a></li>
+                <li><a href="<?php echo BASE_URL . 'php/reservas/reserva_de_personal_administrativo/formularioReserva1.php' ?>">Reservarle</a></li>  
                 <li><a href="#">Gestion del Sistema</a>
                     <ul>
                         <li><a href="#">Personas</a>
@@ -259,6 +299,8 @@
                             <ul>
                                 <li><a href="php/TablasMaestras/EstadoReserva/tablaEstadoReserva.php">Estado Reserva</a></li>
                                 <li><a href="php/TablasMaestras/EstadoControl/tablaEstadoControl.php">Estado Control</a></li>
+                                <li><a href="php/reservas/reserva_de_usuario/formularioReserva1.php">Reservar</a></li>
+                                <li><a href="php/reservas/reserva_de_personal_administrativo/formularioReserva1.php">Reservar a un cliente</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -267,7 +309,7 @@
 
         </div>
 
-         <div class="profile-menu">
+        <div class="profile-menu">
             <button class="profile-button">Mi Perfil</button>
             <ul class="profile-dropdown">
                 <li><a href="login/miPerfil/mis_datos.php">Mis Datos</a></li>

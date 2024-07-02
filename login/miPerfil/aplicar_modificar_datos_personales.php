@@ -9,6 +9,8 @@
 		$sexo 		= $_POST['sexo'];
 		$email      = $_SESSION['email'];
 
+		// echo $nombre."<br>".$apellido."<br>".$documento."<br>".$sexo."<br>".$email."<br>";die;
+
 		$sql_persona = "UPDATE 
 								persona
 							JOIN
@@ -20,7 +22,7 @@
 								apellido 	= ?,
 								rela_sexo 	= ?
 							WHERE 
-								contacto.descripcion_contacto = ?";
+								contacto.descripcion_contacto LIKE ?";
 
 		$sql_documento = "UPDATE 
 								documento
@@ -35,7 +37,7 @@
 							SET 
 								descripcion_documento = ?
 							WHERE 
-								contacto.descripcion_contacto = ?";
+								contacto.descripcion_contacto LIKE ?";
 
 		$stmt1 = $conexion->prepare($sql_persona);
 		$stmt2 = $conexion->prepare($sql_documento);

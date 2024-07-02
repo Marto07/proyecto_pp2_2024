@@ -6,34 +6,15 @@ USE proyecto_pp2;
 -- INSERT INTO `sucursal` (`id_sucursal`, `descripcion_sucursal`, `direccion`, `estado`, `rela_complejo`) VALUES (NULL, 'Sucursal YPF 1', 'Avenida avellaneda 235', '1', '1'), (NULL, 'Sucursal YPF 2', 'Avenida Napoleon 565', '1', '1'), (NULL, 'Sucursal YPF 3', 'Barrio Don Bosco calle sarmiento 277', '1', '1'), (NULL, 'LeClub 1', 'Avenida Gutniski', '1', '2'), (NULL, 'LeClub 2', 'Calle Domingo sarmiento 200', '1', '2'), (NULL, 'Sucursal FutBar1', 'Junin 728', '1', '3'), (NULL, 'Sucursal FutBar2', 'Avenida Uriburu 900', '1', '3');
 
 SELECT 
-            horario.id_horario,
-            horario.horario_inicio,
-            horario.horario_fin,
-            reserva.id_reserva,
-            zona.descripcion_zona,
-            sucursal.descripcion_sucursal,
-            complejo.descripcion_complejo,
-            IF (reserva.id_reserva IS NULL, 'disponible', 'no-disponible') AS estado
+            usuarios.id_usuario,
+            usuarios.password
         FROM 
-                zona
-            JOIN 
-            	sucursal
-            ON
-            	zona.rela_sucursal = sucursal.id_sucursal
-            JOIN
-                complejo
-            ON
-                sucursal.rela_complejo = complejo.id_complejo
-            AND
-                id_zona = 3
-            JOIN 
-                reserva 
-            ON 
-                reserva.rela_zona = zona.id_zona
-            RIGHT JOIN 
-                horario
-            ON
-                horario.id_horario = reserva.rela_horario
-            AND
-                reserva.fecha_reserva = '2024-06-29'
-        ORDER BY (horario.horario_inicio)
+            usuarios
+        JOIN
+            contacto
+        ON
+            usuarios.rela_contacto = contacto.id_contacto
+        WHERE 
+            contacto.descripcion_contacto LIKE 'Correo@prueba.com'
+        AND
+            usuarios.estado LIKE 'verificado';

@@ -60,7 +60,7 @@
     		";
 
     $stmt = $conexion->prepare($sql);
-    $stmt->bind_param('i', $_SESSION['email']);
+    $stmt->bind_param('s', $_SESSION['email']);
     $stmt->execute();
     $resultado = $stmt->get_result();
     $datos_personales = $resultado->fetch_assoc();
@@ -74,7 +74,10 @@
 
     }*/
 
-    $_SESSION['datos_personales'] = $datos_personales;
+    $nombre = $datos_personales['nombre'];
+    $apellido = $datos_personales['apellido'];
+    $documento = $datos_personales['descripcion_documento'];
+    $sexo = $datos_personales['descripcion_sexo'];
 
     $stmt->close();
     $conexion->close();
@@ -161,19 +164,19 @@
 			</div>
 
 			<label for="nombre">nombre:</label>
-			<h3 name="nombre"><?php echo $_SESSION['datos_personales']['nombre']; ?></h3>
+			<h3 name="nombre"><?php echo $nombre; ?></h3>
 			<br>
 
 			<label for="apellido">apellido:</label>
-			<h3 name="apellido"><?php echo $_SESSION['datos_personales']['apellido']; ?></h3>
+			<h3 name="apellido"><?php echo $apellido; ?></h3>
 			<br>
 
 			<label for="dni">dni:</label>
-			<h3 name="dni"><?php echo $_SESSION['datos_personales']['descripcion_documento']; ?></h3>
+			<h3 name="dni"><?php echo $documento; ?></h3>
 			<br>
 
 			<label for="sexo">sexo:</label>
-			<h3 name="sexo"><?php echo $_SESSION['datos_personales']['descripcion_sexo']; ?></h3>
+			<h3 name="sexo"><?php echo $sexo; ?></h3>
 			<br>
 
 		</fieldset>
