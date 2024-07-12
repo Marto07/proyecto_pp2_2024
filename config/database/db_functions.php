@@ -105,7 +105,7 @@
 
 	}
 
-	function obtenerBarrios() {
+	function obtenerBarrios($offset=null, $registros_por_pagina=null) {
 
 		global $conexion;
 
@@ -120,7 +120,9 @@
 					ON
 						rela_localidad = id_localidad
 					WHERE
-						barrio.estado IN(1)";
+						barrio.estado IN(1)
+					LIMIT
+					$offset, $registros_por_pagina";
 
 		if ($registros = $conexion->query($sql)) {
 			return $registros;

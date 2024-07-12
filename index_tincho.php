@@ -45,6 +45,7 @@
     if ($reg = $registros->fetch_assoc()) {
         $id_persona = $reg['id_persona'];
     }
+
     function obtenerAcessoGestionCanchas($id_persona) {
         global $conexion;
 
@@ -70,8 +71,8 @@
         } 
     }
 
-    if (obtenerAcessoGestionCanchas($id_persona)) {
-        echo "USTED TIENE UN COMPLEJO CON UNA CANCHA";
+    if ($registros = obtenerAcessoGestionCanchas($id_persona)) {
+
     }
 
 ?>
@@ -304,6 +305,7 @@
                             </ul>
                         </li>
                         <li><a href="php/ajax/index.php">Permisos</a></li>
+                        <?php if ($registros->num_rows > 0) {echo '<li><a href="#">Mis Canchas</a></li>';} ?>
                     </ul>
                 </li>
             </ul>

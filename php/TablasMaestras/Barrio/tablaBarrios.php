@@ -36,9 +36,24 @@
         }
     }
 	
+	// SETEAMOS EL PAGINADO
+	$registros_por_pagina = 5;
+
+	// Determinar la página actual
+	if (isset($_GET['pagina']) && is_numeric($_GET['pagina'])) {
+	    $pagina_actual = (int) $_GET['pagina'];
+	} else {
+	    $pagina_actual = 1;
+	}
+
+	//DEFINIMOS EL OFSET O LA CANTIDAD DE REGISTROS SKIPEADOS
+	$offset = ($pagina_actual - 1) * $registros_por_pagina;
+
 	require_once('../../../config/database/db_functions.php');
 	require_once('../../../config/root_path.php');
-	$registros = obtenerBarrios();
+	$registros = obtenerBarrios($offset, $registros_por_pagina);
+
+	// Número de registros por página
 ?>
 
 <!DOCTYPE html>
@@ -179,6 +194,27 @@
 
  		</tbody>
  	</table>
+
+ 	<?php 
+
+ 		//calculamos total de paginas necesarias
+ 		$sql = "SELECT COUNT(*) FROM barrio WHERE estado = 1";
+ 		$registros = $conexion->query($sql);
+ 		$reg = $registros->fetch_array();
+ 		$total_registros = $reg[0];
+		$total_paginas 	= ceil($total_registros / $registros_por_pagina);
+
+		echo "<center>";
+			if ($pagina_actual > 1) {
+			    echo "<a href='?pagina=" . ($pagina_actual - 1) . "' style='padding: 10px; border-radius: 5px; background-color: white; margin: 10px; margin-top:20px'>Previo</a> ";
+			}
+
+			if ($pagina_actual < $total_paginas) {
+			    echo "<a href='?pagina=" . ($pagina_actual + 1) . "' style='padding: 10px; border-radius: 5px; background-color: white; margin: 10px; margin-top: 20px'>Siguiente</a>";
+			}
+		echo "</center>";
+
+ 	?>
 
  	<script>
         function confirmDelete(id) {
