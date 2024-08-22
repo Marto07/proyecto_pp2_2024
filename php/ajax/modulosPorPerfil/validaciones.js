@@ -9,9 +9,7 @@ $(document).ready(function() {
 
             selectPerfil.append($('<option>', {
                 value: '',
-                text: 'Seleccione un perfil',
-                disabled: true,
-                selected: true
+                text: 'Seleccione un perfil'
             }));
 
             $.each(data, function(index, perfil) {

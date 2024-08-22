@@ -5,16 +5,13 @@ USE proyecto_pp2;
 
 -- INSERT INTO `sucursal` (`id_sucursal`, `descripcion_sucursal`, `direccion`, `estado`, `rela_complejo`) VALUES (NULL, 'Sucursal YPF 1', 'Avenida avellaneda 235', '1', '1'), (NULL, 'Sucursal YPF 2', 'Avenida Napoleon 565', '1', '1'), (NULL, 'Sucursal YPF 3', 'Barrio Don Bosco calle sarmiento 277', '1', '1'), (NULL, 'LeClub 1', 'Avenida Gutniski', '1', '2'), (NULL, 'LeClub 2', 'Calle Domingo sarmiento 200', '1', '2'), (NULL, 'Sucursal FutBar1', 'Junin 728', '1', '3'), (NULL, 'Sucursal FutBar2', 'Avenida Uriburu 900', '1', '3');
 
-SELECT 
-            usuarios.id_usuario,
-            usuarios.password
-        FROM 
-            usuarios
-        JOIN
-            contacto
-        ON
-            usuarios.rela_contacto = contacto.id_contacto
-        WHERE 
-            contacto.descripcion_contacto LIKE 'Correo@prueba.com'
-        AND
-            usuarios.estado LIKE 'verificado';
+SELECT  id_persona, 
+                    nombre,
+                    apellido,
+                    descripcion_documento   AS documento,
+                    descripcion_sexo        AS sexo
+                FROM persona
+                JOIN documento
+                ON persona.rela_documento = documento.id_documento
+                JOIN sexo
+                ON persona.rela_sexo = sexo.id_sexo ;
