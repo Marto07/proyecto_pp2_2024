@@ -78,6 +78,7 @@
     $apellido = $datos_personales['apellido'];
     $documento = $datos_personales['descripcion_documento'];
     $sexo = $datos_personales['descripcion_sexo'];
+    $_SESSION['datos_personales'] = $datos_personales;
 
     $stmt->close();
     $conexion->close();

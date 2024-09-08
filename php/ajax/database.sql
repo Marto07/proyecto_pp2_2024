@@ -15,3 +15,29 @@ SELECT  id_persona,
                 ON persona.rela_documento = documento.id_documento
                 JOIN sexo
                 ON persona.rela_sexo = sexo.id_sexo ;
+
+
+CREATE TABLE zona_tarifa(
+    id_zona_tarifa INT AUTO_INCREMENT PRIMARY KEY,
+    turno ENUM('dia','noche'),
+    precio FLOAT,
+    rela_zona INT,
+    estado BOOLEAN DEFAULT 1,
+    FOREIGN KEY (rela_zona) REFERENCES zona(id_zona)
+);
+
+CREATE TABLE beneficio(
+    id_beneficio INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(50),
+    descripcion VARCHAR(150),
+    tipo ENUM('descuento', 'gratis'),
+    valor DECIMAL(5,2) #descuento si es que corresponde
+);
+
+CREATE TABLE sucursal_beneficio(
+    id_sucursal_beneficio INT AUTO_INCREMENT PRIMARY KEY,
+    descripcion VARCHAR(50),
+    rela_complejo INT,
+    rela_beneficio INT,
+    estado BOOLEAN DEFAULT 1
+);

@@ -1,9 +1,8 @@
 <?php 
-echo "MODIFICACION"; die;
 require_once('../../config/database/conexion.php');
 $id = $_GET['id_usuario'];
 
-$sqlUsuario = "SELECT * FROM usuario WHERE id_usuario = $id";
+$sqlUsuario = "SELECT * FROM usuarios WHERE id_usuario = $id";
 
 $sqlPerfil = "SELECT
 					id_perfil,
@@ -12,76 +11,16 @@ $sqlPerfil = "SELECT
 					perfil
 				WHERE estado IN (1)";
 
-$registrosEstado	= $conexion->query($sqlEstado); 
-$registrosComplejo	= $conexion->query($sqlComplejo);
-$registrosServicio	= $conexion->query($sqlServicio);
-
-$sql = "SELECT 	
-						id_zona,
-						descripcion_zona,
-                        dimension,
-						terreno,
-						tipo_futbol,
-						valor,
-						rela_estado_zona,
-						rela_complejo,
-						rela_servicio						
-					FROM
-						zona
-					JOIN
-						servicio
-					ON
-						zona.rela_servicio = servicio.id_servicio
-                    JOIN 
-                    	complejo
-					ON 
-						zona.rela_complejo = complejo.id_complejo
-					WHERE
-						zona.estado IN(1)
-					AND 
-						zona.id_zona = $id";
-
-$registros = $conexion->query($sql);
-
-foreach($registros as $reg) {
-	$id 		= $reg['id_zona'];
-	$zona 		= $reg['descripcion_zona'];
-   	$dimension 	= $reg['dimension'];
-	$terreno 	= $reg['terreno'];
-	$tipoFutbol = $reg['tipo_futbol'];
-	$valor		= $reg['valor'];
-	$estado 	= $reg['rela_estado_zona'];
-	$complejo	= $reg['rela_complejo'];
-	$servicio 	= $reg['rela_servicio'];	
-}
+$registrosUsuario	= $conexion->query($sqlUsuario); 
+$registrosPerfil	= $conexion->query($sqlPerfil);
+$datosUsuario = $registrosUsuario->fetch_assoc();
 
 if (isset($_POST['modificacion'])) {
-				$zona = $_POST['descripcion'];
-                $dimension = $_POST['dimension'];
-				$terreno = $_POST['terreno'];
-				$tipoFutbol = $_POST['tipo_futbol'];
-				$valor = $_POST['valor'];
-				$estado = $_POST['estado'];
-				$complejo = $_POST['complejo'];
-				$servicio = $_POST['servicio'];
-	$sql = "UPDATE
-				zona
-			SET 
-				descripcion_zona = '$zona',
-                dimension = '$dimension',
-				terreno = '$terreno',
-				tipo_futbol = '$tipoFutbol',
-				valor = $valor,
-				rela_estado_zona = $estado,
-				rela_complejo = $complejo,
-				rela_servicio = $servicio
-			WHERE
-				id_zona = $id";
+				$perfil = $_POST['perfil'];
+	$sql = "UPDATE perfil";
 	if ($conexion->query($sql)) {
-		header("Location: tablaZonas.php");
+		header("Location: tablaUsuarios.php");
 	}
-
-
 
 
 }
@@ -138,53 +77,17 @@ if (isset($_POST['modificacion'])) {
 </head>
 <body>
 	<h1 style="text-align: center; margin-top: 25px; margin-bottom: 20px; color: white;">Modulo de Modificacion de Zona</h1>
-    <form action="<?php echo $_SERVER['PHP_SELF']. '?id_zona='. $id;?>" method="post" onsubmit="return confirmModification();">
-        <label for="descripcion">C&oacute;digo:</label>
-        <input type="text" id="descripcion" name="descripcion" value="<?php echo $zona; ?>" required>
+    <form action="<?php echo $_SERVER['PHP_SELF']. '?id_usuario='. $id;?>" method="post" onsubmit="return confirmModification();">
+        
 
-        <label for="dimension">Dimensión:</label>
-        <input type="text" id="dimension" name="dimension" value="<?php echo $dimension; ?>">
 
-        <label for="terreno">Terreno:</label>
-        <input type="text" id="terreno" name="terreno" value="<?php echo $terreno; ?>">
 
-        <label for="tipo_futbol">Tipo de Fútbol:</label>
-        <select id="tipo_futbol" name="tipo_futbol" required>
-        	<option value="" disabled selected>Seleccione una categoria...</option>
-            <option value="Futbol 5">Futbol 5</option>
-            <option value="Futbol 7">Futbol 7</option>
-            <option value="Futbol 11">Futbol 11</option>
-        </select>
-
-        <label for="valor">Valor:</label>
-        <input type="number" id="valor" name="valor" value="<?php echo $valor; ?>" required>
-
-        <label for="estado">Estado:</label>
-        <select id="estado" name="estado" required>
-        	<option value="" disabled selected>Seleccione un estado...</option>
-        	<?php foreach ($registrosEstado as $reg) : ?>
-        		<option value="<?php echo $reg['id_estado_zona']; ?>" <?php if ($estado == $reg['id_estado_zona']) {echo 'selected';} ?>>
-        			<?php echo $reg['descripcion_estado_zona'];?>
-        		</option>
-        	<?php endforeach; ?>
-        </select>
-
-        <label for="complejo">Complejo:</label>
-        <select id="complejo" name="complejo" required>
-        	<option value="" disabled selected>Seleccione un complejo...</option>
-            <?php foreach ($registrosComplejo as $reg) : ?>
-        		<option value="<?php echo $reg['id_complejo']; ?>" <?php if ($complejo == $reg['id_complejo']) {echo 'selected';} ?>>
-        			<?php echo $reg['descripcion_complejo'];?>
-        		</option>
-        	<?php endforeach; ?>
-        </select>
-
-        <label for="servicio">Servicio:</label>
-        <select id="servicio" name="servicio" required>
-        	<option value="" disabled selected>Seleccione un servicio...</option>
-            <?php foreach ($registrosServicio as $reg) : ?>
-        		<option value="<?php echo $reg['id_servicio']; ?>" <?php if ($servicio == $reg['id_servicio']) {echo 'selected';} ?>>
-        			<?php echo $reg['descripcion_servicio'];?>
+        <label for="perfil">Perfil:</label>
+        <select id="perfil" name="perfil" required>
+        	<option value="" disabled selected>Seleccione un perfil...</option>
+        	<?php foreach ($registrosPerfil as $reg) : ?>
+        		<option value="<?php echo $reg['id_perfil']; ?>" <?php if ($datosUsuario['rela_perfil'] == $reg['id_perfil']) {echo 'selected';} ?>>
+        			<?php echo $reg['descripcion_perfil'];?>
         		</option>
         	<?php endforeach; ?>
         </select>

@@ -238,6 +238,10 @@
             z-index: 10;
         }
 
+        .profile-dropdown:hover {
+            display: block;
+        }
+
         .profile-dropdown li {
             margin-bottom: 10px;
         }
@@ -256,9 +260,9 @@
             transform: scale(1.05);
         }
 
-        .profile-menu:hover .profile-dropdown {
+        /*.profile-menu:hover .profile-dropdown {
             display: block;
-        }
+        }*/
     </style>
 </head>
 <body>
@@ -321,6 +325,7 @@
         </div>
 
     </header>
-
+<script src="js/jquery-3.7.1.min.js"></script>
+<script src="js/desplegar_perfil.js"></script>
 </body>
 </html>

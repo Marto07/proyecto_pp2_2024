@@ -27,7 +27,13 @@ try {
                                     SET u.estado = 'verificado' WHERE c.descripcion_contacto = ?");
             $stmt->execute([$email]);
             echo '¡Tu correo electrónico ha sido verificado correctamente!';
+            $stmt = $pdo->prepare("UPDATE usuarios u 
+                                    JOIN contacto c ON u.rela_contacto = c.id_contacto
+                                    SET u.token = NULL AND u.expiry = NULL
+                                    WHERE c.descripcion_contacto = ?" );
+            $stmt->execute([$email]);
             header("Location: ../inicio_sesion.php?correo_verificado");
+            exit();
         } else {
             echo 'Token inválido, expirado o correo electrónico no encontrado. <br> <a href="../inicio_sesion.php">Volver al login</a>';
         }
