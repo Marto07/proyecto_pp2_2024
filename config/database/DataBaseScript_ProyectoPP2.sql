@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 02-07-2024 a las 23:39:23
+-- Tiempo de generación: 10-09-2024 a las 23:53:40
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -109,6 +109,13 @@ CREATE TABLE `asignacion_tarifa_servicio` (
   `rela_servicio` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `asignacion_tarifa_servicio`
+--
+
+INSERT INTO `asignacion_tarifa_servicio` (`id_asignacion_tarifa_servicio`, `estado`, `rela_tarifa`, `rela_servicio`) VALUES
+(1, 1, 2, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -121,6 +128,32 @@ CREATE TABLE `barrio` (
   `rela_localidad` int(11) DEFAULT NULL,
   `estado` tinyint(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `barrio`
+--
+
+INSERT INTO `barrio` (`id_barrio`, `descripcion_barrio`, `rela_localidad`, `estado`) VALUES
+(1, 'republica argentina', 1, 1),
+(2, '7 de mayo', 1, 1),
+(3, 'lote 111', 1, 1),
+(4, 'la paz', 1, 1),
+(5, 'el porvenir', 1, 1),
+(6, 'el palomar', 1, 1),
+(7, 'la orquidia', 1, 1),
+(8, '25 de mayo', 1, 1),
+(9, 'don bosco', 1, 1),
+(10, 'tatane', 1, 1),
+(11, 'parque industrial', 1, 1),
+(12, 'fontana', 1, 1),
+(13, 'barrio la pilar', 1, 1),
+(14, 'san francisco', 1, 1),
+(15, 'san pedro', 1, 1),
+(16, 'san miguel', 1, 1),
+(17, 'independencia', 1, 1),
+(18, 'obrero', 1, 1),
+(19, 'virgen del pilar', 1, 1),
+(20, 'mariano moreno', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -163,10 +196,11 @@ CREATE TABLE `contacto` (
 --
 
 INSERT INTO `contacto` (`id_contacto`, `descripcion_contacto`, `estado`, `rela_tipo_contacto`, `rela_persona`) VALUES
-(11, ' Correo@prueba.com', 1, 1, 12),
 (12, 'Rinngley@gmail.com', 1, 1, 13),
 (13, 'Maurolezcano111@gmail.com', 1, 1, 15),
-(15, 'Maurinasd@gmail.com', 1, 1, 17);
+(15, 'Maurinasd@gmail.com', 1, 1, 17),
+(16, 'maurinprueba@gmail.com', 1, 1, 18),
+(17, '12321414', 1, 2, 19);
 
 -- --------------------------------------------------------
 
@@ -227,7 +261,33 @@ INSERT INTO `documento` (`id_documento`, `descripcion_documento`, `estado`, `rel
 (14, '15.253.2441', 1, 1),
 (15, 'a', 1, 1),
 (17, '24454253', 1, 1),
-(18, '42757241', 1, 1);
+(18, '42757241', 1, 1),
+(19, 'documento-NO-USUARIO', 1, 1),
+(20, NULL, 1, 1),
+(21, '42757241', 1, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `empleado`
+--
+
+CREATE TABLE `empleado` (
+  `id_empleado` int(11) NOT NULL,
+  `empleado_descripcion` varchar(50) DEFAULT NULL,
+  `empleado_cargo` varchar(50) DEFAULT NULL,
+  `fecha_alta` date DEFAULT NULL,
+  `estado` tinyint(1) DEFAULT 1,
+  `rela_persona` int(11) DEFAULT NULL,
+  `rela_sucursal` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `empleado`
+--
+
+INSERT INTO `empleado` (`id_empleado`, `empleado_descripcion`, `empleado_cargo`, `fecha_alta`, `estado`, `rela_persona`, `rela_sucursal`) VALUES
+(2, NULL, NULL, '2024-09-10', 1, 21, 5);
 
 -- --------------------------------------------------------
 
@@ -378,6 +438,52 @@ CREATE TABLE `localidad` (
   `estado` tinyint(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `localidad`
+--
+
+INSERT INTO `localidad` (`id_localidad`, `descripcion_localidad`, `rela_provincia`, `estado`) VALUES
+(1, 'Formosa', 1, 1),
+(2, 'Pirané', 1, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `marcador_asistencia`
+--
+
+CREATE TABLE `marcador_asistencia` (
+  `id_marcador_asistencia` int(11) NOT NULL,
+  `descripcion_marcador_asistencia` varchar(50) DEFAULT NULL,
+  `hora_alta` time DEFAULT NULL,
+  `fecha_alta` date DEFAULT NULL,
+  `marcador` enum('entrada','salida') DEFAULT NULL,
+  `estado` tinyint(1) DEFAULT 1,
+  `rela_empleado` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `membresia`
+--
+
+CREATE TABLE `membresia` (
+  `id_membresia` int(11) NOT NULL,
+  `beneficio_membresia` varchar(20) DEFAULT NULL,
+  `descripcion_membresia` varchar(100) DEFAULT NULL,
+  `precio_membresia` float DEFAULT NULL,
+  `estado` tinyint(1) DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `membresia`
+--
+
+INSERT INTO `membresia` (`id_membresia`, `beneficio_membresia`, `descripcion_membresia`, `precio_membresia`, `estado`) VALUES
+(1, '20', 'Descuento en Reservas', NULL, 1),
+(2, 'Gratis', 'Reservas de forma gratuita', NULL, 0);
+
 -- --------------------------------------------------------
 
 --
@@ -448,7 +554,9 @@ INSERT INTO `persona` (`id_persona`, `nombre`, `apellido`, `cuil`, `fecha_nacimi
 (13, 'edgar', 'coppa', NULL, NULL, NULL, 1, 14, 1),
 (15, 'martin', 'coppa', NULL, NULL, NULL, 1, 15, NULL),
 (17, 'martin', 'coppa', NULL, NULL, NULL, 1, 17, 2),
-(18, 'Roberto', 'Pelaez', NULL, '2000-07-05', '2024-07-01', 1, 18, 1);
+(18, 'Roberto', 'Pelaez', NULL, '2000-07-05', '2024-07-01', 1, 18, 1),
+(19, 'nombre-NO-USUARIO', 'apellido-NO-USUARIO', '3135151', '2000-08-05', NULL, 1, 19, 1),
+(21, 'bob esponja', 'Repetida', NULL, '2024-09-18', '2024-09-10', 1, 21, NULL);
 
 -- --------------------------------------------------------
 
@@ -461,6 +569,14 @@ CREATE TABLE `provincia` (
   `descripcion_provincia` varchar(50) DEFAULT NULL,
   `estado` tinyint(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `provincia`
+--
+
+INSERT INTO `provincia` (`id_provincia`, `descripcion_provincia`, `estado`) VALUES
+(1, 'Formosa', 1),
+(2, 'Buenos Aires', 1);
 
 -- --------------------------------------------------------
 
@@ -549,11 +665,21 @@ INSERT INTO `sexo` (`id_sexo`, `descripcion_sexo`, `estado`) VALUES
 CREATE TABLE `socio` (
   `id_socio` int(11) NOT NULL,
   `descripcion_socio` varchar(50) DEFAULT NULL,
+  `rela_complejo` int(11) DEFAULT NULL,
+  `rela_membresia` int(11) DEFAULT NULL,
+  `fecha_afiliacion` date DEFAULT NULL,
+  `fecha_expiracion` date DEFAULT NULL,
   `fecha_alta` date DEFAULT NULL,
   `estado` tinyint(1) DEFAULT 1,
-  `rela_complejo` int(11) DEFAULT NULL,
   `rela_persona` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `socio`
+--
+
+INSERT INTO `socio` (`id_socio`, `descripcion_socio`, `rela_complejo`, `rela_membresia`, `fecha_afiliacion`, `fecha_expiracion`, `fecha_alta`, `estado`, `rela_persona`) VALUES
+(2, NULL, 1, 1, '2024-09-10', '2024-09-30', '2024-09-10', 1, 17);
 
 -- --------------------------------------------------------
 
@@ -596,6 +722,14 @@ CREATE TABLE `tarifa` (
   `turno` enum('dia','noche') DEFAULT NULL,
   `estado` tinyint(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `tarifa`
+--
+
+INSERT INTO `tarifa` (`id_tarifa`, `precio`, `horario_desde`, `horario_hasta`, `turno`, `estado`) VALUES
+(1, 10000, '20:00:00', '06:00:00', 'noche', 1),
+(2, 8000, '06:00:00', '20:00:00', 'dia', 1);
 
 -- --------------------------------------------------------
 
@@ -679,10 +813,11 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id_usuario`, `username`, `password`, `token`, `expiry`, `estado`, `rela_contacto`, `rela_perfil`) VALUES
-(7, 'UserName Prueba', '$2y$10$ktJka4TmKFFdWFf.u7fMsOQKVrG1Dsh0o7K3AXXxLPlurYOBzC8ra', 'asdsa', '2024-06-13 21:58:56', 'verificado', 11, 2),
 (8, 'rinngley', '$2y$10$sAyr1WYs6d7KzyM.9Azrguwp5W0DwiaVaDmSXTy7GeAnpSIMtHTxS', 'fb21b596674f9fde250f257c12a8c833', '2024-06-05 21:59:03', 'verificado', 12, 1),
 (9, 'martincito', '$2y$10$Q/TyJqvCcA8WDEi9YXmihOoD.oBTddFEwpSSHBKORpqdxfIAbC8VC', '7eb706de3dd7aaabfb0837362d1c8016', '2024-06-05 21:59:06', 'verificado', 13, 3),
-(11, 'maurinasd0001', '$2y$10$cm9TCyYPUoRNRdXxjbAcTuhk91ZvURe9RBfpt2QoeNlt0lxJK2XJO', 'b8eece7c33c2da2cb3e3edb2c50b475e', '2024-06-28 20:20:42', 'verificado', 15, 2);
+(11, 'maurinasd0001', '$2y$10$cm9TCyYPUoRNRdXxjbAcTuhk91ZvURe9RBfpt2QoeNlt0lxJK2XJO', 'b8eece7c33c2da2cb3e3edb2c50b475e', '2024-06-28 20:20:42', 'verificado', 15, 2),
+(13, 'usuario canchero', '$2y$10$UuSwyMbcYO6I7Xa7hkvdlOoSY01s4AIf.GkLoNlVgiPVaqL4pKdUy', '435bdfaec7362a006ac5879ffa2a2f2f', '2024-07-04 03:01:11', 'verificado', 16, 3),
+(14, 'USUARIO PRUEBA CONSULTA', 'dsadwa', 'dasd', NULL, 'roungorwgw', 17, 1);
 
 -- --------------------------------------------------------
 
@@ -713,7 +848,9 @@ INSERT INTO `zona` (`id_zona`, `descripcion_zona`, `dimension`, `estado`, `rela_
 (4, 'cancha 2', 'Cancha 2', 1, 2, 2, 1, 5, 1),
 (5, 'cancha 1', NULL, 1, 1, 2, 1, 2, 1),
 (6, 'cancha 1', NULL, 1, 1, 1, 1, 6, 1),
-(7, 'cancha 1', NULL, 1, 1, 1, 1, 3, 1);
+(7, 'cancha 1', NULL, 1, 1, 1, 1, 3, 1),
+(8, 'cancha2', NULL, 1, 1, 2, 1, 6, 1),
+(9, 'cancha1', NULL, 1, 2, 1, 2, 7, 1);
 
 --
 -- Índices para tablas volcadas
@@ -804,6 +941,14 @@ ALTER TABLE `documento`
   ADD KEY `rela_tipo_documento` (`rela_tipo_documento`);
 
 --
+-- Indices de la tabla `empleado`
+--
+ALTER TABLE `empleado`
+  ADD PRIMARY KEY (`id_empleado`),
+  ADD KEY `rela_persona` (`rela_persona`),
+  ADD KEY `rela_sucursal` (`rela_sucursal`);
+
+--
 -- Indices de la tabla `equipo`
 --
 ALTER TABLE `equipo`
@@ -854,6 +999,19 @@ ALTER TABLE `horario`
 ALTER TABLE `localidad`
   ADD PRIMARY KEY (`id_localidad`),
   ADD KEY `rela_provincia` (`rela_provincia`);
+
+--
+-- Indices de la tabla `marcador_asistencia`
+--
+ALTER TABLE `marcador_asistencia`
+  ADD PRIMARY KEY (`id_marcador_asistencia`),
+  ADD KEY `rela_empleado` (`rela_empleado`);
+
+--
+-- Indices de la tabla `membresia`
+--
+ALTER TABLE `membresia`
+  ADD PRIMARY KEY (`id_membresia`);
 
 --
 -- Indices de la tabla `modulo`
@@ -909,7 +1067,8 @@ ALTER TABLE `sexo`
 ALTER TABLE `socio`
   ADD PRIMARY KEY (`id_socio`),
   ADD KEY `rela_complejo` (`rela_complejo`),
-  ADD KEY `rela_persona` (`rela_persona`);
+  ADD KEY `rela_membresia` (`rela_membresia`),
+  ADD KEY `fk_rela_persona` (`rela_persona`);
 
 --
 -- Indices de la tabla `sucursal`
@@ -994,13 +1153,13 @@ ALTER TABLE `asignacion_sucursal_domicilio`
 -- AUTO_INCREMENT de la tabla `asignacion_tarifa_servicio`
 --
 ALTER TABLE `asignacion_tarifa_servicio`
-  MODIFY `id_asignacion_tarifa_servicio` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_asignacion_tarifa_servicio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `barrio`
 --
 ALTER TABLE `barrio`
-  MODIFY `id_barrio` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_barrio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT de la tabla `complejo`
@@ -1012,7 +1171,7 @@ ALTER TABLE `complejo`
 -- AUTO_INCREMENT de la tabla `contacto`
 --
 ALTER TABLE `contacto`
-  MODIFY `id_contacto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id_contacto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT de la tabla `control`
@@ -1030,7 +1189,13 @@ ALTER TABLE `deporte`
 -- AUTO_INCREMENT de la tabla `documento`
 --
 ALTER TABLE `documento`
-  MODIFY `id_documento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id_documento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+
+--
+-- AUTO_INCREMENT de la tabla `empleado`
+--
+ALTER TABLE `empleado`
+  MODIFY `id_empleado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `equipo`
@@ -1078,7 +1243,19 @@ ALTER TABLE `horario`
 -- AUTO_INCREMENT de la tabla `localidad`
 --
 ALTER TABLE `localidad`
-  MODIFY `id_localidad` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_localidad` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de la tabla `marcador_asistencia`
+--
+ALTER TABLE `marcador_asistencia`
+  MODIFY `id_marcador_asistencia` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `membresia`
+--
+ALTER TABLE `membresia`
+  MODIFY `id_membresia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `modulo`
@@ -1096,13 +1273,13 @@ ALTER TABLE `perfil`
 -- AUTO_INCREMENT de la tabla `persona`
 --
 ALTER TABLE `persona`
-  MODIFY `id_persona` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id_persona` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT de la tabla `provincia`
 --
 ALTER TABLE `provincia`
-  MODIFY `id_provincia` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_provincia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `reserva`
@@ -1126,7 +1303,7 @@ ALTER TABLE `sexo`
 -- AUTO_INCREMENT de la tabla `socio`
 --
 ALTER TABLE `socio`
-  MODIFY `id_socio` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_socio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `sucursal`
@@ -1138,7 +1315,7 @@ ALTER TABLE `sucursal`
 -- AUTO_INCREMENT de la tabla `tarifa`
 --
 ALTER TABLE `tarifa`
-  MODIFY `id_tarifa` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_tarifa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `tipo_contacto`
@@ -1162,13 +1339,13 @@ ALTER TABLE `tipo_terreno`
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT de la tabla `zona`
 --
 ALTER TABLE `zona`
-  MODIFY `id_zona` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_zona` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Restricciones para tablas volcadas
@@ -1236,6 +1413,13 @@ ALTER TABLE `documento`
   ADD CONSTRAINT `documento_ibfk_1` FOREIGN KEY (`rela_tipo_documento`) REFERENCES `tipo_documento` (`id_tipo_documento`);
 
 --
+-- Filtros para la tabla `empleado`
+--
+ALTER TABLE `empleado`
+  ADD CONSTRAINT `empleado_ibfk_1` FOREIGN KEY (`rela_persona`) REFERENCES `persona` (`id_persona`),
+  ADD CONSTRAINT `empleado_ibfk_2` FOREIGN KEY (`rela_sucursal`) REFERENCES `sucursal` (`id_sucursal`);
+
+--
 -- Filtros para la tabla `equipo`
 --
 ALTER TABLE `equipo`
@@ -1260,6 +1444,12 @@ ALTER TABLE `localidad`
   ADD CONSTRAINT `localidad_ibfk_1` FOREIGN KEY (`rela_provincia`) REFERENCES `provincia` (`id_provincia`);
 
 --
+-- Filtros para la tabla `marcador_asistencia`
+--
+ALTER TABLE `marcador_asistencia`
+  ADD CONSTRAINT `marcador_asistencia_ibfk_1` FOREIGN KEY (`rela_empleado`) REFERENCES `empleado` (`id_empleado`);
+
+--
 -- Filtros para la tabla `persona`
 --
 ALTER TABLE `persona`
@@ -1279,8 +1469,9 @@ ALTER TABLE `reserva`
 -- Filtros para la tabla `socio`
 --
 ALTER TABLE `socio`
+  ADD CONSTRAINT `fk_rela_persona` FOREIGN KEY (`rela_persona`) REFERENCES `persona` (`id_persona`) ON DELETE CASCADE,
   ADD CONSTRAINT `socio_ibfk_1` FOREIGN KEY (`rela_complejo`) REFERENCES `complejo` (`id_complejo`),
-  ADD CONSTRAINT `socio_ibfk_2` FOREIGN KEY (`rela_persona`) REFERENCES `persona` (`id_persona`);
+  ADD CONSTRAINT `socio_ibfk_2` FOREIGN KEY (`rela_membresia`) REFERENCES `membresia` (`id_membresia`);
 
 --
 -- Filtros para la tabla `sucursal`
