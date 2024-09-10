@@ -2,6 +2,32 @@
 
 	require_once('conexion.php');
 
+	function obtenerMembresias($registros_por_pagina=null, $offset=null) {
+		global $conexion;
+
+		$sql = "SELECT 	
+						id_membresia,
+						beneficio_membresia,
+						descripcion_membresia,
+						precio_membresia
+					FROM
+						membresia
+					WHERE
+						estado IN(1)
+					LIMIT
+						$registros_por_pagina
+					OFFSET 
+						$offset";
+
+		if ($registros = $conexion->query($sql)) {
+			return $registros;
+		} else {
+			return false;
+		}
+
+	}
+
+
 	function obtenerModulos() {
 
 		global $conexion;
