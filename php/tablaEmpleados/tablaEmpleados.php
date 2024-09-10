@@ -80,11 +80,11 @@
 				<th>C&oacute;digo</th>
 				<th>Nombre</th>
 				<th>Apellido</th>
-				<th>Dni</th>
+				<th>Documento</th>
 				<th>Cargo</th>
 				<th>Fecha de Nacimiento</th>
 				<th>Fecha de Alta</th>
-				<th>Complejo</th>
+				<th>Sucursal</th>
 				<th></th>
 				<th></th>
 			</tr>
@@ -97,11 +97,11 @@
 			$id 		 	= $reg['id_empleado'];
 			$nombre 	 	= $reg['nombre'];
 			$apellido 	 	= $reg['apellido'];
-			$dni 	 		= $reg['dni'];
+			$documento 	 	= $reg['descripcion_documento'];
 			$cargo  		= $reg['empleado_cargo'];
 			$fechaNacimiento= $reg['fecha_nacimiento'];
 			$fechaAlta  	= $reg['fecha_alta'];
-			$complejo 		= $reg['descripcion_complejo'];
+			$sucursal 		= $reg['descripcion_sucursal'];
 
 			$modificar = "<a href='tablaEmpleados_modificacion.php?id_empleado=$id'>
 								<img src='../../assets/icons/editar_azul.png'>
@@ -118,11 +118,11 @@
 					 <td> <?php echo $id;										?></td>
 					 <td> <?php echo $nombre;									?></td>
 					 <td> <?php echo $apellido;									?></td>
-					 <td> <?php echo $dni;										?></td>
+					 <td> <?php echo $documento;								?></td>
 					 <td> <?php echo $cargo;									?></td>
 					 <td> <?php echo $fechaNacimiento;							?></td>
 					 <td> <?php echo $fechaAlta;								?></td>
-					 <td> <?php echo $complejo;									?></td>
+					 <td> <?php echo $sucursal;									?></td>
 					 <td> <?php echo $modificar 								?></td>
 					 <td> <?php echo $eliminar 									?></td>
 				 </tr>

@@ -2,24 +2,24 @@
 require_once("../../config/database/conexion.php");
 $id = $_GET['id_empleado'];
 
-$sqlComplejo = "SELECT 
-                    id_complejo,
-                    descripcion_complejo
+$sqlSucursal = "SELECT 
+                    id_sucursal,
+                    descripcion_sucursal
                 FROM 
-                    complejo";
-$registrosComplejo = $conexion->query($sqlComplejo);
+                    sucursal";
+$registrosSucursal = $conexion->query($sqlSucursal);
 
 $sql = "SELECT  
                         empleado.id_empleado,
                         persona.nombre,
                         persona.apellido,
-                        persona.dni,
-                        persona.cuil,
+                        persona.rela_documento,
+                        documento.descripcion_documento,
                         persona.fecha_nacimiento,
                         empleado.rela_persona,
                         empleado.empleado_cargo,
                         empleado.fecha_alta,
-                        empleado.rela_complejo
+                        empleado.rela_sucursal
                     FROM
                         empleado
                     JOIN
@@ -27,9 +27,13 @@ $sql = "SELECT
                     ON
                         empleado.rela_persona = persona.id_persona
                     JOIN
-                        complejo
+                        sucursal
                     ON
-                        empleado.rela_complejo = complejo.id_complejo
+                        empleado.rela_sucursal = sucursal.id_sucursal
+                    JOIN 
+                        documento
+                    ON
+                        documento.id_documento = persona.rela_documento
                     WHERE
                         empleado.estado IN(1)
                     AND 
@@ -41,49 +45,67 @@ foreach ($registros as $reg) {
         $id             = $reg['id_empleado'];
         $nombre         = $reg['nombre'];
         $apellido       = $reg['apellido'];
-        $dni            = $reg['dni'];
+        $documento      = $reg['descripcion_documento'];
         $cargo          = $reg['empleado_cargo'];
         $fechaNacimiento= $reg['fecha_nacimiento'];
         $fechaAlta      = $reg['fecha_alta'];
-        $complejo       = $reg['rela_complejo'];
+        $sucursal       = $reg['rela_sucursal'];
         $relaPersona    = $reg['rela_persona'];
 }
 
 if (isset($_POST['modificacion'])) {
                 $nombre         = $_POST['nombre'];
                 $apellido       = $_POST['apellido'];
-                $dni            = $_POST['dni'];
+                $documento      = $_POST['documento'];
                 $cargo          = $_POST['cargo'];
                 $fechaNacimiento= $_POST['fecha_nacimiento'];
-                $complejo       = $_POST['complejo'];
+                $sucursal       = $_POST['sucursal'];
 
-    $sqlPersona = "UPDATE
-                persona
-            SET 
-                nombre = '$nombre',
-                apellido = '$apellido',
-                dni = '$dni',
-                fecha_nacimiento = '$fechaNacimiento'
-            WHERE
-                id_persona = $relaPersona";
+    // Iniciamos la transacción
+    $conexion->begin_transaction();
 
-    if ($conexion->query($sqlPersona)) {
-        $sqlEmpleado = "UPDATE
-                            empleado
-                        SET
-                            empleado_cargo = '$cargo',
-                            rela_complejo = $complejo
-                        WHERE
-                            id_empleado = $id";
-        if($conexion->query($sqlEmpleado)) {
+    try {
+        // Actualizar documento
+        $sqlDocumento = "UPDATE documento 
+                            SET descripcion_documento = ? 
+                            WHERE id_documento = ?";
+        $stmtDocumento = $conexion->prepare($sqlDocumento);
+        $stmtDocumento->bind_param("si", $documento, $relaDocumento);
+        $stmtDocumento->execute();
 
-            header("Location: tablaEmpleados.php");
+        // Actualizar persona
+        $sqlPersona = "UPDATE persona 
+                        SET nombre = ?, apellido = ?, fecha_nacimiento = ?
+                        WHERE id_persona = ?";
+        $stmtPersona = $conexion->prepare($sqlPersona);
+        $stmtPersona->bind_param("sssi", $nombre, $apellido, $fechaNacimiento, $relaPersona);
+        $stmtPersona->execute();
 
-        }
+        // Actualizar empleado
+        $sqlEmpleado = "UPDATE empleado 
+                            SET empleado_cargo = ?, rela_sucursal = ?
+                            WHERE id_empleado = ?";
+        $stmtEmpleado = $conexion->prepare($sqlEmpleado);
+        $stmtEmpleado->bind_param("sii", $cargo, $sucursal, $id);
+        $stmtEmpleado->execute();
+
+        // Si todo salió bien, hacemos el commit
+        $conexion->commit();
+
+        // Redireccionar si todo fue exitoso
+        header("Location: tablaEmpleados.php");
+
+    } catch (Exception $e) {
+        // Si ocurre algún error, hacemos un rollback
+        $conexion->rollback();
+        echo "Error: " . $e->getMessage();
     }
 
-
-
+    // Cerramos las conexiones
+    $stmtDocumento->close();
+    $stmtPersona->close();
+    $stmtEmpleado->close();
+    $conexion->close();
 
 }
  ?>
@@ -148,8 +170,8 @@ if (isset($_POST['modificacion'])) {
         <label for="apellido">Apellido:</label>
         <input type="text" id="apellido" name="apellido" value="<?php echo $apellido; ?>" required>
 
-        <label for="dni">DNI:</label>
-        <input type="text" id="dni" name="dni" value="<?php echo $dni; ?>" required>
+        <label for="dni">Documento:</label>
+        <input type="text" id="documento" name="documento" value="<?php echo $documento; ?>" required>
 
         <label for="cargo">Cargo:</label>
         <select name="cargo">
@@ -162,14 +184,14 @@ if (isset($_POST['modificacion'])) {
         <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
         <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" value="<?php echo $fechaNacimiento ?>" required>
 
-        <label for="complejo">Complejo:</label>
-        <select id="complejo" name="complejo" required>
-            <option value="" disabled selected>Seleccione un Complejo...</option>
+        <label for="sucursal">Sucursal:</label>
+        <select id="sucursal" name="sucursal" required>
+            <option value="" disabled selected>Seleccione un sucursal...</option>
 
-            <?php foreach ($registrosComplejo as $reg) : ?>
+            <?php foreach ($registrosSucursal as $reg) : ?>
 
-                <option value="<?php echo $reg['id_complejo']; ?>" <?php if($complejo == $reg['id_complejo']) {echo 'selected';} ?>>
-                    <?php echo $reg['descripcion_complejo'];?>
+                <option value="<?php echo $reg['id_sucursal']; ?>" <?php if($sucursal == $reg['id_sucursal']) {echo 'selected';} ?>>
+                    <?php echo $reg['descripcion_sucursal'];?>
                 </option>
 
             <?php endforeach; ?>

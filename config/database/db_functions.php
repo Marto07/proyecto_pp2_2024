@@ -426,12 +426,11 @@
 						empleado.id_empleado,
 						persona.nombre,
 						persona.apellido,
-						persona.dni,
-						persona.cuil,
+						documento.descripcion_documento,
 						persona.fecha_nacimiento,
 						empleado.empleado_cargo,
 						empleado.fecha_alta,
-						complejo.descripcion_complejo
+						sucursal.descripcion_sucursal
 					FROM
 						empleado
 					JOIN
@@ -439,12 +438,41 @@
 					ON
 						empleado.rela_persona = persona.id_persona
 					JOIN
-						complejo
+						sucursal
 					ON
-						empleado.rela_complejo = complejo.id_complejo
+						empleado.rela_sucursal = sucursal.id_sucursal
+					JOIN 
+						documento
+					ON
+						documento.id_documento = persona.rela_documento
 					WHERE
 						empleado.estado IN(1)
 					ORDER BY (empleado.id_empleado)";
+
+		if ($registros = $conexion->query($sql)) {
+			return $registros;
+		} else {
+			return false;
+		}
+
+	}
+
+	function obtenerMembresias($registros_por_pagina=null, $offset=null) {
+		global $conexion;
+
+		$sql = "SELECT 	
+						id_membresia,
+						beneficio_membresia,
+						descripcion_membresia,
+						precio_membresia
+					FROM
+						membresia
+					WHERE
+						estado IN(1)
+					LIMIT
+						$registros_por_pagina
+					OFFSET 
+						$offset";
 
 		if ($registros = $conexion->query($sql)) {
 			return $registros;

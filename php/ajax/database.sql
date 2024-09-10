@@ -15,3 +15,24 @@ SELECT  id_persona,
                 ON persona.rela_documento = documento.id_documento
                 JOIN sexo
                 ON persona.rela_sexo = sexo.id_sexo ;
+
+CREATE TABLE membresia(
+    id_membresia INT AUTO_INCREMENT PRIMARY KEY,
+    beneficio_membresia VARCHAR(20),
+    descripcion_membresia VARCHAR(100),#si fuera necesario
+    precio_membrecia FLOAT,
+    estado BOOLEAN DEFAULT 1,
+);
+
+CREATE TABLE socio(
+    id_socio INT AUTO_INCREMENT PRIMARY KEY,
+    descripcion_socio VARCHAR(50),
+    rela_complejo INT,
+    rela_membresia INT,
+    fecha_afiliacion DATE,
+    fecha_expiracion DATE,
+    fecha_alta DATE,
+    estado BOOLEAN DEFAULT 1,
+    FOREIGN KEY (rela_complejo) REFERENCES complejo(id_complejo),
+    FOREIGN KEY (rela_membresia) REFERENCES membresia(id_membresia)
+);

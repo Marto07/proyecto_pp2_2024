@@ -1,13 +1,23 @@
 <?php 
 require_once("../../config/database/conexion.php");
 
-$sqlComplejo = "SELECT 
-                    id_complejo,
-                    descripcion_complejo
+$sqlSucursal = "SELECT 
+                    id_sucursal,
+                    descripcion_sucursal
                 FROM 
-                    complejo";
-$registrosComplejo = $conexion->query($sqlComplejo);
+                    sucursal";
 
+$sqlTipoDocumento = "SELECT
+                        id_tipo_documento,
+                        descripcion_tipo_documento
+                    FROM
+                        tipo_documento
+                    WHERE 
+                        estado IN(1)";
+
+$registrosSucursal = $conexion->query($sqlSucursal);
+
+$registrosTipoDocumento = $conexion->query($sqlTipoDocumento);
  ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -57,9 +67,62 @@ $registrosComplejo = $conexion->query($sqlComplejo);
             cursor: pointer;
             font-size: 16px;
         }
+
+        /* MODAL */
+        .notification-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none; /* Oculto por defecto */
+            justify-content: center;
+            align-items: center;
+        }
+        .notification-box {
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 90%; /* Limitar el ancho máximo */
+            width: 300px; /* Ajustar según el tamaño del formulario */
+            margin:auto;
+            margin-top:30vh;
+        }
+
+        .notification-box p {
+            margin: 0 0 15px;
+        }
+
+        .notification-box .close-btn {
+            background: #dc3545;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        /* MODAL */
     </style>
 </head>
 <body>
+
+    <!-- MODAL  -->
+    <div class="notification-overlay" id="notificationOverlay">
+        <div class="notification-box">
+            <p>Persona repetida.</p>
+            <small>Esta persona ya fue insertada:</small>
+            <p>nombre:<?php echo " " . $_GET['nombre']; ?></p>
+            <p>apellido:<?php echo " " . $_GET['apellido']; ?></p>
+            <p>documento:<?php echo " " . $_GET['documento']; ?></p>
+            <p>fecha de nacimiento:<?php echo " " . $_GET['fecha_nacimiento']; ?></p>
+
+
+            <button class="close-btn" id="closeNotification">Cerrar</button>
+        </div>
+    </div>
 
     <h1 style="text-align: center; margin-top: 25px; margin-bottom: 20px; color: white;">Modulo Alta de Empleados</h1>
     <form action="tablaEmpleados_aplicar_alta.php" method="post">
@@ -70,28 +133,36 @@ $registrosComplejo = $conexion->query($sqlComplejo);
         <label for="apellido">Apellido:</label>
         <input type="text" id="apellido" name="apellido" value="" required>
 
-        <label for="dni">DNI:</label>
-        <input type="text" id="dni" name="dni" value="" required>
+
+        <label for="documento">Documento:</label>
+        <input type="text" id="documento" name="documento" value="" required>
+
+        <label for="tipo_documento">Tipo de documento:</label>
+        <select name="tipo_documento">
+            <option value=""disabled selected>Seleccione una tipo de documento...</option>
+            <?php foreach ($registrosTipoDocumento as $reg) { ?>
+                <option value="<?php echo $reg['id_tipo_documento']; ?>"><?php echo $reg['descripcion_tipo_documento']; ?></option>
+            <?php } ?>
+        </select>
 
         <label for="cargo">Cargo:</label>
         <select name="cargo">
             <option value=""disabled selected>Seleccione una Cargo...</option>
-            <option value="Cantinero">Cantinero</option>
-            <option value="Canchero">Canchero</option>
+            <option value="Personal Administrativo">Personal Administrativo</option>
             <option value="Portero">Portero</option>
         </select>
 
         <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
         <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" value="" required>
 
-        <label for="complejo">Complejo:</label>
-        <select id="complejo" name="complejo" required>
-            <option value="" disabled selected>Seleccione un Complejo...</option>
+        <label for="sucursal">Sucursal:</label>
+        <select id="sucursal" name="sucursal" required>
+            <option value="" disabled selected>Seleccione una Sucursal...</option>
 
-            <?php foreach ($registrosComplejo as $reg) : ?>
+            <?php foreach ($registrosSucursal as $reg) : ?>
 
-                <option value="<?php echo $reg['id_complejo']; ?>">
-                    <?php echo $reg['descripcion_complejo'];?>
+                <option value="<?php echo $reg['id_sucursal']; ?>">
+                    <?php echo $reg['descripcion_sucursal'];?>
                 </option>
 
             <?php endforeach; ?>
@@ -100,6 +171,22 @@ $registrosComplejo = $conexion->query($sqlComplejo);
 
         <button type="submit">Enviar</button>
     </form>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            //funcion cerrar el modal 
+            $('#closeNotification').on('click', function() {
+                $('#notificationOverlay').hide();
+            });
+
+
+            // Mostrar el modal solo si se detecta la variable 'persona_repetida' en la URL
+            <?php if (isset($_GET['persona_repetida'])): ?>
+                $('#notificationOverlay').show();
+            <?php endif; ?>
+        });//FIN DOCUMENT READY
+    </script>
 
 </body>
 </html>
