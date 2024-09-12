@@ -5,7 +5,7 @@ USE proyecto_pp2;
 
 -- INSERT INTO `sucursal` (`id_sucursal`, `descripcion_sucursal`, `direccion`, `estado`, `rela_complejo`) VALUES (NULL, 'Sucursal YPF 1', 'Avenida avellaneda 235', '1', '1'), (NULL, 'Sucursal YPF 2', 'Avenida Napoleon 565', '1', '1'), (NULL, 'Sucursal YPF 3', 'Barrio Don Bosco calle sarmiento 277', '1', '1'), (NULL, 'LeClub 1', 'Avenida Gutniski', '1', '2'), (NULL, 'LeClub 2', 'Calle Domingo sarmiento 200', '1', '2'), (NULL, 'Sucursal FutBar1', 'Junin 728', '1', '3'), (NULL, 'Sucursal FutBar2', 'Avenida Uriburu 900', '1', '3');
 
-SELECT  id_persona, 
+/*SELECT  id_persona, 
                     nombre,
                     apellido,
                     descripcion_documento   AS documento,
@@ -16,7 +16,6 @@ SELECT  id_persona,
                 JOIN sexo
                 ON persona.rela_sexo = sexo.id_sexo ;
 
-<<<<<<< HEAD
 CREATE TABLE membresia(
     id_membresia INT AUTO_INCREMENT PRIMARY KEY,
     beneficio_membresia VARCHAR(20),
@@ -62,5 +61,6 @@ CREATE TABLE sucursal_beneficio(
     rela_complejo INT,
     rela_beneficio INT,
     estado BOOLEAN DEFAULT 1
-);
->>>>>>> 6c268b1cba099be66116997eacdaaa82b5733f1d
+);*/
+
+

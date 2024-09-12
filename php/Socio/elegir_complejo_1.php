@@ -81,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 membresia m ON so.rela_membresia = m.id_membresia
             WHERE 
                 z.rela_sucursal = ?");
-        $idPersona = 17;
+        $idPersona = 11;
         $queryZona->bind_param("ii", $idPersona,$selectedSucursal);
         $queryZona->execute();
         $resultZona = $queryZona->get_result();

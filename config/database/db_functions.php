@@ -1,7 +1,7 @@
 <?php 
 
 	require_once('conexion.php');
-
+/*
 	function obtenerMembresias($registros_por_pagina=null, $offset=null) {
 		global $conexion;
 
@@ -26,7 +26,7 @@
 		}
 
 	}
-
+*/
 
 	function obtenerModulos() {
 
