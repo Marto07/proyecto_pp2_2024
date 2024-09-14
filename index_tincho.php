@@ -2,42 +2,50 @@
     require_once("config/root_path.php");
     require_once(RUTA . "config/database/conexion.php");
     require_once(RUTA . "config/database/db_functions/personas.php");
+    require_once(RUTA . "php/functions/controlar_acceso.php");
     session_start();
 
-    if (!isset($_SESSION['usuario']) || !isset($_SESSION['id_perfil'])) {
-        header("Location: error403.php");
-        exit();
-    }
-
     $modulo = "Inicio";
+    validarAcceso($modulo,$_SESSION['perfil']);
 
-    $sql_acceso = "SELECT COUNT(*) AS tiene_acceso
-                    FROM 
-                        asignacion_perfil_modulo asp
-                    JOIN 
-                        perfil p 
-                    ON 
-                        asp.rela_perfil = p.id_perfil
-                    JOIN 
-                        modulo m ON asp.rela_modulo = m.id_modulo
-                    WHERE 
-                        p.descripcion_perfil 
-                    LIKE 
-                        '{$_SESSION['perfil']}' 
-                    AND 
-                        m.descripcion_modulo 
-                    LIKE 
-                        '{$modulo}'";
+    
 
-    $resultado = $conexion->query($sql_acceso);
 
-    if ($reg = $resultado->fetch_assoc()) {
-        if ($reg['tiene_acceso'] == 0) {
+
+
+
+/* 
+        if (!isset($_SESSION['usuario']) || !isset($_SESSION['id_perfil'])) {
             header("Location: error403.php");
             exit();
         }
-    }
+        $sql_acceso = "SELECT COUNT(*) AS tiene_acceso
+                        FROM 
+                            asignacion_perfil_modulo asp
+                        JOIN 
+                            perfil p 
+                        ON 
+                            asp.rela_perfil = p.id_perfil
+                        JOIN 
+                            modulo m ON asp.rela_modulo = m.id_modulo
+                        WHERE 
+                            p.descripcion_perfil 
+                        LIKE 
+                            '{$_SESSION['perfil']}' 
+                        AND 
+                            m.descripcion_modulo 
+                        LIKE 
+                            '{$modulo}'";
 
+        $resultado = $conexion->query($sql_acceso);
+
+        if ($reg = $resultado->fetch_assoc()) {
+            if ($reg['tiene_acceso'] == 0) {
+                header("Location: error403.php");
+                exit();
+            }
+        }
+*/
 
     $id_usuario = $_SESSION['id_usuario'];
     $registros = obtenerPersonaPorUsuario($id_usuario);
@@ -46,6 +54,7 @@
         $id_persona = $reg['id_persona'];
     }
 
+    //esta funcion seria para darle acceso si tiene complejo a su nombre
     function obtenerAcessoGestionCanchas($id_persona) {
         global $conexion;
 
@@ -266,65 +275,7 @@
     </style>
 </head>
 <body>
-
-    <header>
-        <div class="menu">
-            <img src="prototipo_logo-Photoroom.png"  width="60px" height="60px">
-
-            <ul class="cont-ul">
-                <li><a href="#">reclamos</a></li>
-                <li><a href="#">vistas</a></li>
-                <li><a href="<?php echo BASE_URL . 'php/reservas/reserva_de_usuario/formularioReserva1.php' ?>">Reservar</a></li>
-                <li><a href="<?php echo BASE_URL . 'php/reservas/reserva_de_personal_administrativo/formularioReserva1.php' ?>">Reservarle</a></li>  
-                <li><a href="#">Gestion del Sistema</a>
-                    <ul>
-                        <li><a href="#">Personas</a>
-                            <ul>
-                                <li><a href="php/TablasMaestras/Sexo/tablaSexos.php">sexo</a></li>
-                                <li><a href="php/TablasMaestras/TipoDocumento/tabla_tipo_documentos.php">tipo documento</a></li>
-                                <li><a href="php/TablasMaestras/TipoContacto/tablaTipoContactos.php">tipo contacto</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="#">zona</a>
-                            <ul>
-                                <li><a href="php/TablasMaestras/Deportes/tablaDeportes.php">Deporte</a></li>
-                                <li><a href="php/TablasMaestras/FormatoDeporte/tablaFormatoDeportes.php">Formato Deporte</a></li>
-                                <li><a href="php/TablasMaestras/Servicio/tablaServicios.php">Servicio</a></li>
-                                <li><a href="php/TablasMaestras/TipoTerreno/tablaTipoTerrenos.php">Tipo Terreno</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="#">domicilio</a>
-                            <ul>
-                                <li><a href="php/TablasMaestras/Provincia/tablaProvincias.php">Provincia</a></li>
-                                <li><a href="php/TablasMaestras/Localidad/tablaLocalidades.php">Localidad</a></li>
-                                <li><a href="php/TablasMaestras/Barrio/tablaBarrios.php">Barrio</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="#">reserva</a>
-                            <ul>
-                                <li><a href="php/TablasMaestras/EstadoReserva/tablaEstadoReserva.php">Estado Reserva</a></li>
-                                <li><a href="php/TablasMaestras/EstadoControl/tablaEstadoControl.php">Estado Control</a></li>
-                                <li><a href="php/reservas/reserva_de_usuario/formularioReserva1.php">Reservar</a></li>
-                                <li><a href="php/reservas/reserva_de_personal_administrativo/formularioReserva1.php">Reservar a un cliente</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="php/ajax/index.php">Permisos</a></li>
-                        <?php if ($registros->num_rows > 0) {echo '<li><a href="#">Mis Canchas</a></li>';} ?>
-                    </ul>
-                </li>
-            </ul>
-
-        </div>
-
-        <div class="profile-menu">
-            <button class="profile-button">Mi Perfil</button>
-            <ul class="profile-dropdown">
-                <li><a href="login/miPerfil/mis_datos.php">Mis Datos</a></li>
-                <li><a href="login/cerrar_sesion.php">Cerrar Sesión</a></li>
-            </ul>
-        </div>
-
-    </header>
+    <?php include(RUTA. 'includes/menu_navegacion.php'); ?>
 <script src="js/jquery-3.7.1.min.js"></script>
 <script src="js/desplegar_perfil.js"></script>
 </body>

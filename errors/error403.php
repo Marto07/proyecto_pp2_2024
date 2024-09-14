@@ -1,4 +1,7 @@
-<?php session_start(); ?>
+<?php 
+  session_start(); 
+  require_once("../config/root_path.php");
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -86,13 +89,13 @@
   </use>
   <h1>403</h1>
   <?php  
-  if (!isset($_SESSION['usuario']) || !isset($_SESSION['id_perfil'])) {
-    echo "<a class='back-button' href='login/inicio_sesion.php'>Iniciar Sesion</a>
+  if (isset($_GET['no_tiene_sesion'])) {
+    echo "<a class='back-button' href='" . BASE_URL . "login/inicio_sesion.php'>Iniciar Sesion</a>
 ";
     echo "<h2>Offside, Primero debes iniciar sesión!</h2>";
-  } else {
+  } elseif (isset($_GET['no_tiene_acceso'])) {
     echo "<h2>Offside, No tienes permiso para acceder a esta página!</h2>";
-    echo "<a class='back-button' href='index_tincho.php'>Volver</a>
+    echo "<a class='back-button' href='" . BASE_URL . "index_tincho.php'>Volver</a>
 ";
   }
   ?>
