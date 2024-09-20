@@ -384,16 +384,15 @@
 		}
 	}
 
-	function obtenerZonasFutbol() {
+	function obtenerZonasFutbol($id_sucursal) {
 		global $conexion;
 
 		$sql = "SELECT 	
 						id_zona,
 						descripcion_zona,
-                        dimension,
-						terreno,
-						tipo_futbol,
-						descripcion_complejo						
+						descripcion_tipo_terreno,
+						descripcion_formato_deporte,
+						descripcion_sucursal						
 					FROM
 						zona
 					JOIN
@@ -401,11 +400,21 @@
 					ON
 						zona.rela_servicio = servicio.id_servicio
                     JOIN 
-                    	complejo
+                    	sucursal
 					ON 
-						zona.rela_complejo = complejo.id_complejo
+						zona.rela_sucursal = sucursal.id_sucursal
+					JOIN 
+						formato_deporte
+					ON 
+						zona.rela_formato_deporte = formato_deporte.id_formato_deporte
+					JOIN
+						tipo_terreno
+					ON
+						zona.rela_tipo_terreno = tipo_terreno.id_tipo_terreno
 					WHERE
 						descripcion_servicio LIKE 'cancha'
+					AND
+						id_sucursal = $id_sucursal
 					AND
 						zona.estado IN(1)
 					ORDER BY (zona.id_zona)";
@@ -445,8 +454,12 @@
 
 	}
 
-	function obtenerEmpleados() {
+	function obtenerEmpleados($id_sucursal = '') {
 		global $conexion;
+
+
+		$orden = " ORDER BY (empleado.id_empleado)";
+
 
 		$sql = "SELECT 	
 						empleado.id_empleado,
@@ -472,8 +485,13 @@
 					ON
 						documento.id_documento = persona.rela_documento
 					WHERE
-						empleado.estado IN(1)
-					ORDER BY (empleado.id_empleado)";
+						empleado.estado IN(1)";
+
+		if ($id_sucursal) {
+			$sql .= " AND empleado.rela_sucursal = $id_sucursal";
+		}
+
+		$sql .= " $orden";
 
 		if ($registros = $conexion->query($sql)) {
 			return $registros;

@@ -1,5 +1,6 @@
 <?php 
 require_once("../../config/database/conexion.php");
+$id_sucursal = isset($_GET['id_sucursal']) ? $_GET['id_sucursal'] : die("falta GET de sucursal");
 $id = $_GET['id_empleado'];
 
 $sqlSucursal = "SELECT 
@@ -59,7 +60,7 @@ if (isset($_POST['modificacion'])) {
                 $documento      = $_POST['documento'];
                 $cargo          = $_POST['cargo'];
                 $fechaNacimiento= $_POST['fecha_nacimiento'];
-                $sucursal       = $_POST['sucursal'];
+                $sucursal       = $id_sucursal;
 
     // Iniciamos la transacción
     $conexion->begin_transaction();
@@ -93,7 +94,7 @@ if (isset($_POST['modificacion'])) {
         $conexion->commit();
 
         // Redireccionar si todo fue exitoso
-        header("Location: tablaEmpleados.php");
+        header("Location: tablaEmpleados.php?id_sucursal=$id_sucursal");
 
     } catch (Exception $e) {
         // Si ocurre algún error, hacemos un rollback
@@ -162,7 +163,7 @@ if (isset($_POST['modificacion'])) {
 <body>
 
     <h1 style="text-align: center; margin-top: 25px; margin-bottom: 20px; color: white;">Modulo Modificacion de Empleado</h1>
-    <form action="<?php echo $_SERVER['PHP_SELF']. '?id_empleado='. $id;?>" method="post" onsubmit="return confirmModification();">
+    <form action="<?php echo $_SERVER['PHP_SELF']. '?id_empleado='. $id . '&id_sucursal='. $id_sucursal;?>" method="post" onsubmit="return confirmModification();">
 
         <label for="nombre">Nombre:</label>
         <input type="text" id="nombre" name="nombre" value="<?php echo $nombre; ?>">
@@ -183,20 +184,6 @@ if (isset($_POST['modificacion'])) {
 
         <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
         <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" value="<?php echo $fechaNacimiento ?>" required>
-
-        <label for="sucursal">Sucursal:</label>
-        <select id="sucursal" name="sucursal" required>
-            <option value="" disabled selected>Seleccione un sucursal...</option>
-
-            <?php foreach ($registrosSucursal as $reg) : ?>
-
-                <option value="<?php echo $reg['id_sucursal']; ?>" <?php if($sucursal == $reg['id_sucursal']) {echo 'selected';} ?>>
-                    <?php echo $reg['descripcion_sucursal'];?>
-                </option>
-
-            <?php endforeach; ?>
-
-        </select>
 
         <button type="submit" name="modificacion">Enviar</button>
     </form>

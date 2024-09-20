@@ -1,8 +1,15 @@
 <?php 
-
+	require_once("../../config/root_path.php");
 	require_once('../../config/database/db_functions.php');
+	if (isset($_GET['id_sucursal'])) {
+		$id_sucursal = $_GET['id_sucursal'];
+	} else {
+		echo "ha ocurrido un error :(" . "<br>"; 
+	    echo "<a href='" . BASE_URL . "index_tincho.php" . "'>Volver</a>";
+	    die; 
+	}
 
-	$registros = obtenerEmpleados();
+	$registros = obtenerEmpleados($id_sucursal);
 ?>
 
 <!DOCTYPE html>
@@ -103,11 +110,11 @@
 			$fechaAlta  	= $reg['fecha_alta'];
 			$sucursal 		= $reg['descripcion_sucursal'];
 
-			$modificar = "<a href='tablaEmpleados_modificacion.php?id_empleado=$id'>
+			$modificar = "<a href='tablaEmpleados_modificacion.php?id_empleado=$id&id_sucursal=$id_sucursal'>
 								<img src='../../assets/icons/editar_azul.png'>
 							</a>";
 
-			$eliminar =	"<a href=\"javascript:confirmDelete($id)\">
+			$eliminar =	"<a href=\"javascript:confirmDelete($id,$id_sucursal)\">
 								<img src='../../assets/icons/eliminar.png'>
 							</a>";
 
@@ -131,7 +138,7 @@
 		 
  		<tr>
  			<td colspan="10" class="alta">
- 				<a href="tablaEmpleados_alta.php">
+ 				<a href="tablaEmpleados_alta.php?<?php echo "id_sucursal=$id_sucursal" ?>">
  					<img src="../../assets/icons/agregar.png" type="icon">
  				</a>
  			</td>
@@ -141,11 +148,11 @@
  	</table>
 
  	<script>
-        function confirmDelete(id) {
+        function confirmDelete(id,id_sucursal) {
             var respuesta = confirm("¿Estás seguro de que deseas eliminar este registro?");
             if (respuesta) {
                 // Si el usuario hace clic en "Aceptar", redirige a la página de eliminación
-                window.location.href = "tablaEmpleados_baja.php?id_empleado=" + id;
+                window.location.href = "tablaEmpleados_baja.php?id_empleado=" + id + "&id_sucursal=" + id_sucursal;
             }
         }
     </script>

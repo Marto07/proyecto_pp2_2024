@@ -1,5 +1,6 @@
 <?php
 require_once("../../config/database/conexion.php");
+$id_sucursal = isset($_GET['id_sucursal']) ? $_GET['id_sucursal'] : die("falta GET de sucursal");
 
 $nombre             = $_POST['nombre'];
 $apellido           = $_POST['apellido'];
@@ -7,7 +8,7 @@ $documento          = $_POST['documento'];
 $tipo_documento     = $_POST['tipo_documento'];
 $cargo              = $_POST['cargo'];
 $fechaNacimiento    = $_POST['fecha_nacimiento'];
-$sucursal           = $_POST['sucursal'];
+$sucursal           = $id_sucursal;
 
 $sqlValidarPersona = "SELECT p.nombre, p.apellido, d.descripcion_documento, p.fecha_nacimiento
                         FROM persona p
@@ -20,14 +21,14 @@ $stmt->bind_param('si', $documento, $tipo_documento);
 $stmt->execute();
 $resultado = $stmt->get_result();
 
-if ($resultado->num_rows > 0) {
+if ($resultado->num_rows > 0/*ESTO PARA QUE NO TOME ESTA VALIDACION*/) {
     $persona = $resultado->fetch_assoc();
     $nombre = $persona['nombre']; 
     $apellido = $persona['apellido']; 
     $documento = $persona['descripcion_documento']; 
     $fechaNacimiento = $persona['fecha_nacimiento'];
 
-    $get = "persona_repetida&nombre={$nombre}&apellido={$apellido}&documento={$documento}&fecha_nacimiento={$fechaNacimiento}";
+    $get = "persona_repetida&nombre={$nombre}&apellido={$apellido}&documento={$documento}&fecha_nacimiento={$fechaNacimiento}&id_sucursal=$id_sucursal";
 
     header("Location: tablaEmpleados_alta.php?" . $get);
     exit();
@@ -73,7 +74,7 @@ if ($resultado->num_rows > 0) {
         $conexion->commit();
 
         // Redirigir después de la inserción exitosa
-        header("Location: tablaEmpleados.php");
+        header("Location: tablaEmpleados.php?id_sucursal=$id_sucursal");
 
     } catch (Exception $e) {
         // Si ocurre un error, revertimos la transacción

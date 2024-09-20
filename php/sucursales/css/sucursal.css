@@ -1,0 +1,166 @@
+.contenido {
+  width: 100%;
+  background-color: #f2f2f2;
+  padding-top: 20px;
+}
+
+.container {
+  background-color: rgba(0, 0, 0,0.2);
+  width: 95%;
+  height: 100%;
+  overflow: auto;
+  margin: auto;
+  padding-top: 10px;
+}
+
+footer {
+  margin: 0px;
+  background-color: rgb(55, 68, 64);
+}
+
+.mitadSuperior {
+  display: flex;
+  flex-direction: row;
+  height: 50%;
+  width: 98%;
+  margin: auto;
+  border-radius: 10px 10px 10px 10px;
+}
+
+.contenedor-foto {
+  background-size:cover;
+  background-position: center;
+  background-repeat:no-repeat;
+  background-color: green;
+  flex:1.5;
+  overflow: hidden;
+  border-radius: 10px 0px 0px 10px;
+  position: relative;
+
+}
+
+.info {
+  background-color: #f2f2f2;
+  border:1px solid grey;
+  flex:1;
+  padding-top: 18px;
+  padding-bottom:10px;
+}
+
+
+
+.info2 {
+  background-color: #f2f2f2;
+  border:1px solid grey;
+  flex:1;
+  border-radius: 0px 10px 10px 0px;
+  padding-bottom:10px;
+}
+
+.info h2,
+.info h3,
+.info h4,
+.info a {
+  background-color: rgba(127, 127, 127, 0.3);
+  padding: 10px;
+  border: 1px solid black;
+  display: flex;
+  width: 60%;
+  height: 25px;
+  margin: auto;
+  margin-top: 5px;
+  border-radius: 5px;
+
+}
+
+.direccion {
+  background-color: white;
+  margin: auto;
+  margin-top: 10px;
+  width: 65%;
+}
+
+.servicios {
+  text-align: left;
+  color:white;
+  background-color: rgb(92, 113, 92);
+  border: 1px solid black;
+  border-radius: 5px;
+  width: 80%;
+  height: 65%;
+  margin: auto;
+  margin-top: 10px;
+  padding-left:10px;
+  overflow: hidden;
+}
+
+.servicios h3 {
+  text-align: center;
+}
+
+/*encima de la foto de la sucursal*/
+.icono{
+  background-color: black;
+  color: white;
+  position: absolute;
+  width:15%;
+  height: auto;
+  border-radius: 50%;
+  top: 20px; /* Ajusta la posición vertical del ícono */
+  left: 30px; /* Ajusta la posición horizontal del ícono */
+}
+
+.iconos {
+  background-color: aliceblue;
+  display: flex;
+  height: 75%;
+  overflow: auto;
+}
+
+.icono1,
+.icono2 {
+  padding-top: 2px;
+  width: 50%;
+  background-color: rgb(92, 113, 92);
+}
+
+.mitadInferior {
+  height: 48%;
+  width: 98%;
+  margin: auto;
+  padding-top: 30px;
+  overflow: auto;
+}
+
+.canchas {
+  margin-top:20px;
+  margin-bottom:20px;
+  background-color: #f2f2f2;
+  width: 99%;
+  border: solid 1px grey;
+  padding-top:20px;
+  padding-bottom:20px;
+  border-radius: 10px;
+}
+
+.cancha {
+  background-color: grey;
+  width: 90%;
+  height: 40px;
+  margin: auto;
+  border: 2px solid black;
+  border-radius: 10px;
+}
+
+.cancha:not(:first-child) {
+  margin-top: 15px;
+}
+
+.info_cancha {
+  display: flex;
+  /*  flex-direction: column;*/
+  height: 100%;
+  align-items: center;
+  justify-content: space-around;
+  color: white;
+}

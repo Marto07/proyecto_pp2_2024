@@ -1,6 +1,7 @@
 <?php 
-
+    require_once("../../config/root_path.php");
     $conexion = new mysqli("localhost","root","","proyecto_pp2");
+    session_start();
 
     if (isset($_GET['id_complejo'])) {
         $id_complejo = $_GET['id_complejo'];
@@ -420,6 +421,10 @@
 
                             </div>
 
+                            <div class="altas" align="center" style="">
+                                <a href="<?php echo BASE_URL . "php/socio/tabla_socios.php?id_complejo=$id_complejo"; ?>">Gestionar Socios</a>
+                            </div>
+
                         </div>
                     </div>
 
@@ -434,9 +439,10 @@
     <script>
         $(document).ready(function () {
             $('.complejoSucursal').on('click', function () {
+
                 let idSucursal = $(this).attr("id");
                 alert(idSucursal);
-                location.href = "sucursal_seleccionada.php" + "?id_sucursal=" + idSucursal;
+                window.location.href = "<?php echo BASE_URL; ?>php/sucursales/sucursal.php" + "?id_sucursal=" + idSucursal;
             });
 
             $('.menu-btn').click(function() {
@@ -446,8 +452,8 @@
         });///document ready
     </script>
 
-    <script src="/pp2/modules/nav/filtro_busqueda/js/filtro_busqueda.js"></script>
-    <script src="/pp2/modules/menu_desplegable/js/menu_desplegable.js"></script>
+    <!-- <script src="/pp2/modules/nav/filtro_busqueda/js/filtro_busqueda.js"></script> -->
+    <!-- <script src="/pp2/modules/menu_desplegable/js/menu_desplegable.js"></script> -->
 </body>
 
 </html>

@@ -6,7 +6,8 @@
     session_start();
 
     $modulo = "Inicio";
-    validarAcceso($modulo,$_SESSION['perfil']);
+    $perfil = $_SESSION['perfil'];
+    validarAcceso($modulo, $perfil);
 
     
 
@@ -91,8 +92,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Navbar</title>
-    <style type="text/css">
+    <title>Index</title>
+    <!-- <style type="text/css">
         body {
             margin: 0;
             padding: 0;
@@ -272,11 +273,14 @@
         /*.profile-menu:hover .profile-dropdown {
             display: block;
         }*/
-    </style>
+    </style> -->
+    <link rel="stylesheet" href="<?php echo BASE_URL. 'css/aside/menu_aside_beterette.css'; ?>">
+    <link rel="stylesheet" href="<?php echo BASE_URL. 'css/header.css' ?>">
 </head>
 <body>
-    <?php include(RUTA. 'includes/menu_navegacion.php'); ?>
+    <?php include(RUTA. 'includes/header_tincho.php'); ?>
+    <?php include(RUTA. 'includes/menu_aside_beterette.php'); ?>
 <script src="js/jquery-3.7.1.min.js"></script>
-<script src="js/desplegar_perfil.js"></script>
+<!-- <script src="js/desplegar_perfil.js"></script> -->
 </body>
 </html>

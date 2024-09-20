@@ -1,49 +1,72 @@
+<?php  
+    require_once(RUTA. 'config/database/conexion.php');
+    // session_start();
+    // $_SESSION['id_perfil'] = 1;
+    $id_perfil = $_SESSION['id_perfil']; // perfil del usuario almacenado en sesión
+    /*
+    $querySinRuta = "SELECT m.descripcion_modulo, sm.descripcion_submodulo
+              FROM modulo m 
+              JOIN asignacion_perfil_modulo apm ON m.id_modulo = apm.rela_modulo
+              JOIN submodulo sm ON m.id_modulo = sm.rela_modulo
+              WHERE apm.rela_perfil = ?";
+    */
+    $query = "SELECT m.descripcion_modulo, sm.descripcion_submodulo, m.ruta as ruta_modulo,sm.ruta as ruta_submodulo 
+              FROM modulo m 
+              JOIN asignacion_perfil_modulo apm ON m.id_modulo = apm.rela_modulo
+              JOIN submodulo sm ON m.id_modulo = sm.rela_modulo
+              WHERE apm.rela_perfil = ?";
+
+    $stmt = $conexion->prepare($query);
+    $stmt->bind_param("i", $id_perfil);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $modulos = [];
+    while ($row = $result->fetch_assoc()) {
+        $modulos[$row['descripcion_modulo']]['ruta_modulo'] = $row['ruta_modulo'];
+        $modulos[$row['descripcion_modulo']]['submodulos'][] = [
+            'nombre' => $row['descripcion_submodulo'],
+            'ruta' => $row['ruta_submodulo']
+        ];
+    }
+
+
+
+?>
+
 <header>
         <div class="menu">
             <img src="<?php echo BASE_URL; ?>assets/icons/prototipo_logo-Photoroom.png"  width="60px" height="60px">
 
             <ul class="cont-ul">
+                
+                <?php foreach ($modulos as $modulo => $data): ?>
 
-                <li><a href="#">reclamos</a></li>
-                <li><a href="#">vistas</a></li>
-                <li><a href="<?php echo BASE_URL . 'php/reservas/reserva_de_usuario/formularioReserva1.php' ?>">Reservar</a></li>
-                <li><a href="<?php echo BASE_URL . 'php/reservas/reserva_de_personal_administrativo/formularioReserva1.php' ?>">Reservarle</a></li>  
-                <li><a href="#">Gestion del Sistema</a>
-                    <ul>
-                        <li><a href="#">Personas</a>
-                            <ul>
-                                <li><a href="<?php echo BASE_URL; ?>php/TablasMaestras/Sexo/tablaSexos.php">sexo</a></li>
-                                <li><a href="<?php echo BASE_URL; ?>php/TablasMaestras/TipoDocumento/tabla_tipo_documentos.php">tipo documento</a></li>
-                                <li><a href="<?php echo BASE_URL; ?>php/TablasMaestras/TipoContacto/tablaTipoContactos.php">tipo contacto</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="#">zona</a>
-                            <ul>
-                                <li><a href="<?php echo BASE_URL; ?>php/TablasMaestras/Deportes/tablaDeportes.php">Deporte</a></li>
-                                <li><a href="<?php echo BASE_URL; ?>php/TablasMaestras/FormatoDeporte/tablaFormatoDeportes.php">Formato Deporte</a></li>
-                                <li><a href="<?php echo BASE_URL; ?>php/TablasMaestras/Servicio/tablaServicios.php">Servicio</a></li>
-                                <li><a href="<?php echo BASE_URL; ?>php/TablasMaestras/TipoTerreno/tablaTipoTerrenos.php">Tipo Terreno</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="#">domicilio</a>
-                            <ul>
-                                <li><a href="<?php echo BASE_URL; ?>php/TablasMaestras/Provincia/tablaProvincias.php">Provincia</a></li>
-                                <li><a href="<?php echo BASE_URL; ?>php/TablasMaestras/Localidad/tablaLocalidades.php">Localidad</a></li>
-                                <li><a href="<?php echo BASE_URL; ?>php/TablasMaestras/Barrio/tablaBarrios.php">Barrio</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="#">reserva</a>
-                            <ul>
-                                <li><a href="<?php echo BASE_URL; ?>php/TablasMaestras/EstadoReserva/tablaEstadoReserva.php">Estado Reserva</a></li>
-                                <li><a href="<?php echo BASE_URL; ?>php/TablasMaestras/EstadoControl/tablaEstadoControl.php">Estado Control</a></li>
-                                <li><a href="<?php echo BASE_URL; ?>php/reservas/reserva_de_usuario/formularioReserva1.php">Reservar</a></li>
-                                <li><a href="<?php echo BASE_URL; ?>php/reservas/reserva_de_personal_administrativo/formularioReserva1.php">Reservar a un cliente</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="<?php echo BASE_URL; ?>php/modulosPorPerfil/index.php">Permisos</a></li>
-                        <?php if ($registros->num_rows > 0) {echo '<li><a href="#">Mis Canchas</a></li>';} ?>
-                    </ul>
-                </li>
+                    <li>
+
+                        <a href=
+                            "<?php 
+                                if ($data['ruta_modulo'] != '#' && !empty($data['ruta_modulo'])) {
+                                    echo BASE_URL . $data['ruta_modulo'];
+                                }
+
+                            ?>" 
+                        >
+                            <?php echo $modulo; ?>
+                                
+                        </a>
+                        <ul>
+
+                            <?php foreach ($data['submodulos'] as $submodulo): ?>
+                                <li><a href="<?php echo BASE_URL . $submodulo['ruta']; ?>"><?php echo $submodulo['nombre']; ?></a></li>
+                            <?php endforeach; ?>
+
+                        </ul>
+
+                    </li>
+
+                <?php endforeach; ?>
+
             </ul>
 
         </div>
@@ -55,5 +78,8 @@
                 <li><a href="<?php echo BASE_URL; ?>login/cerrar_sesion.php">Cerrar Sesión</a></li>
             </ul>
         </div>
+
+        <script src="<?php echo BASE_URL . 'js/jquery-3.7.1.min.js'; ?>"></script>
+        <script src="<?php echo BASE_URL . 'js/desplegar_perfil.js'; ?>"></script>
 
     </header>

@@ -1,4 +1,5 @@
 <?php 
+$id_sucursal = isset($_GET['id_sucursal']) ? $_GET['id_sucursal'] : die("falta GET de sucursal");
 require_once("../../config/database/conexion.php");
 
 $sqlSucursal = "SELECT 
@@ -125,7 +126,7 @@ $registrosTipoDocumento = $conexion->query($sqlTipoDocumento);
     </div>
 
     <h1 style="text-align: center; margin-top: 25px; margin-bottom: 20px; color: white;">Modulo Alta de Empleados</h1>
-    <form action="tablaEmpleados_aplicar_alta.php" method="post">
+    <form action="tablaEmpleados_aplicar_alta.php?<?php echo "id_sucursal=$id_sucursal";?>" method="post">
 
         <label for="nombre">Nombre:</label>
         <input type="text" id="nombre" name="nombre" value="">
@@ -156,16 +157,6 @@ $registrosTipoDocumento = $conexion->query($sqlTipoDocumento);
         <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" value="" required>
 
         <label for="sucursal">Sucursal:</label>
-        <select id="sucursal" name="sucursal" required>
-            <option value="" disabled selected>Seleccione una Sucursal...</option>
-
-            <?php foreach ($registrosSucursal as $reg) : ?>
-
-                <option value="<?php echo $reg['id_sucursal']; ?>">
-                    <?php echo $reg['descripcion_sucursal'];?>
-                </option>
-
-            <?php endforeach; ?>
 
         </select>
 
