@@ -1,14 +1,15 @@
 <?php
+session_start();
 require_once("../../config/root_path.php");
 require_once(RUTA . "config/database/conexion.php");
-require_once(RUTA. "php/functions/consulta_reutilizable_mysql.php");
+require_once(RUTA . "php/functions/consulta_reutilizable_mysql.php");
 
 if (isset($_GET['id_complejo'])) {
     $id_complejo = $_GET['id_complejo'];
 } else {
-    echo "ha ocurrido un error :(" . "<br>"; 
+    echo "ha ocurrido un error :(" . "<br>";
     echo "<a href='" . BASE_URL . "index_tincho.php" . "'>Volver</a>";
-    die; 
+    die;
 }
 
 
@@ -22,7 +23,7 @@ $modulo = "Lista de socios de un complejo";
 $thead = ['ID', 'Nombre', 'Apellido', 'Documento', 'Membresia'];
 
 // Define los campos a seleccionar
-$campos = ['id_socio as id','id_persona', 'nombre', 'apellido', 'descripcion_documento', 'descripcion_membresia'];
+$campos = ['id_socio as id', 'id_persona', 'nombre', 'apellido', 'descripcion_documento', 'descripcion_membresia'];
 $tabla = 'socio'; // La tabla principal
 
 // Define el JOIN con la tabla ciudades
@@ -47,22 +48,102 @@ $registros = obtenerRegistros($tabla, $campos, $join, $condicion);
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $titulo_pagina; ?></title>
-    <link rel="stylesheet" href="<?php echo BASE_URL. "php/socio/css/tabla_reutilizable.css" ?>">
-</head>
-<body>
+    <link rel="stylesheet" href="<?php echo BASE_URL . 'css/aside/menu_aside_beterette.css'; ?>">
+    <link rel="stylesheet" href="<?php echo BASE_URL . 'css/header.css' ?>">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            background: #161616;
+            font-family: Arial, Helvetica, sans-serif;
+        }
 
-    <div class="table-container">
-        <h2><?php echo $modulo; ?></h2>
+        /* Formulario Empleado/////////////////////////////////////77 */
+        /* Estilos generales para el contenedor del formulario */
+        .containerEmpleado {
+            margin: auto;
+            margin-top: 10px;
+            padding: 20px;
+            background-color: #212121;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgb(128, 128, 128, 0.7);
+        }
+
+        .containerEmpleado h1 {
+            color: #fff;
+            text-align: center;
+        }
+
+
+        /* Tabla Registro //////////////////////////////////////////7 */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: auto;
+            margin-top: 1%;
+            color: rgba(0, 0, 0, 0.6);
+            font-weight: bold;
+            font-size: 16px;
+            border: none;
+        }
+
+        th,
+        table td {
+            text-align: center;
+            padding: 10px;
+            color: white;
+
+        }
+
+        /* ESTILOS ESPECIALES A LOS THEAD */
+
+        body table thead tr {
+            background-color: #161616;
+            color: rgba(255, 255, 255, 0.9);
+            text-align: center;
+            padding: 8px;
+        }
+
+        /* RENGLONES DE COLORES DIFERENTES */
+        table tbody tr:nth-child(odd) {
+            background-color: #2c2c2c;
+        }
+
+        table tbody tr:nth-child(even) {
+            background-color: #161616;
+        }
+
+        .alta {
+            text-align: center;
+            color: #161616;
+        }
+
+        table tbody img {
+            height: 30px;
+        }
+
+        table tbody a:hover {
+            cursor: pointer;
+        }
+    </style>
+
+</head>
+
+<body>
+    <?php include(RUTA . 'includes/header_tincho.php'); ?>
+    <?php include(RUTA . 'includes/menu_aside_beterette.php'); ?>
+    <div class="containerEmpleado">
+        <h1>Socios</h1>
         <table>
             <thead>
                 <tr>
 
                     <?php foreach ($thead as $th) : ?>
-                        <th><?php echo $th;?></th>
+                        <th><?php echo $th; ?></th>
                     <?php endforeach; ?>
                     <th></th>
                     <th></th>
@@ -70,13 +151,13 @@ $registros = obtenerRegistros($tabla, $campos, $join, $condicion);
                 </tr>
             </thead>
             <tbody>
-                <?php 
-                    foreach ($registros as $registro) {
-                        $modificar = "<a href='modificar.php?id={$registro['id']}&id_complejo=$id_complejo'>
+                <?php
+                foreach ($registros as $registro) {
+                    $modificar = "<a href='modificar.php?id={$registro['id']}&id_complejo=$id_complejo'>
                                 <img src='" . BASE_URL . "/assets/icons/editar_azul.png'>
                             </a>";
 
-                        $eliminar = "<a valor='{$registro['id']}' complejo='{$id_complejo}' class='eliminar'>
+                    $eliminar = "<a valor='{$registro['id']}' complejo='{$id_complejo}' class='eliminar'>
                                             <img src='" . BASE_URL . "/assets/icons/eliminar.png'>
                                         </a>";
                 ?>
@@ -106,8 +187,7 @@ $registros = obtenerRegistros($tabla, $campos, $join, $condicion);
     <script src="../../libs/jquery-3.7.1.min.js"></script>
     <script src="../../libs/sweetalert2.all.min.js"></script>
     <script>
-
-        $('.eliminar').on('click', function () {
+        $('.eliminar').on('click', function() {
 
             let valor = $(this).attr('valor');
             let complejo = $(this).attr('complejo');
@@ -131,10 +211,23 @@ $registros = obtenerRegistros($tabla, $campos, $join, $condicion);
 
         }); // #ELIMINAR ON CLICK
 
+        <?php if (isset($_GET['persona_repetida'])) : ?>  
+            Swal.fire({
+                title: '¿Seguro que desea eliminar este registro?',
+                text: "No podrás deshacer esta acción",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33', // Botón rojo
+                cancelButtonColor: '#aaa', // Botón gris
+                confirmButtonText: 'Eliminar',
+                cancelButtonText: 'Cancelar'
+            })
+        <?php endif; ?>
+
         function eliminar(id, complejo) {
             window.location.href = "eliminar.php?id=" + id + "&id_complejo=" + complejo;
         }
-        
     </script>
 </body>
+
 </html>

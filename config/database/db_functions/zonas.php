@@ -109,30 +109,62 @@
 
     
 
-    function insertarReserva($rela_horario,$fecha,$rela_zona,$rela_persona) {
+    function insertarReserva($rela_horario,$fecha,$rela_zona,$rela_persona,$monto_pagado,$monto_total) {
     	global $conexion;
 
     	$sqlInsert = "INSERT INTO 
 					reserva(
+						rela_estado_reserva,
 						fecha_reserva,
 						fecha_alta,
 						rela_persona,
 						rela_zona,
-						rela_horario
+						rela_horario,
+						monto_pagado,
+						monto_total
 					) 
 				VALUES(
+					1,
 					?,
 					CURRENT_DATE(),
 					?,
 					?,
+					?,
+					?,
 					?);";
 		$stmt = $conexion->prepare($sqlInsert);
-		$stmt->bind_param("siii", $fecha, $rela_persona, $rela_zona, $rela_horario);
+		$stmt->bind_param("siiiii", $fecha, $rela_persona, $rela_zona, $rela_horario,$monto_pagado,$monto_total);
 
 		if($stmt->execute()) {
 			return true;
 		} else{
 			return false;
 		}
+    }
+
+    //esta funcion seria para darle acceso si tiene complejo a su nombre
+    function obtenerAcessoGestionCanchas($id_persona) {
+        global $conexion;
+
+        $sql = "SELECT 
+                    zona.id_zona,
+                    zona.descripcion_zona,
+                    persona.nombre,
+                    persona.apellido
+                    FROM asignacion_persona_complejo apc
+                    JOIN complejo ON apc.rela_complejo = complejo.id_complejo
+                    JOIN sucursal ON sucursal.rela_complejo = complejo.id_complejo
+                    JOIN zona ON zona.rela_sucursal = sucursal.id_sucursal
+                    JOIN persona ON persona.id_persona = apc.rela_persona
+                    WHERE apc.rela_persona = ?";
+
+        $stmt = $conexion->prepare($sql);
+        $stmt->bind_param("i", $id_persona);
+        $registros = [];
+
+        if($stmt->execute()) {
+            $registros = $stmt->get_result();
+            return $registros;
+        } 
     }
 ?>

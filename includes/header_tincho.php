@@ -9,7 +9,7 @@
                 Cancha</button>
 
             <!-- Formulario de filtro que será contenido del modal en pantallas pequeñas -->
-            <form id="filtro_deporte">
+            <form id="filtro_deporte" method="POST" action="<?php echo BASE_URL. "php/reservas/reserva_formulario/listado_canchas_disponibles.php"; ?>">
                 <!-- Selección del deporte -->
                 <div class="form_filtro">
                     <label for="deporte">Deporte:</label>
@@ -41,7 +41,7 @@
                 <!-- Selección de la fecha -->
                 <div class="form_filtro">
                     <label for="fecha">Fecha:</label>
-                    <input type="date" id="fecha" name="fecha">
+                    <input type="text" id="fecha" name="fecha">
                 </div>
 
                 <!-- Selección de la hora -->
@@ -68,7 +68,7 @@
                     <div class="profile-img">
                     </div>
 
-                    <span>Lionel Messi
+                    <span><?php echo $_SESSION['usuario']; ?>
                         <i class="fa-solid fa-angle-down"></i>
                     </span>
                 </div>

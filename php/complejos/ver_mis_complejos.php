@@ -52,16 +52,20 @@
     <link rel="stylesheet" type="text/css" href=
         "<?php echo BASE_URL . 'php/complejos/css/plantilla.css';?>"
     >
-    <title></title>
+    <link rel="stylesheet" href="<?php echo BASE_URL . 'css/aside/menu_aside_beterette.css'; ?>">
+    <link rel="stylesheet" href="<?php echo BASE_URL . 'css/header.css' ?>">
     <script src="https://kit.fontawesome.com/03cc0c0d2a.js" crossorigin="anonymous"></script>
+    <title>Mis complejos</title>
 </head>
 <body>
+    <?php include(RUTA. 'includes/header_tincho.php'); ?>
+    <?php include(RUTA. 'includes/menu_aside_beterette.php'); ?>
 
     <div class="contenido">
 
         <div class="container">
 
-            <h>Complejos</h>
+            <h>Mis Complejos</h>
             <br>
             <form method="GET" action="<?php echo $_SERVER['PHP_SELF']; ?>">
                 <input type="text" placeholder="Buscar Complejo..." name="filtro">

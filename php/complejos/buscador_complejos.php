@@ -41,11 +41,14 @@
     <link rel="stylesheet" type="text/css" href=
         "<?php echo BASE_URL . 'php/complejos/css/plantilla.css';?>"
     >
-    <title></title>
+    <link rel="stylesheet" href="<?php echo BASE_URL . 'css/aside/menu_aside_beterette.css'; ?>">
+    <link rel="stylesheet" href="<?php echo BASE_URL . 'css/header.css' ?>">
+    <title>Buscador Complejos</title>
     <script src="https://kit.fontawesome.com/03cc0c0d2a.js" crossorigin="anonymous"></script>
 </head>
 <body>
-
+    <?php include(RUTA. 'includes/header_tincho.php'); ?>
+    <?php include(RUTA. 'includes/menu_aside_beterette.php'); ?>
     <div class="contenido">
 
         <div class="container">

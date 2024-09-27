@@ -48,42 +48,11 @@
         }
 */
 
-    $id_usuario = $_SESSION['id_usuario'];
-    $registros = obtenerPersonaPorUsuario($id_usuario);
 
-    if ($reg = $registros->fetch_assoc()) {
-        $id_persona = $reg['id_persona'];
-    }
+ 
+    
 
-    //esta funcion seria para darle acceso si tiene complejo a su nombre
-    function obtenerAcessoGestionCanchas($id_persona) {
-        global $conexion;
 
-        $sql = "SELECT 
-                    zona.id_zona,
-                    zona.descripcion_zona,
-                    persona.nombre,
-                    persona.apellido
-                    FROM asignacion_persona_complejo apc
-                    JOIN complejo ON apc.rela_complejo = complejo.id_complejo
-                    JOIN sucursal ON sucursal.rela_complejo = complejo.id_complejo
-                    JOIN zona ON zona.rela_sucursal = sucursal.id_sucursal
-                    JOIN persona ON persona.id_persona = apc.rela_persona
-                    WHERE apc.rela_persona = ?";
-
-        $stmt = $conexion->prepare($sql);
-        $stmt->bind_param("i", $id_persona);
-        $registros = [];
-
-        if($stmt->execute()) {
-            $registros = $stmt->get_result();
-            return $registros;
-        } 
-    }
-
-    if ($registros = obtenerAcessoGestionCanchas($id_persona)) {
-
-    }
 
 ?>
 
@@ -93,194 +62,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Index</title>
-    <!-- <style type="text/css">
-        body {
-            margin: 0;
-            padding: 0;
-            color: white;
-            font-family: 'Montserrat', sans-serif;
-            background-color: gray;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        header {
-            background-color: #e0f2e9;
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .menu {
-            display: flex;
-        }
-
-        .menu ul.cont-ul {
-            list-style: none;
-            display: flex;
-            gap: 20px;
-        }
-
-        .menu ul.cont-ul > li {
-            position: relative;
-        }
-
-        .menu ul.cont-ul > li > a {
-            text-decoration: none;
-            color: #3d9970;
-            font-size: 18px;
-            padding: 10px 15px;
-            transition: all 0.3s ease;
-        }
-
-        .menu ul.cont-ul > li > a:hover {
-            background-color: #3d9970;
-            color: #e0f2e9;
-            transform: scale(1.1);
-        }
-
-        .menu ul.cont-ul > li > ul {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            background-color: #a8e6cf;
-            list-style: none;
-            padding: 10px;
-            border-radius: 5px;
-            width: 100%;
-            min-width: 100%;
-        }
-
-        .menu ul.cont-ul > li > ul > li {
-            position: relative;
-        }
-
-        .menu ul.cont-ul > li > ul > li > a {
-            text-decoration: none;
-            color: #3d9970;
-            padding: 8px 12px;
-            display: block;
-            transition: all 0.3s ease;
-        }
-
-        .menu ul.cont-ul > li > ul > li > a:hover {
-            background-color: #3d9970;
-            color: #e0f2e9;
-            transform: scale(1.05);
-        }
-
-        .menu ul.cont-ul > li:hover > ul {
-            display: block;
-        }
-
-        .menu ul.cont-ul > li > ul > li > ul {
-            display: none;
-            position: absolute;
-            top: 0;
-            left: 100%;
-            background-color: #d7ffd9;
-            list-style: none;
-            padding: 10px;
-            border-radius: 5px;
-            width: 100%;
-            min-width: 100%;
-        }
-
-        .menu ul.cont-ul > li > ul > li > ul > li {
-            position: relative;
-        }
-
-        .menu ul.cont-ul > li > ul > li > ul > li > a {
-            text-decoration: none;
-            color: #3d9970;
-            padding: 8px 12px;
-            display: block;
-            transition: all 0.3s ease;
-        }
-
-        .menu ul.cont-ul > li > ul > li > ul > li > a:hover {
-            background-color: #3d9970;
-            color: #e0f2e9;
-            transform: scale(1.05);
-        }
-
-        .menu ul.cont-ul > li > ul > li:hover > ul {
-            display: block;
-        }
-
-        .profile-menu {
-            position: relative;
-            margin-right: 20px;
-        }
-
-        .profile-button {
-            padding: 10px 15px;
-            background-color: #3d9970;
-            color: white;
-            text-decoration: none;
-            font-size: 18px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .profile-button:hover {
-            background-color: #2e7d32;
-            transform: scale(1.1);
-        }
-
-        .profile-dropdown {
-            display: none;
-            position: absolute;
-            top: 100%;
-            right: 0;
-            background-color: #a8e6cf;
-            list-style: none;
-            padding: 10px;
-            border-radius: 5px;
-            z-index: 10;
-        }
-
-        .profile-dropdown:hover {
-            display: block;
-        }
-
-        .profile-dropdown li {
-            margin-bottom: 10px;
-        }
-
-        .profile-dropdown li a {
-            text-decoration: none;
-            color: #3d9970;
-            padding: 8px 12px;
-            display: block;
-            transition: all 0.3s ease;
-        }
-
-        .profile-dropdown li a:hover {
-            background-color: #3d9970;
-            color: #e0f2e9;
-            transform: scale(1.05);
-        }
-
-        /*.profile-menu:hover .profile-dropdown {
-            display: block;
-        }*/
-    </style> -->
     <link rel="stylesheet" href="<?php echo BASE_URL. 'css/aside/menu_aside_beterette.css'; ?>">
     <link rel="stylesheet" href="<?php echo BASE_URL. 'css/header.css' ?>">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        
+        .flatpickr-calendar {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .flatpickr-day {
+            border-radius: 50%;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .flatpickr-day:hover, .flatpickr-day.selected {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+    </style>
 </head>
 <body>
     <?php include(RUTA. 'includes/header_tincho.php'); ?>
     <?php include(RUTA. 'includes/menu_aside_beterette.php'); ?>
 <script src="js/jquery-3.7.1.min.js"></script>
-<!-- <script src="js/desplegar_perfil.js"></script> -->
+<script>
+    $(document).ready(function () {
+
+        flatpickr("#fecha", {
+            dateFormat: "Y-m-d",  // Formato de fecha almacenado
+            minDate: "today",     // Hoy como la fecha mínima
+            maxDate: new Date().fp_incr(7),  // 7 días hacia adelante desde hoy
+            defaultDate: "today", // Preselecciona la fecha de hoy
+            altInput: true,
+            altFormat: "F j, Y",  // Formato alternativo que se muestra
+            allowInput: false     // Evita que el usuario escriba manualmente
+        });
+
+    });//document ready
+
+</script>
 </body>
 </html>

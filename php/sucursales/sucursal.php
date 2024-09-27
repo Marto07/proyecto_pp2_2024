@@ -122,15 +122,16 @@
 	<style type="text/css">
 		*{font-family: arial;}
 	</style>
-	<link rel="stylesheet" href=
-	"<?php echo BASE_URL. 'css/menu_navegacion.css'; ?>"
-	>
 	<link rel="stylesheet" type="text/css" href="<?php echo BASE_URL. 'php/sucursales/css/sucursal.css'; ?>">
 	<script src="https://kit.fontawesome.com/03cc0c0d2a.js" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="<?php echo BASE_URL . 'css/aside/menu_aside_beterette.css'; ?>">
+    <link rel="stylesheet" href="<?php echo BASE_URL . 'css/header.css' ?>">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
 </head>
 <body>
-	<?php include(RUTA. 'includes/menu_navegacion.php'); ?>
+	<?php include(RUTA. 'includes/header_tincho.php'); ?>
+	<?php include(RUTA. 'includes/menu_aside_beterette.php'); ?>
 
 	<div class="contenido">
 		
@@ -237,8 +238,8 @@
 
 
 			        <div class="Altas">
-			        	<a href="">Gestionar Empleados</a>
-			        	<a href="">Gestionar Socios</a>
+			        	<a href="../tablaEmpleados/tablaEmpleados.php?id_sucursal=<?php echo $id_sucursal; ?>">Gestionar Empleados</a>
+			        	<a href="../Socio/tabla_socios.php?id_complejo=<?php echo $id_complejo; ?>">Gestionar Socios</a><a href="<?php echo BASE_URL. "php/tablaZonasCanchas/tablaZonas.php?id_sucursal=$id_sucursal"; ?>">Gestionar canchas</a>
 			        </div>
 			    </div>
 
