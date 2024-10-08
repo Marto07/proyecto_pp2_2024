@@ -22,14 +22,15 @@ if ($id_persona > 0 && $id_complejo > 0 && $id_membresia > 0) {
     // Insertar el registro de membresía (esto asume que tienes una tabla para almacenar esta relación)
     $query = "
         INSERT INTO socio (rela_persona, rela_complejo, rela_membresia) 
-        VALUES ($id_persona, $id_complejo, $id_membresia)";
-    echo $query; die;
+        VALUES (?, ?, ?)";
+
     
     $stmt = $conn->prepare($query);
     $stmt->bind_param("iii", $id_persona, $id_complejo, $id_membresia);
 
     if ($stmt->execute()) {
         echo "¡Registro exitoso! La persona ahora es socio del complejo.";
+        header("Location: ../../index_tincho.php");
     } else {
         echo "Error al registrar al socio: " . $conn->error;
     }

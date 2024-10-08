@@ -109,25 +109,31 @@
 
     
 
-    function insertarReserva($rela_horario,$fecha,$rela_zona,$rela_persona) {
+    function insertarReserva($rela_horario,$fecha,$rela_zona,$rela_persona,$monto_pagado,$monto_total) {
     	global $conexion;
 
     	$sqlInsert = "INSERT INTO 
 					reserva(
+						rela_estado_reserva,
 						fecha_reserva,
 						fecha_alta,
 						rela_persona,
 						rela_zona,
-						rela_horario
+						rela_horario,
+						monto_pagado,
+						monto_total
 					) 
 				VALUES(
+					1,
 					?,
 					CURRENT_DATE(),
 					?,
 					?,
+					?,
+					?,
 					?);";
 		$stmt = $conexion->prepare($sqlInsert);
-		$stmt->bind_param("siii", $fecha, $rela_persona, $rela_zona, $rela_horario);
+		$stmt->bind_param("siiiii", $fecha, $rela_persona, $rela_zona, $rela_horario,$monto_pagado,$monto_total);
 
 		if($stmt->execute()) {
 			return true;

@@ -1,16 +1,19 @@
-<?php 
+<?php
 
-    require_once("../../../config/database/conexion.php");
-    session_start();
+require_once("../../../config/root_path.php");
+require_once(RUTA . "config/database/conexion.php");
+require_once(RUTA . "php/functions/controlar_acceso.php");
+session_start();
+$perfil = $_SESSION['perfil'];
+validarAcceso("administrador", $perfil);
+if (!isset($_SESSION['usuario']) || !isset($_SESSION['id_perfil'])) {
+    header("Location: ../../../error403.php");
+    exit();
+}
 
-    if (!isset($_SESSION['usuario']) || !isset($_SESSION['id_perfil'])) {
-        header("Location: ../../../error403.php");
-        exit();
-    }
+$modulo = "Zonas";
 
-    $modulo = "Zonas";
-
-    $sql_acceso = "SELECT COUNT(*) AS tiene_acceso
+$sql_acceso = "SELECT COUNT(*) AS tiene_acceso
                     FROM 
                         asignacion_perfil_modulo asp
                     JOIN 
@@ -28,18 +31,19 @@
                     LIKE 
                         '{$modulo}'";
 
-    $resultado = $conexion->query($sql_acceso);
+$resultado = $conexion->query($sql_acceso);
 
-    if ($reg = $resultado->fetch_assoc()) {
-        if ($reg['tiene_acceso'] == 0) {
-            header("Location: ../../../error403.php");
-            exit();
-        }
+if ($reg = $resultado->fetch_assoc()) {
+    if ($reg['tiene_acceso'] == 0) {
+        header("Location: ../../../error403.php");
+        exit();
     }
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -67,7 +71,8 @@
             color: #333;
         }
 
-        input, select {
+        input,
+        select {
             width: 100%;
             padding: 10px;
             margin-bottom: 15px;
@@ -88,6 +93,7 @@
         }
     </style>
 </head>
+
 <body>
 
     <h1 style="text-align: center; margin-top: 25px; margin-bottom: 20px; color: white;">Modulo Alta de TipoTerrenos</h1>
@@ -100,4 +106,5 @@
     </form>
 
 </body>
+
 </html>

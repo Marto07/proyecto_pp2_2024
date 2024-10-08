@@ -6,7 +6,7 @@ $password   = $_POST['password'];
 //echo $user;
 //echo $name;
 
-$sql="SELECT 
+$sql = "SELECT 
             usuarios.id_usuario,
             usuarios.password
         FROM 
@@ -23,11 +23,11 @@ $sql="SELECT
 $datos = $conexion->query($sql);
 
 // el compañero usa mysql->query 
-if($datos->num_rows == 1) {
+if ($datos->num_rows == 1) {
 
     $row = $datos->fetch_assoc();
 
-    if(password_verify($password, $row['password'])) {
+    if (password_verify($password, $row['password'])) {
 
         $sql = "SELECT id_usuario ,username ,id_perfil, descripcion_perfil, descripcion_contacto 
             FROM 
@@ -46,12 +46,11 @@ if($datos->num_rows == 1) {
         $datos = $conexion->query($sql);
 
         while ($reg = $datos->fetch_assoc()) {
-        	$id_usuario = $reg['id_usuario'];
+            $id_usuario = $reg['id_usuario'];
             $usuario    = $reg['username'];
             $email      = $reg['descripcion_contacto'];
             $id_perfil  = $reg['id_perfil'];
             $perfil     = $reg['descripcion_perfil'];
-
         }
 
         session_start();
@@ -62,17 +61,13 @@ if($datos->num_rows == 1) {
         $_SESSION['id_perfil']  =   $id_perfil;
         $_SESSION['perfil']     =   $perfil;
 
-        header('location: ../index_tincho.php');
+        header('location: ../index.php');
         exit();
+    } else {
+        //        echo"no existe";
+        header('location: inicio_sesion.php?error=2');
     }
-    else {
-//        echo"no existe";
-    header('location: inicio_sesion.php?error=2');
-    }
-
 } else {
-//    echo"usuario inexistente";
+    //    echo"usuario inexistente";
     header('location: inicio_sesion.php?error=1');
-    
 }
-?>

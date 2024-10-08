@@ -4,8 +4,8 @@ session_start(); // Asegúrate de tener la sesión iniciada
 // Conexión a la base de datos
 $host = "localhost";
 $user = "root";
-$password = "";
-$database = "proyecto_pp2"; 
+$password = "root";
+$database = "proyecto_pp2";
 
 $conn = new mysqli($host, $user, $password, $database);
 
@@ -44,7 +44,6 @@ if ($id_usuario > 0) {
     // Consulta para obtener las membresías
     $queryMembresias = "SELECT id_membresia, descripcion_membresia FROM MEMBRESIA";
     $resultMembresias = $conn->query($queryMembresias);
-
 } else {
     die("No se recibió un ID de usuario válido.");
 }
@@ -52,36 +51,39 @@ if ($id_usuario > 0) {
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hacerse Socio</title>
 </head>
+
 <body>
 
-<h2>Hacerse Socio</h2>
+    <h2>Hacerse Socio</h2>
 
-<!-- Formulario para seleccionar la membresía y enviarlo a registrar_socio_3.php -->
-<form action="hacerse_socio_aplicar.php" method="POST">
-    <label for="membresia">Seleccionar Membresía:</label>
-    <select name="membresia" id="membresia" required>
-        <option value="">Selecciona una membresía</option>
-        <?php while ($row = $resultMembresias->fetch_assoc()) { ?>
-            <option value="<?php echo $row['id_membresia']; ?>">
-                <?php echo $row['descripcion_membresia']; ?>
-            </option>
-        <?php } ?>
-    </select>
-    <br><br>
+    <!-- Formulario para seleccionar la membresía y enviarlo a registrar_socio_3.php -->
+    <form action="hacerse_socio_aplicar.php" method="POST">
+        <label for="membresia">Seleccionar Membresía:</label>
+        <select name="membresia" id="membresia" required>
+            <option value="">Selecciona una membresía</option>
+            <?php while ($row = $resultMembresias->fetch_assoc()) { ?>
+                <option value="<?php echo $row['id_membresia']; ?>">
+                    <?php echo $row['descripcion_membresia']; ?>
+                </option>
+            <?php } ?>
+        </select>
+        <br><br>
 
-    <!-- Inputs ocultos para enviar id_persona e id_complejo -->
-    <input type="hidden" name="id_persona" value="<?php echo $id_persona; ?>">
-    <input type="hidden" name="id_complejo" value="<?php echo $id_complejo; ?>">
+        <!-- Inputs ocultos para enviar id_persona e id_complejo -->
+        <input type="hidden" name="id_persona" value="<?php echo $id_persona; ?>">
+        <input type="hidden" name="id_complejo" value="<?php echo $id_complejo; ?>">
 
-    <button type="submit">Hacerse Socio</button>
-</form>
+        <button type="submit">Hacerse Socio</button>
+    </form>
 
 </body>
+
 </html>
 
 <?php

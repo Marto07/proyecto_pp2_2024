@@ -68,7 +68,7 @@
                     <div class="profile-img">
                     </div>
 
-                    <span>Lionel Messi
+                    <span><?php echo $_SESSION['usuario']; ?>
                         <i class="fa-solid fa-angle-down"></i>
                     </span>
                 </div>

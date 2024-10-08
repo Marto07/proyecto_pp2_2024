@@ -1,40 +1,11 @@
-<?php 
-require_once("../../../config/database/conexion.php");
-    session_start();
+<?php
+require_once("../../../config/root_path.php");
+require_once(RUTA . "config/database/conexion.php");
+require_once(RUTA . "php/functions/controlar_acceso.php");
+session_start();
+$perfil = $_SESSION['perfil'];
+validarAcceso("administrador", $perfil);
 
-    if (!isset($_SESSION['usuario']) || !isset($_SESSION['id_perfil'])) {
-        header("Location: ../../../error403.php");
-        exit();
-    }
-
-    $modulo = "Personas";
-
-    $sql_acceso = "SELECT COUNT(*) AS tiene_acceso
-                    FROM 
-                        asignacion_perfil_modulo asp
-                    JOIN 
-                        perfil p 
-                    ON 
-                        asp.rela_perfil = p.id_perfil
-                    JOIN 
-                        modulo m ON asp.rela_modulo = m.id_modulo
-                    WHERE 
-                        p.descripcion_perfil 
-                    LIKE 
-                        '{$_SESSION['perfil']}' 
-                    AND 
-                        m.descripcion_modulo 
-                    LIKE 
-                        '{$modulo}'";
-
-    $resultado = $conexion->query($sql_acceso);
-
-    if ($reg = $resultado->fetch_assoc()) {
-        if ($reg['tiene_acceso'] == 0) {
-            header("Location: ../../../error403.php");
-            exit();
-        }
-    }
 
 $id = $_GET['id_sexo'];
 
@@ -53,7 +24,7 @@ foreach ($registros as $reg) {
 }
 
 if (isset($_POST['modificacion'])) {
-                $descripcion = $_POST['descripcion'];
+    $descripcion = $_POST['descripcion'];
 
     $sql = "UPDATE
                 sexo
@@ -65,14 +36,11 @@ if (isset($_POST['modificacion'])) {
     if ($conexion->query($sql)) {
         header("Location: tablaSexos.php");
     }
-
-
-
-
 }
- ?>
+?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -100,7 +68,8 @@ if (isset($_POST['modificacion'])) {
             color: #333;
         }
 
-        input, select {
+        input,
+        select {
             width: 100%;
             padding: 10px;
             margin-bottom: 15px;
@@ -121,10 +90,11 @@ if (isset($_POST['modificacion'])) {
         }
     </style>
 </head>
+
 <body>
 
     <h1 style="text-align: center; margin-top: 25px; margin-bottom: 20px; color: white;">Modulo Modificacion de sexo</h1>
-    <form action="<?php echo $_SERVER['PHP_SELF']. '?id_sexo='. $id;?>" method="post" onsubmit="return confirmModification();">
+    <form action="<?php echo $_SERVER['PHP_SELF'] . '?id_sexo=' . $id; ?>" method="post" onsubmit="return confirmModification();">
 
         <label for="descripcion">Descripción:</label>
         <input type="text" id="descripcion" name="descripcion" value="<?php echo $descripcion; ?>">
@@ -139,4 +109,5 @@ if (isset($_POST['modificacion'])) {
         }
     </script>
 </body>
+
 </html>

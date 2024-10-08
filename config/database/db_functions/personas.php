@@ -1,12 +1,13 @@
-<?php  
-	require_once(RUTA. "config/database/conexion.php");
+<?php
+require_once(RUTA . "config/database/conexion.php");
 
-	function obtenerPersonas($id_persona=null) {
-		global $conexion;
+function obtenerPersonas($id_persona = null)
+{
+    global $conexion;
 
-        if (is_null($id_persona)) {
+    if (is_null($id_persona)) {
 
-            $sql = "SELECT
+        $sql = "SELECT
                     persona.id_persona,
                     persona.nombre,
                     persona.apellido,
@@ -25,22 +26,21 @@
                 WHERE
                     persona.estado IN (1)";
 
-            $stmt = $conexion->prepare($sql);
-            $registros = [];
+        $stmt = $conexion->prepare($sql);
+        $registros = [];
 
-            if($stmt->execute()) {
-                $registros = $stmt->get_result();
-                return $registros;
-            } 
-            
+        if ($stmt->execute()) {
+            $registros = $stmt->get_result();
+            return $registros;
         }
+    }
 
-		
 
-        if (!is_null($id_persona)) {
-            if (is_numeric($id_persona)) {
 
-                $sql = "SELECT
+    if (!is_null($id_persona)) {
+        if (is_numeric($id_persona)) {
+
+            $sql = "SELECT
                     persona.id_persona,
                     persona.nombre,
                     persona.apellido,
@@ -61,23 +61,22 @@
                 AND
                     persona.estado IN (1)";
 
-                $stmt = $conexion->prepare($sql);
-                $registros = [];
+            $stmt = $conexion->prepare($sql);
+            $registros = [];
 
-                if($stmt->execute()) {
-                    $registros = $stmt->get_result();
-                    return $registros;
-                } 
-
+            if ($stmt->execute()) {
+                $registros = $stmt->get_result();
+                return $registros;
             }
         }
+    }
+}
 
-	}
+function ObtenerPersonaPorUsuario($id_usuario = null)
+{
 
-    function ObtenerPersonaPorUsuario($id_usuario=null) {
-        
-        global $conexion;
-        $sql = "SELECT 
+    global $conexion;
+    $sql = "SELECT 
                     persona.id_persona,
                     persona.nombre,
                     persona.apellido,
@@ -99,14 +98,12 @@
                 WHERE 
                     id_usuario = ?";
 
-        $stmt = $conexion->prepare($sql);
-        $stmt->bind_param("i",$id_usuario);
-        $registros = [];
+    $stmt = $conexion->prepare($sql);
+    $stmt->bind_param("i", $id_usuario);
+    $registros = [];
 
-        if($stmt->execute()) {
-            $registros = $stmt->get_result();
-            return $registros;
-        }
-
+    if ($stmt->execute()) {
+        $registros = $stmt->get_result();
+        return $registros;
     }
-?>
+}

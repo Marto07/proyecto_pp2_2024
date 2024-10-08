@@ -1,5 +1,10 @@
-<?php 
-require_once("../../../config/database/conexion.php");
+<?php
+require_once("../../../config/root_path.php");
+require_once(RUTA . "config/database/conexion.php");
+require_once(RUTA . "php/functions/controlar_acceso.php");
+session_start();
+$perfil = $_SESSION['perfil'];
+validarAcceso("administrador", $perfil);
 $id = $_GET['id_tipo_contacto'];
 
 $sql = "SELECT  
@@ -17,7 +22,7 @@ foreach ($registros as $reg) {
 }
 
 if (isset($_POST['modificacion'])) {
-                $descripcion = $_POST['descripcion'];
+    $descripcion = $_POST['descripcion'];
 
     $sql = "UPDATE
                 tipo_contacto
@@ -29,14 +34,11 @@ if (isset($_POST['modificacion'])) {
     if ($conexion->query($sql)) {
         header("Location: tablatipocontactos.php");
     }
-
-
-
-
 }
- ?>
+?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,7 +66,8 @@ if (isset($_POST['modificacion'])) {
             color: #333;
         }
 
-        input, select {
+        input,
+        select {
             width: 100%;
             padding: 10px;
             margin-bottom: 15px;
@@ -85,10 +88,11 @@ if (isset($_POST['modificacion'])) {
         }
     </style>
 </head>
+
 <body>
 
     <h1 style="text-align: center; margin-top: 25px; margin-bottom: 20px; color: white;">Modulo Modificacion de tipo_contacto</h1>
-    <form action="<?php echo $_SERVER['PHP_SELF']. '?id_tipo_contacto='. $id;?>" method="post" onsubmit="return confirmModification();">
+    <form action="<?php echo $_SERVER['PHP_SELF'] . '?id_tipo_contacto=' . $id; ?>" method="post" onsubmit="return confirmModification();">
 
         <label for="descripcion">Descripción:</label>
         <input type="text" id="descripcion" name="descripcion" value="<?php echo $descripcion; ?>">
@@ -103,4 +107,5 @@ if (isset($_POST['modificacion'])) {
         }
     </script>
 </body>
+
 </html>

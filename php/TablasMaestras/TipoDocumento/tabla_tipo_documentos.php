@@ -1,23 +1,29 @@
-<?php 
-
-	require_once('../../../config/database/db_functions.php');
-
-	$registros = obtenerTipoDocumentos();
+<?php
+require_once("../../../config/root_path.php");
+require_once(RUTA . "config/database/conexion.php");
+require_once(RUTA . "php/functions/controlar_acceso.php");
+session_start();
+$perfil = $_SESSION['perfil'];
+validarAcceso("administrador", $perfil);
+$registros = obtenerTipoDocumentos();
 ?>
 
 <!DOCTYPE html>
 <html>
+
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Tabla tipo documentos</title>
 	<style>
 		/* GENERALES */
-		body{
+		body {
 			padding: 0;
 			margin: 0;
 			font-family: sans-serif;
-			background-color: #96E072/*rgba(0, 0, 0, 0.85)*/;
+			background-color: #96E072
+				/*rgba(0, 0, 0, 0.85)*/
+			;
 			color: white;
 		}
 
@@ -30,41 +36,44 @@
 			font-weight: bold;
 		}
 
-		th, td {
+		th,
+		td {
 			text-align: center;
 			padding: 8px 10px;
 		}
 
-		td, th:nth-child(7),
-		td, th:nth-child(8) {
+		td,
+		th:nth-child(7),
+		td,
+		th:nth-child(8) {
 			padding: 8px 5px;
 		}
 
 		/* ESTILOS ESPECIALES A LOS THEAD */
 
 		body table thead tr {
-			background-color: #25ac5c ;
-			color:rgba(255, 255, 255, 0.9);
+			background-color: #25ac5c;
+			color: rgba(255, 255, 255, 0.9);
 			text-align: left;
 		}
 
 
 		/* RENGLONES DE COLORES DIFERENTES */
 		table tbody tr:nth-child(odd) {
-			background-color: #f4f4f4 ;
+			background-color: #f4f4f4;
 		}
 
 		table tbody tr:nth-child(even) {
-			background-color: #E6E6E6 ;
+			background-color: #E6E6E6;
 		}
 
 		.alta {
 			text-align: center;
-			
+
 		}
 
-		table tbody img{
-			height:30px;
+		table tbody img {
+			height: 30px;
 		}
 
 		table tbody a:hover {
@@ -72,23 +81,24 @@
 		}
 
 		.back-button {
-            background-color: #a8e6cf;
-            color: #3d9970;
-            text-decoration: none;
-            padding: 10px 20px;
-            font-size: 16px;
-            border-radius: 5px;
-            transition: all 0.3s ease;
-            display: inline-block;
-            margin-bottom: 20px;
-        }
+			background-color: #a8e6cf;
+			color: #3d9970;
+			text-decoration: none;
+			padding: 10px 20px;
+			font-size: 16px;
+			border-radius: 5px;
+			transition: all 0.3s ease;
+			display: inline-block;
+			margin-bottom: 20px;
+		}
 
-        .back-button:hover {
-            background-color: #79b8a0;
-            color: white;
-        }
+		.back-button:hover {
+			background-color: #79b8a0;
+			color: white;
+		}
 	</style>
 </head>
+
 <body>
 	<h1 style="text-align: center; margin-top: 25px; margin-bottom: 20px;">Modulo de tipos de documentos</h1>
 	<a class="back-button" href="../../../index_tincho.php">Volver</a>
@@ -104,51 +114,51 @@
 
 		<tbody>
 
-		<?php foreach ($registros as $reg) : 
+			<?php foreach ($registros as $reg) :
 
-			$id 		 = $reg['id_tipo_documento'];
-			$descripcion = $reg['descripcion_tipo_documento'];
+				$id 		 = $reg['id_tipo_documento'];
+				$descripcion = $reg['descripcion_tipo_documento'];
 
-			$modificar = "<a href='tabla_tipo_documentos_modificacion.php?id_tipo_documento=$id'>
+				$modificar = "<a href='tabla_tipo_documentos_modificacion.php?id_tipo_documento=$id'>
 								<img src='../../../assets/icons/editar_azul.png'>
 							</a>";
 
-			$eliminar =	"<a href=\"javascript:confirmDelete($id)\">
+				$eliminar =	"<a href=\"javascript:confirmDelete($id)\">
 								<img src='../../../assets/icons/eliminar.png'>
 							</a>";
 
-		?>
+			?>
 
 
-				 <tr>
-					 <td> <?php echo $id;										?></td>
-					 <td> <?php echo $descripcion;								?></td>
-					 <td> <?php echo $modificar; 								?></td>
-					 <td> <?php echo $eliminar;									?></td>
-				 </tr>
-				 
-		<?php endforeach; ?>
-		 
- 		<tr>
- 			<td colspan="8" class="alta">
- 				<a href="tabla_tipo_documentos_alta.php">
- 					<img src="../../../assets/icons/agregar.png" type="icon">
- 				</a>
- 			</td>
- 		</tr>
+				<tr>
+					<td> <?php echo $id;										?></td>
+					<td> <?php echo $descripcion;								?></td>
+					<td> <?php echo $modificar; 								?></td>
+					<td> <?php echo $eliminar;									?></td>
+				</tr>
 
- 		</tbody>
- 	</table>
+			<?php endforeach; ?>
 
- 	<script>
-        function confirmDelete(id) {
-            var respuesta = confirm("¿Estás seguro de que deseas eliminar este registro?");
-            if (respuesta) {
-                // Si el usuario hace clic en "Aceptar", redirige a la página de eliminación
-                window.location.href = "tabla_tipo_documentos_baja.php?id_tipo_documento=" + id;
-            }
-        }
-    </script>
+			<tr>
+				<td colspan="8" class="alta">
+					<a href="tabla_tipo_documentos_alta.php">
+						<img src="../../../assets/icons/agregar.png" type="icon">
+					</a>
+				</td>
+			</tr>
+
+		</tbody>
+	</table>
+
+	<script>
+		function confirmDelete(id) {
+			var respuesta = confirm("¿Estás seguro de que deseas eliminar este registro?");
+			if (respuesta) {
+				// Si el usuario hace clic en "Aceptar", redirige a la página de eliminación
+				window.location.href = "tabla_tipo_documentos_baja.php?id_tipo_documento=" + id;
+			}
+		}
+	</script>
 </body>
+
 </html>
-	

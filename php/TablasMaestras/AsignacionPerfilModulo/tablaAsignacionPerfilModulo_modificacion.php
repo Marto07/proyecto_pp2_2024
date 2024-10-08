@@ -1,42 +1,13 @@
-<?php 
-require_once("../../../config/database/conexion.php");
-    session_start();
+<?php
+require_once("../../../config/root_path.php");
+require_once(RUTA . "config/database/conexion.php");
+require_once(RUTA . "php/functions/controlar_acceso.php");
+session_start();
+$perfil = $_SESSION['perfil'];
+validarAcceso("administrador", $perfil);
 
-    if (!isset($_SESSION['usuario']) || !isset($_SESSION['id_perfil'])) {
-        header("Location: ../../../error403.php");
-        exit();
-    }
 
-    $modulo = "Permisos";
-
-    $sql_acceso = "SELECT COUNT(*) AS tiene_acceso
-                    FROM 
-                        asignacion_perfil_modulo asp
-                    JOIN 
-                        perfil p 
-                    ON 
-                        asp.rela_perfil = p.id_perfil
-                    JOIN 
-                        modulo m ON asp.rela_modulo = m.id_modulo
-                    WHERE 
-                        p.descripcion_perfil 
-                    LIKE 
-                        '{$_SESSION['perfil']}' 
-                    AND 
-                        m.descripcion_modulo 
-                    LIKE 
-                        '{$modulo}'";
-
-    $resultado = $conexion->query($sql_acceso);
-
-    if ($reg = $resultado->fetch_assoc()) {
-        if ($reg['tiene_acceso'] == 0) {
-            header("Location: ../../../error403.php");
-            exit();
-        }
-    }
-    
-    require_once("../../../config/database/db_functions.php");
+require_once("../../../config/database/db_functions.php");
 $registrosPerfil = obtenerPerfiles();
 $registrosModulo = obtenerModulos();
 $id = $_GET['id_asignacion_perfil_modulo'];
@@ -45,7 +16,7 @@ $sql1 = "SELECT * FROM asignacion_perfil_modulo WHERE id_asignacion_perfil_modul
 
 $registros = $conexion->query($sql1);
 
-foreach($registros as $reg) {
+foreach ($registros as $reg) {
     $relaPerfil = $reg['rela_perfil'];
     $relaModulo = $reg['rela_modulo'];
 }
@@ -55,14 +26,14 @@ foreach ($registrosPerfil as $reg) {
     $descripcionPerfil    = $reg['descripcion_perfil'];
 }
 
-foreach($registrosModulo as $reg) {
+foreach ($registrosModulo as $reg) {
     $idModulo = $reg['id_modulo'];
     $descripcionModulo = $reg['descripcion_modulo'];
 }
 
 if (isset($_POST['modificacion'])) {
-                $modulo = $_POST['modulo'];
-                $perfil   = $_POST['perfil'];
+    $modulo = $_POST['modulo'];
+    $perfil   = $_POST['perfil'];
 
     $sql = "UPDATE
                 asignacion_perfil_modulo
@@ -75,14 +46,11 @@ if (isset($_POST['modificacion'])) {
     if ($conexion->query($sql)) {
         header("Location: tablaAsignacionPerfilModulo.php");
     }
-
-
-
-
 }
- ?>
+?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -110,7 +78,8 @@ if (isset($_POST['modificacion'])) {
             color: #333;
         }
 
-        input, select {
+        input,
+        select {
             width: 100%;
             padding: 10px;
             margin-bottom: 15px;
@@ -131,27 +100,32 @@ if (isset($_POST['modificacion'])) {
         }
     </style>
 </head>
+
 <body>
 
     <h1 style="text-align: center; margin-top: 25px; margin-bottom: 20px; color: white;">Modulo Modificacion de perfil por modulo</h1>
-    <form action="<?php echo $_SERVER['PHP_SELF']. '?id_asignacion_perfil_modulo='. $id;?>" method="post" onsubmit="return confirmModification();">
+    <form action="<?php echo $_SERVER['PHP_SELF'] . '?id_asignacion_perfil_modulo=' . $id; ?>" method="post" onsubmit="return confirmModification();">
 
         <label for="modulo">Modulo:</label>
         <select id="modulo" name="modulo" required>
             <option value="" disabled selected>Seleccione una modulo...</option>
             <?php foreach ($registrosModulo as $reg) : ?>
-                <option value="<?php echo $reg['id_modulo']; ?>" <?php if ($relaModulo == $reg['id_modulo']) {echo 'selected';} ?>>
-                    <?php echo $reg['descripcion_modulo'];?>
+                <option value="<?php echo $reg['id_modulo']; ?>" <?php if ($relaModulo == $reg['id_modulo']) {
+                                                                        echo 'selected';
+                                                                    } ?>>
+                    <?php echo $reg['descripcion_modulo']; ?>
                 </option>
             <?php endforeach; ?>
         </select>
 
-        <label for ="perfil">perfil:</label>
+        <label for="perfil">perfil:</label>
         <select id="perfil" name="perfil" required>
             <option value="" disabled selected>Seleccione una perfil...</option>
             <?php foreach ($registrosPerfil as $reg) : ?>
-                <option value="<?php echo $reg['id_perfil']; ?>" <?php if ($relaPerfil == $reg['id_perfil']) {echo 'selected';} ?>>
-                    <?php echo $reg['descripcion_perfil'];?>
+                <option value="<?php echo $reg['id_perfil']; ?>" <?php if ($relaPerfil == $reg['id_perfil']) {
+                                                                        echo 'selected';
+                                                                    } ?>>
+                    <?php echo $reg['descripcion_perfil']; ?>
                 </option>
             <?php endforeach; ?>
         </select>
@@ -167,4 +141,5 @@ if (isset($_POST['modificacion'])) {
         }
     </script>
 </body>
+
 </html>

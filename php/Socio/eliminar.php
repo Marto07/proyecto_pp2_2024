@@ -14,7 +14,7 @@ $sql = "UPDATE socio
 
 //ejecutar la consulta o error
 if ($conexion->query($sql)) {
-    header("Location: " . BASE_URL . "php/socio/tabla_socios.php?id_complejo = {$id_complejo}"); 
+    header("Location: " . BASE_URL . "php/socio/tabla_socios.php?id_complejo={$id_complejo}"); 
 } else {
     echo "error al actualizar el registro: " . $conexion->error;
 }
