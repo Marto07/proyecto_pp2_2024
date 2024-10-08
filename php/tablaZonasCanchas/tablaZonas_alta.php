@@ -1,5 +1,8 @@
-<?php 
+<?php
+session_start();
 require_once("../../config/database/conexion.php");
+require_once('../../config/root_path.php');
+$id_sucursal = isset($_GET['id_sucursal']) ? $_GET['id_sucursal'] : die("No hay GET de sucursal");
 
 $sqlEstado = "SELECT
                     id_estado_zona,
@@ -8,129 +11,183 @@ $sqlEstado = "SELECT
                     estado_zona
                 WHERE estado IN (1)";
 
-$sqlComplejo = "SELECT
-                    id_complejo,
-                    descripcion_complejo
+$sqlTerreno = "SELECT id_tipo_terreno, descripcion_tipo_terreno
+                FROM tipo_terreno WHERE estado IN(1)";
+
+$sqlFutbol = "SELECT id_formato_deporte, descripcion_formato_deporte
+                FROM formato_deporte WHERE estado IN(1)";
+
+$sqlSucursal = "SELECT
+                    id_sucursal,
+                    descripcion_sucursal
                 FROM
-                    complejo
+                    sucursal
                 WHERE estado IN (1)";
 
-$sqlServicio = "SELECT
-                    id_servicio,
-                    descripcion_servicio
-                FROM
-                    servicio
-                WHERE estado IN (1)";
 
-$registrosEstado    = $conexion->query($sqlEstado); 
-$registrosComplejo  = $conexion->query($sqlComplejo);
-$registrosServicio  = $conexion->query($sqlServicio);
- ?>
+$registrosEstado    = $conexion->query($sqlEstado);
+$registrosComplejo  = $conexion->query($sqlSucursal);
+$registrosTerreno  = $conexion->query($sqlTerreno);
+$registrosFutbol  = $conexion->query($sqlFutbol);
+?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ALTA DE ZONA</title>
+    <link rel="stylesheet" href="<?php echo BASE_URL . 'css/aside/menu_aside_beterette.css'; ?>">
+    <link rel="stylesheet" href="<?php echo BASE_URL . 'css/header.css' ?>">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #96E072;
-            margin: 0;
-            padding: 20px;
+            background: #161616;
+            font-family: Arial, Helvetica, sans-serif;
         }
 
-        form {
-            background-color: #fff;
+        /* Formulario Empleado/////////////////////////////////////77 */
+        /* Estilos generales para el contenedor del formulario */
+        .containerEmpleado {
+            width: 40%;
+            margin: auto;
+            margin-top: 10px;
             padding: 20px;
+            background-color: #212121;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 400px;
-            margin: 0 auto;
+            box-shadow: 0px 0px 10px rgb(128, 128, 128, 0.7);
         }
 
-        label {
+        .containerEmpleado h1 {
+            color: #fff;
+            text-align: center;
+        }
+
+        .containerEmpleado form {
+            margin-top: 10px;
+        }
+
+        /* Estilos para las etiquetas de los campos */
+        .containerEmpleado label {
             display: block;
             margin-bottom: 8px;
-            color: #333;
+            font-weight: bold;
+            color: #fff;
+            text-align: center;
         }
 
-        input, select {
+        /* Estilos para los campos de entrada de texto */
+        .containerEmpleado input[type="text"],
+        .containerEmpleado input[type="date"],
+        .containerEmpleado select {
             width: 100%;
             padding: 10px;
-            margin-bottom: 15px;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
+            margin-bottom: 20px;
+            border: 1px solid #2c2c2c;
             border-radius: 4px;
             font-size: 16px;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
         }
 
-        button {
-            background-color: #96E072;
+        /* Estilos para cambiar el color del borde cuando el campo está enfocado */
+        .containerEmpleado input[type="text"]:focus,
+        .containerEmpleado input[type="date"]:focus,
+        .containerEmpleado select:focus {
+            border-color: grey;
+            box-shadow: 1px 0px 3px grey;
+            outline: none;
+        }
+
+        /* Estilos para el botón de enviar */
+        .containerEmpleado button {
+            width: 40%;
+            padding: 12px;
+            background-color: #2c2c2c;
             color: #fff;
-            padding: 10px 15px;
             border: none;
             border-radius: 4px;
-            cursor: pointer;
             font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Cambio de color al pasar el cursor sobre el botón */
+        .containerEmpleado button:hover {
+            background-color: #0b0b0b;
+            border: 1px solid grey;
+            box-shadow: 1px 0px 3px gray;
+        }
+
+        /* Ajustes para pantallas pequeñas */
+        @media (max-width: 480px) {
+            .containerEmpleado {
+                padding: 10px;
+            }
+
+            .containerEmpleado label {
+                font-size: 14px;
+            }
+
+            .containerEmpleado input[type="text"],
+            .containerEmpleado input[type="date"],
+            .containerEmpleado select {
+                font-size: 14px;
+            }
+
+            .containerEmpleado button {
+                font-size: 14px;
+                padding: 10px;
+            }
         }
     </style>
 </head>
+
 <body>
-    <h1 style="text-align: center; margin-top: 25px; margin-bottom: 20px;">Modulo de Alta de Zonas</h1>
-    <form action="tablaZonas_aplicar_alta.php" method="post">
-        <label for="descripcion">C&oacute;digo:</label>
-        <input type="text" id="descripcion" name="descripcion" value="" required>
+    <?php include(RUTA . 'includes/header_tincho.php'); ?>
+    <?php include(RUTA . 'includes/menu_aside_beterette.php'); ?>
+    <script src="js/jquery-3.7.1.min.js"></script>
+    <div class="containerEmpleado">
+        <h1>Modulo de Alta de Zonas</h1>
+        <form action="tablaZonas_aplicar_alta.php" method="post">
+            <label for="descripcion">Código:</label>
+            <input type="text" id="descripcion" name="descripcion" value="" placeholder="cancha número 1" required>
+            <p id="error_descripcion" style="color: red; display: none;">Solo se permiten letras, números y espacios.</p>
 
-        <label for="dimension">Dimensión:</label>
-        <input type="text" id="dimension" name="dimension" value="">
 
-        <label for="terreno">Terreno:</label>
-        <input type="text" id="terreno" name="terreno" value="">
+            <label for="terreno">Terreno:</label>
+            <select id="terreno" name="terreno" required>
+                <option value="" disabled selected>Seleccione un Terreno...</option>
+                <?php foreach ($registrosTerreno as $reg) : ?>
+                    <option value="<?= $reg['id_tipo_terreno'];  ?>"><?= $reg['descripcion_tipo_terreno'] ?></option>
+                <?php endforeach; ?>
 
-        <label for="tipo_futbol">Tipo de Fútbol:</label>
-        <select id="tipo_futbol" name="tipo_futbol" required>
-            <option value="" disabled selected>Seleccione una categoria...</option>
-            <option value="Futbol 5">Futbol 5</option>
-            <option value="Futbol 7">Futbol 7</option>
-            <option value="Futbol 11">Futbol 11</option>
-        </select>
+            </select>
 
-        <label for="valor">Valor:</label>
-        <input type="number" id="valor" name="valor" value="" required>
+            <label for="tipo_futbol">Tipo de Fútbol:</label>
+            <select id="tipo_futbol" name="tipo_futbol" required>
+                <option value="" disabled selected>Seleccione una categoria...</option>
+                <?php foreach ($registrosFutbol as $reg) : ?>
+                    <option value="<?= $reg['id_formato_deporte'];  ?>"><?= $reg['descripcion_formato_deporte'] ?></option>
+                <?php endforeach; ?>
+            </select>
 
-        <label for="estado">Estado:</label>
-        <select id="estado" name="estado" required>
-            <option value="" disabled selected>Seleccione un estado...</option>
-            <?php foreach ($registrosEstado as $reg) : ?>
-                <option value="<?php echo $reg['id_estado_zona']; ?>">
-                    <?php echo $reg['descripcion_estado_zona'];?>
-                </option>
-            <?php endforeach; ?>
-        </select>
+            <label for="estado">Estado:</label>
+            <select id="estado" name="estado" required>
+                <option value="" disabled selected>Seleccione un estado...</option>
+                <?php foreach ($registrosEstado as $reg) : ?>
+                    <option value="<?php echo $reg['id_estado_zona']; ?>">
+                        <?php echo $reg['descripcion_estado_zona']; ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
 
-        <label for="complejo">Complejo:</label>
-        <select id="complejo" name="complejo" required>
-            <option value="" disabled selected>Seleccione un complejo...</option>
-            <?php foreach ($registrosComplejo as $reg) : ?>
-                <option value="<?php echo $reg['id_complejo']; ?>">
-                    <?php echo $reg['descripcion_complejo'];?>
-                </option>
-            <?php endforeach; ?>
-        </select>
+            <input type="hidden" name="sucursal" value="<?= $id_sucursal ?>">
 
-        <label for="servicio">Servicio:</label>
-        <select id="servicio" name="servicio" required>
-            <option value="" disabled selected>Seleccione un servicio...</option>
-            <?php foreach ($registrosServicio as $reg) : ?>
-                <option value="<?php echo $reg['id_servicio']; ?>">
-                    <?php echo $reg['descripcion_servicio'];?>
-                </option>
-            <?php endforeach; ?>
-        </select>
-
-        <button type="submit">Enviar</button>
-    </form>
-
+            <button type="submit">Enviar</button>
+        </form>
+    </div>
+    <script src="../../js/validarNomCancha.js"></script>
 </body>
+
 </html>

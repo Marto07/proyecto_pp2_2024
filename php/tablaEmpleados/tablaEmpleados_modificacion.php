@@ -1,5 +1,8 @@
-<?php 
+<?php
+session_start();
 require_once("../../config/database/conexion.php");
+require_once("../../config/root_path.php");
+$id_sucursal = isset($_GET['id_sucursal']) ? $_GET['id_sucursal'] : die("falta GET de sucursal");
 $id = $_GET['id_empleado'];
 
 $sqlSucursal = "SELECT 
@@ -42,24 +45,24 @@ $sql = "SELECT
 $registros = $conexion->query($sql);
 
 foreach ($registros as $reg) {
-        $id             = $reg['id_empleado'];
-        $nombre         = $reg['nombre'];
-        $apellido       = $reg['apellido'];
-        $documento      = $reg['descripcion_documento'];
-        $cargo          = $reg['empleado_cargo'];
-        $fechaNacimiento= $reg['fecha_nacimiento'];
-        $fechaAlta      = $reg['fecha_alta'];
-        $sucursal       = $reg['rela_sucursal'];
-        $relaPersona    = $reg['rela_persona'];
+    $id             = $reg['id_empleado'];
+    $nombre         = $reg['nombre'];
+    $apellido       = $reg['apellido'];
+    $documento      = $reg['descripcion_documento'];
+    $cargo          = $reg['empleado_cargo'];
+    $fechaNacimiento = $reg['fecha_nacimiento'];
+    $fechaAlta      = $reg['fecha_alta'];
+    $sucursal       = $reg['rela_sucursal'];
+    $relaPersona    = $reg['rela_persona'];
 }
 
 if (isset($_POST['modificacion'])) {
-                $nombre         = $_POST['nombre'];
-                $apellido       = $_POST['apellido'];
-                $documento      = $_POST['documento'];
-                $cargo          = $_POST['cargo'];
-                $fechaNacimiento= $_POST['fecha_nacimiento'];
-                $sucursal       = $_POST['sucursal'];
+    $nombre         = $_POST['nombre'];
+    $apellido       = $_POST['apellido'];
+    $documento      = $_POST['documento'];
+    $cargo          = $_POST['cargo'];
+    $fechaNacimiento = $_POST['fecha_nacimiento'];
+    $sucursal       = $id_sucursal;
 
     // Iniciamos la transacción
     $conexion->begin_transaction();
@@ -93,8 +96,7 @@ if (isset($_POST['modificacion'])) {
         $conexion->commit();
 
         // Redireccionar si todo fue exitoso
-        header("Location: tablaEmpleados.php");
-
+        header("Location: tablaEmpleados.php?id_sucursal=$id_sucursal");
     } catch (Exception $e) {
         // Si ocurre algún error, hacemos un rollback
         $conexion->rollback();
@@ -106,100 +108,160 @@ if (isset($_POST['modificacion'])) {
     $stmtPersona->close();
     $stmtEmpleado->close();
     $conexion->close();
-
 }
- ?>
+?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modificar Empleado</title>
+    <link rel="stylesheet" href="<?php echo BASE_URL . 'css/aside/menu_aside_beterette.css'; ?>">
+    <link rel="stylesheet" href="<?php echo BASE_URL . 'css/header.css' ?>">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #96E072;
-            margin: 0;
-            padding: 20px;
+            background: #161616;
+            font-family: Arial, Helvetica, sans-serif;
         }
 
-        form {
-            background-color: #fff;
+        /* Formulario Empleado/////////////////////////////////////77 */
+        /* Estilos generales para el contenedor del formulario */
+        .containerEmpleado {
+            width: 60%;
+            margin: auto;
+            margin-top: 10px;
             padding: 20px;
+            background-color: #212121;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 400px;
-            margin: 0 auto;
+            box-shadow: 0px 0px 10px rgb(128, 128, 128, 0.7);
         }
 
-        label {
+        .containerEmpleado h1 {
+            color: #fff;
+            text-align: center;
+        }
+
+        .containerEmpleado form {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        /* Estilos para las etiquetas de los campos */
+        .containerEmpleado label {
             display: block;
             margin-bottom: 8px;
-            color: #333;
+            font-weight: bold;
+            color: #fff;
         }
 
-        input, select {
+        /* Estilos para los campos de entrada de texto */
+        .containerEmpleado input[type="text"],
+        .containerEmpleado input[type="date"],
+        .containerEmpleado select {
             width: 100%;
             padding: 10px;
-            margin-bottom: 15px;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
+            margin-bottom: 20px;
+            border: 1px solid #2c2c2c;
             border-radius: 4px;
             font-size: 16px;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
         }
 
-        button {
-            background-color: #96E072;
+        /* Estilos para cambiar el color del borde cuando el campo está enfocado */
+        .containerEmpleado input[type="text"]:focus,
+        .containerEmpleado input[type="date"]:focus,
+        .containerEmpleado select:focus {
+            border-color: grey;
+            box-shadow: 1px 0px 3px grey;
+            outline: none;
+        }
+
+        /* Estilos para el botón de enviar */
+        .containerEmpleado button {
+            width: 40%;
+            padding: 12px;
+            background-color: #2c2c2c;
             color: #fff;
-            padding: 10px 15px;
             border: none;
             border-radius: 4px;
-            cursor: pointer;
             font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Cambio de color al pasar el cursor sobre el botón */
+        .containerEmpleado button:hover {
+            background-color: #0b0b0b;
+            border: 1px solid grey;
+            box-shadow: 1px 0px 3px gray;
+        }
+
+        /* Ajustes para pantallas pequeñas */
+        @media (max-width: 480px) {
+            .containerEmpleado {
+                padding: 10px;
+            }
+
+            .containerEmpleado label {
+                font-size: 14px;
+            }
+
+            .containerEmpleado input[type="text"],
+            .containerEmpleado input[type="date"],
+            .containerEmpleado select {
+                font-size: 14px;
+            }
+
+            .containerEmpleado button {
+                font-size: 14px;
+                padding: 10px;
+            }
+        }
+
+        .error {
+            color: #ff6448;
+            margin-bottom: 10px;
         }
     </style>
 </head>
+
 <body>
+    <?php include(RUTA . 'includes/header_tincho.php'); ?>
+    <?php include(RUTA . 'includes/menu_aside_beterette.php'); ?>
+    <script src="js/jquery-3.7.1.min.js"></script>
+    <div class="containerEmpleado">
+        <h1>Modulo Modificacion de Empleado</h1>
+        <form action="<?php echo $_SERVER['PHP_SELF'] . '?id_empleado=' . $id . '&id_sucursal=' . $id_sucursal; ?>" method="post" onsubmit="return confirmModification();">
 
-    <h1 style="text-align: center; margin-top: 25px; margin-bottom: 20px; color: white;">Modulo Modificacion de Empleado</h1>
-    <form action="<?php echo $_SERVER['PHP_SELF']. '?id_empleado='. $id;?>" method="post" onsubmit="return confirmModification();">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" value="<?php echo $nombre; ?>">
 
-        <label for="nombre">Nombre:</label>
-        <input type="text" id="nombre" name="nombre" value="<?php echo $nombre; ?>">
+            <label for="apellido">Apellido:</label>
+            <input type="text" id="apellido" name="apellido" value="<?php echo $apellido; ?>" required>
 
-        <label for="apellido">Apellido:</label>
-        <input type="text" id="apellido" name="apellido" value="<?php echo $apellido; ?>" required>
+            <label for="dni">Documento:</label>
+            <input type="text" id="documento" name="documento" value="<?php echo $documento; ?>" required>
 
-        <label for="dni">Documento:</label>
-        <input type="text" id="documento" name="documento" value="<?php echo $documento; ?>" required>
+            <label for="cargo">Cargo:</label>
+            <select name="cargo" required>
+                <option value="" disabled selected>Seleccione una Cargo...</option>
+                <option value="Cantinero">Cantinero</option>
+                <option value="Canchero">Canchero</option>
+                <option value="Portero">Portero</option>
+            </select>
 
-        <label for="cargo">Cargo:</label>
-        <select name="cargo">
-            <option value=""disabled selected>Seleccione una Cargo...</option>
-            <option value="Cantinero">Cantinero</option>
-            <option value="Canchero">Canchero</option>
-            <option value="Portero">Portero</option>
-        </select>
+            <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
+            <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" value="<?php echo $fechaNacimiento ?>" required>
+            <p id="error_message" style="color: red; display: none;">Solo se permite mayores de 18 años</p>
 
-        <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
-        <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" value="<?php echo $fechaNacimiento ?>" required>
-
-        <label for="sucursal">Sucursal:</label>
-        <select id="sucursal" name="sucursal" required>
-            <option value="" disabled selected>Seleccione un sucursal...</option>
-
-            <?php foreach ($registrosSucursal as $reg) : ?>
-
-                <option value="<?php echo $reg['id_sucursal']; ?>" <?php if($sucursal == $reg['id_sucursal']) {echo 'selected';} ?>>
-                    <?php echo $reg['descripcion_sucursal'];?>
-                </option>
-
-            <?php endforeach; ?>
-
-        </select>
-
-        <button type="submit" name="modificacion">Enviar</button>
-    </form>
-
+            <button type="submit" name="modificacion">Enviar</button>
+        </form>
+    </div>
+    <script src="../../js/validacionForm.js"></script>
+    <script src="../../js/validarEdad.js"></script>
 </body>
+
 </html>

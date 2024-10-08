@@ -1,10 +1,10 @@
-<?php  
+<?php 
 	require_once(RUTA. "config/database/conexion.php");
 
-	function obtenerPersonas($id_persona=null) {
+	function obtenerPersonas($id_persona = null) {
 		global $conexion;
 
-        if (is_null($id_persona)) {
+        if (is_null($id_persona) || $id_persona == '') {
 
             $sql = "SELECT
                     persona.id_persona,
@@ -109,4 +109,5 @@
         }
 
     }
+
 ?>

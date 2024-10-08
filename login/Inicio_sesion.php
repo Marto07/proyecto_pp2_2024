@@ -1,6 +1,7 @@
+<?php require_once("../config/root_path.php"); ?>
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8">
     <title>Iniciar sesión</title>
     <!-- <link rel="stylesheet" href="../css/style.css"> -->
@@ -121,8 +122,8 @@
         }
 
     </style>
-  </head>
-  <body>
+</head>
+<body>
 
     <div id="image">
         
@@ -178,113 +179,141 @@
         <?php }?>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="<?php echo BASE_URL; ?>libs/sweetalert2.all.min.js"></script>
 <script>
-$(document).ready(function() {
-    var spanerror = $('#mensaje-error');
-    spanerror.hide();
+    $(document).ready(function() {
+        //inicializamos el mensaje de error oculto
+        var spanerror = $('#mensaje-error');
+        spanerror.hide();
+        
+        //modal para volver a enviar la verificacion por correo
+        <?php 
+            if (isset($_GET['verificacion_expirada'])) : 
+                $email = $_GET['email'];
+                $username = $_GET['username'];
+        ?>
+            Swal.fire({
+                title: 'No verifico su correo',
+                text: '¿Desea volver a enviar la verificacion?',
+                icon: 'question',
+                animation: false,
+                iconColor: '#ffe05f',
+                showCancelButton: true,
+                confirmButtonText: 'Enviar Verificacion',
+                cancelButtonText: 'Cancelar',
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#ff6448',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Si confirma, redirigir a verify
+                    window.location.href = 'verificacion_correo/register.php?<?php echo "email={$email}&username={$username}"; ?>';
+                }
+            });
+        <?php endif; ?>
 
-    <?php 
-        if (isset($_GET['correo_enviado'])) { ?>
+
+        //hacemos visible el mensaje 
+        <?php if (isset($_GET['correo_enviado'])) { ?>
+                spanerror.css({
+                    'display'           : 'inline-block',
+                    'background-color'  : '#6EFF6B',
+                    'margin'            : '10px',
+                    'color'             : 'white',
+                    'padding'           : '10px'
+            });
+            spanerror.html('Verifique su Email');
+        <?php } else if (isset($_GET['correo_verificado'])) {?>
             spanerror.css({
-                'display'           : 'inline-block',
-                'background-color'  : '#6EFF6B',
-                'margin'            : '10px',
-                'color'             : 'white',
-                'padding'           : '10px'
+                    'display'           : 'inline-block',
+                    'background-color'  : '#6EFF6B',
+                    'margin'            : '10px',
+                    'color'             : 'white',
+                    'padding'           : '10px'
+            });
+            spanerror.html('Email Verificado');
+        <?php } ?>
+
+
+        //inicializamos los span para ocultarlos
+        var spanemail       = $('span:eq(0)');
+        var spancontrasena  = $('span:eq(1)');
+
+        spanemail     .hide();
+        spancontrasena  .hide();
+
+        $('form').on('submit', function(event) {
+          //obtenemos variables para operar la validacion
+            var emailInput    = $('#email'); 
+            var contrasenaInput = $('#password');
+
+            //ocultamos por defecto los span PREVIO a su validacion
+
+            var email = emailInput.val();
+            var contrasena = contrasenaInput.val();
+
+            //expresiones regulares
+            var regexemail      = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+            var regexcontrasena = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+
+            //testeamos el email
+            if (!regexemail.test(email)) {
+                //si da incorrecto
+                event.preventDefault();
+                emailInput.css('border', '2px solid #FF4500');
+                spanemail.css({
+                    'display'           : 'inline-block',
+                    'background-color'  : '#FF4500',
+                    'margin'            : '10px',
+                    'color'             : 'white',
+                    'padding'           : '10px'
+                });
+                spanemail.html('email Invalido.');
+                alert('Almenos 5 caracteres. No utilice caracteres especiales');
+
+            } else {
+                //si da correcto
+                emailInput.css('border', '2px solid green');
+                spanemail.css({
+                    'display'           : 'inline-block',
+                    'background-color'  : 'green',
+                    'margin'            : '10px',
+                    'color'             : 'white',
+                    'padding'           : '10px'
+                });
+                spanemail.html('Ok.');
+            }
+
+            //testeamos la contraseña
+            if (!regexcontrasena.test(contrasena)) {
+                //si da incorrecto
+                event.preventDefault();
+                contrasenaInput.css('border', '2px solid #FF4500');
+                spancontrasena.css({
+                    'display'           : 'inline-block',
+                    'background-color'  : '#FF4500',
+                    'margin'            : '10px',
+                    'color'             : 'white',
+                    'padding'           : '10px'
+                });
+                spancontrasena.html('contrasena Invalida.');
+                alert('Almenos 8 caracteres y 1 número.');
+            } else {
+                //si da correcto
+                contrasenaInput.css('border', '2px solid green');
+                spancontrasena.css({
+                    'display'           : 'inline-block',
+                    'background-color'  : 'green',
+                    'margin'            : '10px',
+                    'color'             : 'white',
+                    'padding'           : '10px'
+                });
+                spancontrasena.html('Ok.');
+            }
+
         });
-        spanerror.html('Verifique su Email');
-    <?php } else if (isset($_GET['correo_verificado'])) {?>
-        spanerror.css({
-                'display'           : 'inline-block',
-                'background-color'  : '#6EFF6B',
-                'margin'            : '10px',
-                'color'             : 'white',
-                'padding'           : '10px'
-        });
-        spanerror.html('Email Verificado');
-    <?php } ?>
-
-
-    //inicializamos los span para ocultarlos
-    var spanemail       = $('span:eq(0)');
-    var spancontrasena  = $('span:eq(1)');
-
-    spanemail     .hide();
-    spancontrasena  .hide();
-
-    $('form').on('submit', function(event) {
-      //obtenemos variables para operar la validacion
-        var emailInput    = $('#email'); 
-        var contrasenaInput = $('#password');
-
-        //ocultamos por defecto los span PREVIO a su validacion
-
-        var email = emailInput.val();
-        var contrasena = contrasenaInput.val();
-
-        //expresiones regulares
-        var regexemail      = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-        var regexcontrasena = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
-
-        //testeamos el email
-        if (!regexemail.test(email)) {
-            //si da incorrecto
-            event.preventDefault();
-            emailInput.css('border', '2px solid #FF4500');
-            spanemail.css({
-                'display'           : 'inline-block',
-                'background-color'  : '#FF4500',
-                'margin'            : '10px',
-                'color'             : 'white',
-                'padding'           : '10px'
-            });
-            spanemail.html('email Invalido.');
-            alert('Almenos 5 caracteres. No utilice caracteres especiales');
-
-        } else {
-            //si da correcto
-            emailInput.css('border', '2px solid green');
-            spanemail.css({
-                'display'           : 'inline-block',
-                'background-color'  : 'green',
-                'margin'            : '10px',
-                'color'             : 'white',
-                'padding'           : '10px'
-            });
-            spanemail.html('Ok.');
-        }
-
-        //testeamos la contraseña
-        if (!regexcontrasena.test(contrasena)) {
-            //si da incorrecto
-            event.preventDefault();
-            contrasenaInput.css('border', '2px solid #FF4500');
-            spancontrasena.css({
-                'display'           : 'inline-block',
-                'background-color'  : '#FF4500',
-                'margin'            : '10px',
-                'color'             : 'white',
-                'padding'           : '10px'
-            });
-            spancontrasena.html('contrasena Invalida.');
-            alert('Almenos 8 caracteres y 1 número.');
-        } else {
-            //si da correcto
-            contrasenaInput.css('border', '2px solid green');
-            spancontrasena.css({
-                'display'           : 'inline-block',
-                'background-color'  : 'green',
-                'margin'            : '10px',
-                'color'             : 'white',
-                'padding'           : '10px'
-            });
-            spancontrasena.html('Ok.');
-        }
-
+        
     });
-    
-});
 
 </script>
 </body>

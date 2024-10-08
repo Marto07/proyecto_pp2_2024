@@ -1,40 +1,7 @@
 <?php 
-require_once("../../../config/database/conexion.php");
+    require_once("../../../config/database/conexion.php");
     session_start();
 
-    if (!isset($_SESSION['usuario']) || !isset($_SESSION['id_perfil'])) {
-        header("Location: ../../../error403.php");
-        exit();
-    }
-
-    $modulo = "Domicilios";
-
-    $sql_acceso = "SELECT COUNT(*) AS tiene_acceso
-                    FROM 
-                        asignacion_perfil_modulo asp
-                    JOIN 
-                        perfil p 
-                    ON 
-                        asp.rela_perfil = p.id_perfil
-                    JOIN 
-                        modulo m ON asp.rela_modulo = m.id_modulo
-                    WHERE 
-                        p.descripcion_perfil 
-                    LIKE 
-                        '{$_SESSION['perfil']}' 
-                    AND 
-                        m.descripcion_modulo 
-                    LIKE 
-                        '{$modulo}'";
-
-    $resultado = $conexion->query($sql_acceso);
-
-    if ($reg = $resultado->fetch_assoc()) {
-        if ($reg['tiene_acceso'] == 0) {
-            header("Location: ../../../error403.php");
-            exit();
-        }
-    }
     
     require_once("../../../config/database/db_functions.php");
     $registrosLocalidad = obtenerLocalidades();
@@ -47,47 +14,67 @@ require_once("../../../config/database/conexion.php");
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alta barrio</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #96E072;
-            margin: 0;
-            padding: 20px;
-        }
+       body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #F0F4F8;
+    margin: 0;
+    padding: 20px;
+}
 
-        form {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 400px;
-            margin: 0 auto;
-        }
+form {
+    background-color: #FFFFFF;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 450px;
+    margin: 0 auto;
+    font-size: 16px;
+}
 
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: #333;
-        }
+label {
+    display: block;
+    margin-bottom: 10px;
+    color: #333;
+    font-weight: 600;
+}
 
-        input, select {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 16px;
-        }
+input, select {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+    border: 1px solid #D1D5DB;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
 
-        button {
-            background-color: #96E072;
-            color: #fff;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-        }
+input:focus, select:focus {
+    border-color: #4A90E2;
+    box-shadow: 0 0 8px rgba(74, 144, 226, 0.2);
+    outline: none;
+}
+
+button {
+    background-color: #4A90E2;
+    color: #FFFFFF;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+    background-color: #357ABD;
+    transform: scale(1.05);
+}
+
+button:active {
+    transform: scale(0.95);
+}
+
     </style>
 </head>
 <body>

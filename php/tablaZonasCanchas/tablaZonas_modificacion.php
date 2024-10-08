@@ -1,6 +1,9 @@
-<?php 
+<?php
+session_start();
 require_once('../../config/database/conexion.php');
+require_once('../../config/root_path.php');
 $id = $_GET['id_zona'];
+$id_sucursal = isset($_GET['id_sucursal']) ? $_GET['id_sucursal'] : die("no hay id de sucursal :(");;
 
 $sqlEstado = "SELECT
 					id_estado_zona,
@@ -9,34 +12,36 @@ $sqlEstado = "SELECT
 					estado_zona
 				WHERE estado IN (1)";
 
-$sqlComplejo = "SELECT
-					id_complejo,
-					descripcion_complejo
-				FROM
-					complejo
-				WHERE estado IN (1)";
+$sqlTerreno = "SELECT id_tipo_terreno, descripcion_tipo_terreno
+                FROM tipo_terreno WHERE estado IN(1)";
 
-$sqlServicio = "SELECT
-					id_servicio,
-					descripcion_servicio
-				FROM
-					servicio
-				WHERE estado IN (1)";
+$sqlFutbol = "SELECT id_formato_deporte, descripcion_formato_deporte
+                FROM formato_deporte WHERE estado IN(1)";
 
-$registrosEstado	= $conexion->query($sqlEstado); 
-$registrosComplejo	= $conexion->query($sqlComplejo);
-$registrosServicio	= $conexion->query($sqlServicio);
+$sqlSucursal = "SELECT
+                    id_sucursal,
+                    descripcion_sucursal
+                FROM
+                    sucursal
+                WHERE estado IN (1)";
+
+
+
+$registrosEstado    = $conexion->query($sqlEstado);
+$registrosComplejo    = $conexion->query($sqlSucursal);
+$registrosTerreno  = $conexion->query($sqlTerreno);
+$registrosFutbol  = $conexion->query($sqlFutbol);
 
 $sql = "SELECT 	
 						id_zona,
 						descripcion_zona,
-                        dimension,
-						terreno,
-						tipo_futbol,
-						valor,
+						descripcion_tipo_terreno,
+						descripcion_formato_deporte,
+						descripcion_sucursal,
+						rela_tipo_terreno,
+						rela_formato_deporte,
 						rela_estado_zona,
-						rela_complejo,
-						rela_servicio						
+						rela_sucursal						
 					FROM
 						zona
 					JOIN
@@ -44,165 +49,225 @@ $sql = "SELECT
 					ON
 						zona.rela_servicio = servicio.id_servicio
                     JOIN 
-                    	complejo
+                    	sucursal
 					ON 
-						zona.rela_complejo = complejo.id_complejo
+						zona.rela_sucursal = sucursal.id_sucursal
+					JOIN 
+						formato_deporte
+					ON 
+						zona.rela_formato_deporte = formato_deporte.id_formato_deporte
+					JOIN
+						tipo_terreno
+					ON
+						zona.rela_tipo_terreno = tipo_terreno.id_tipo_terreno
 					WHERE
-						zona.estado IN(1)
-					AND 
-						zona.id_zona = $id";
+						descripcion_servicio LIKE 'cancha'
+					AND
+						id_zona = $id
+					AND
+						zona.estado IN(1)";
 
 $registros = $conexion->query($sql);
 
-foreach($registros as $reg) {
-	$id 		= $reg['id_zona'];
-	$zona 		= $reg['descripcion_zona'];
-   	$dimension 	= $reg['dimension'];
-	$terreno 	= $reg['terreno'];
-	$tipoFutbol = $reg['tipo_futbol'];
-	$valor		= $reg['valor'];
-	$estado 	= $reg['rela_estado_zona'];
-	$complejo	= $reg['rela_complejo'];
-	$servicio 	= $reg['rela_servicio'];	
+foreach ($registros as $reg) {
+
+    $id         = $reg['id_zona'];
+    $zona         = $reg['descripcion_zona'];
+    $terreno     = $reg['rela_tipo_terreno'];
+    $tipoFutbol = $reg['rela_formato_deporte'];
+    $estado     = $reg['rela_estado_zona'];
+    $sucursal    = $reg['rela_sucursal'];
 }
 
 if (isset($_POST['modificacion'])) {
-				$zona = $_POST['descripcion'];
-                $dimension = $_POST['dimension'];
-				$terreno = $_POST['terreno'];
-				$tipoFutbol = $_POST['tipo_futbol'];
-				$valor = $_POST['valor'];
-				$estado = $_POST['estado'];
-				$complejo = $_POST['complejo'];
-				$servicio = $_POST['servicio'];
-	$sql = "UPDATE
+    $zona = $_POST['descripcion'];
+    $terreno = $_POST['terreno'];
+    $tipoFutbol = $_POST['tipo_futbol'];
+    $estado = $_POST['estado'];
+    $sucursal = $id_sucursal;
+    $sql = "UPDATE
 				zona
 			SET 
 				descripcion_zona = '$zona',
-                dimension = '$dimension',
-				terreno = '$terreno',
-				tipo_futbol = '$tipoFutbol',
-				valor = $valor,
+				rela_tipo_terreno = '$terreno',
+				rela_formato_deporte = '$tipoFutbol',
 				rela_estado_zona = $estado,
-				rela_complejo = $complejo,
-				rela_servicio = $servicio
+				rela_sucursal = $sucursal,
+				rela_servicio = 1
 			WHERE
 				id_zona = $id";
-	if ($conexion->query($sql)) {
-		header("Location: tablaZonas.php");
-	}
-
-
-
-
+    if ($conexion->query($sql)) {
+        header("Location: tablaZonas.php?id_sucursal=$id_sucursal");
+    }
 }
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MODIFICACION ZONA</title>
+    <link rel="stylesheet" href="<?php echo BASE_URL . 'css/aside/menu_aside_beterette.css'; ?>">
+    <link rel="stylesheet" href="<?php echo BASE_URL . 'css/header.css' ?>">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #96E072;
-            margin: 0;
-            padding: 20px;
+            background: #161616;
+            font-family: Arial, Helvetica, sans-serif;
         }
 
-        form {
-            background-color: #fff;
+        /* Formulario Empleado/////////////////////////////////////77 */
+        /* Estilos generales para el contenedor del formulario */
+        .containerEmpleado {
+            width: 40%;
+            margin: auto;
+            margin-top: 10px;
             padding: 20px;
+            background-color: #212121;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 400px;
-            margin: 0 auto;
+            box-shadow: 0px 0px 10px rgb(128, 128, 128, 0.7);
         }
 
-        label {
+        .containerEmpleado h1 {
+            color: #fff;
+            text-align: center;
+        }
+
+        .containerEmpleado form {
+            margin-top: 10px;
+        }
+
+        /* Estilos para las etiquetas de los campos */
+        .containerEmpleado label {
             display: block;
             margin-bottom: 8px;
-            color: #333;
+            font-weight: bold;
+            color: #fff;
+            text-align: center;
         }
 
-        input, select {
+        /* Estilos para los campos de entrada de texto */
+        .containerEmpleado input[type="text"],
+        .containerEmpleado input[type="date"],
+        .containerEmpleado select {
             width: 100%;
             padding: 10px;
-            margin-bottom: 15px;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
+            margin-bottom: 20px;
+            border: 1px solid #2c2c2c;
             border-radius: 4px;
             font-size: 16px;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
         }
 
-        button {
-            background-color: #96E072;
+        /* Estilos para cambiar el color del borde cuando el campo está enfocado */
+        .containerEmpleado input[type="text"]:focus,
+        .containerEmpleado input[type="date"]:focus,
+        .containerEmpleado select:focus {
+            border-color: grey;
+            box-shadow: 1px 0px 3px grey;
+            outline: none;
+        }
+
+        /* Estilos para el botón de enviar */
+        .containerEmpleado button {
+            width: 40%;
+            padding: 12px;
+            background-color: #2c2c2c;
             color: #fff;
-            padding: 10px 15px;
             border: none;
             border-radius: 4px;
-            cursor: pointer;
             font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Cambio de color al pasar el cursor sobre el botón */
+        .containerEmpleado button:hover {
+            background-color: #0b0b0b;
+            border: 1px solid grey;
+            box-shadow: 1px 0px 3px gray;
+        }
+
+        /* Ajustes para pantallas pequeñas */
+        @media (max-width: 480px) {
+            .containerEmpleado {
+                padding: 10px;
+            }
+
+            .containerEmpleado label {
+                font-size: 14px;
+            }
+
+            .containerEmpleado input[type="text"],
+            .containerEmpleado input[type="date"],
+            .containerEmpleado select {
+                font-size: 14px;
+            }
+
+            .containerEmpleado button {
+                font-size: 14px;
+                padding: 10px;
+            }
         }
     </style>
 </head>
+
 <body>
-	<h1 style="text-align: center; margin-top: 25px; margin-bottom: 20px; color: white;">Modulo de Modificacion de Zona</h1>
-    <form action="<?php echo $_SERVER['PHP_SELF']. '?id_zona='. $id;?>" method="post" onsubmit="return confirmModification();">
-        <label for="descripcion">C&oacute;digo:</label>
-        <input type="text" id="descripcion" name="descripcion" value="<?php echo $zona; ?>" required>
+    <?php include(RUTA . 'includes/header_tincho.php'); ?>
+    <?php include(RUTA . 'includes/menu_aside_beterette.php'); ?>
+    <script src="js/jquery-3.7.1.min.js"></script>
+    <div class="containerEmpleado">
+        <h1>Modulo de Modificacion de Zona</h1>
+        <form action="<?php echo $_SERVER['PHP_SELF'] . '?id_zona=' . $id . '&id_sucursal=' . $id_sucursal; ?>" method="post" onsubmit="return confirmModification();">
+            <label for="descripcion">Código:</label>
+            <input type="text" id="descripcion" name="descripcion" value="" placeholder="cancha número 1" required>
+            <p id="error_descripcion" style="color: red; display: none;">Solo se permiten letras, números y espacios.</p>
 
-        <label for="dimension">Dimensión:</label>
-        <input type="text" id="dimension" name="dimension" value="<?php echo $dimension; ?>">
+            <label for="terreno">Terreno:</label>
+            <select id="terreno" name="terreno" required>
+                <option value="" disabled selected>Seleccione un Terreno...</option>
+                <?php foreach ($registrosTerreno as $reg) : ?>
+                    <option value="<?= $reg['id_tipo_terreno']; ?>"
+                        <?php if ($terreno == $reg['id_tipo_terreno']) {
+                            echo 'selected';
+                        } ?>>
+                        <?= $reg['descripcion_tipo_terreno'] ?></option>
+                <?php endforeach; ?>
 
-        <label for="terreno">Terreno:</label>
-        <input type="text" id="terreno" name="terreno" value="<?php echo $terreno; ?>">
+            </select>
 
-        <label for="tipo_futbol">Tipo de Fútbol:</label>
-        <select id="tipo_futbol" name="tipo_futbol" required>
-        	<option value="" disabled selected>Seleccione una categoria...</option>
-            <option value="Futbol 5">Futbol 5</option>
-            <option value="Futbol 7">Futbol 7</option>
-            <option value="Futbol 11">Futbol 11</option>
-        </select>
+            <label for="tipo_futbol">Tipo de Fútbol:</label>
+            <select id="tipo_futbol" name="tipo_futbol" required>
+                <option value="" disabled selected>Seleccione una categoria...</option>
+                <?php foreach ($registrosFutbol as $reg) : ?>
+                    <option value="<?= $reg['id_formato_deporte'];  ?>"
+                        <?php if ($reg['id_formato_deporte'] == $tipoFutbol) {
+                            echo 'selected';
+                        } ?>>
+                        <?= $reg['descripcion_formato_deporte'] ?>
 
-        <label for="valor">Valor:</label>
-        <input type="number" id="valor" name="valor" value="<?php echo $valor; ?>" required>
+                    </option>
+                <?php endforeach; ?>
+            </select>
 
-        <label for="estado">Estado:</label>
-        <select id="estado" name="estado" required>
-        	<option value="" disabled selected>Seleccione un estado...</option>
-        	<?php foreach ($registrosEstado as $reg) : ?>
-        		<option value="<?php echo $reg['id_estado_zona']; ?>" <?php if ($estado == $reg['id_estado_zona']) {echo 'selected';} ?>>
-        			<?php echo $reg['descripcion_estado_zona'];?>
-        		</option>
-        	<?php endforeach; ?>
-        </select>
+            <label for="estado">Estado:</label>
+            <select id="estado" name="estado" required>
+                <option value="" disabled selected>Seleccione un estado...</option>
+                <?php foreach ($registrosEstado as $reg) : ?>
+                    <option value="<?php echo $reg['id_estado_zona']; ?>" <?php if ($estado == $reg['id_estado_zona']) {
+                                                                                echo 'selected';
+                                                                            } ?>>
+                        <?php echo $reg['descripcion_estado_zona']; ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
 
-        <label for="complejo">Complejo:</label>
-        <select id="complejo" name="complejo" required>
-        	<option value="" disabled selected>Seleccione un complejo...</option>
-            <?php foreach ($registrosComplejo as $reg) : ?>
-        		<option value="<?php echo $reg['id_complejo']; ?>" <?php if ($complejo == $reg['id_complejo']) {echo 'selected';} ?>>
-        			<?php echo $reg['descripcion_complejo'];?>
-        		</option>
-        	<?php endforeach; ?>
-        </select>
-
-        <label for="servicio">Servicio:</label>
-        <select id="servicio" name="servicio" required>
-        	<option value="" disabled selected>Seleccione un servicio...</option>
-            <?php foreach ($registrosServicio as $reg) : ?>
-        		<option value="<?php echo $reg['id_servicio']; ?>" <?php if ($servicio == $reg['id_servicio']) {echo 'selected';} ?>>
-        			<?php echo $reg['descripcion_servicio'];?>
-        		</option>
-        	<?php endforeach; ?>
-        </select>
-
-        <button type="submit" name="modificacion">Enviar</button>
-    </form>
-
+            <button type="submit" name="modificacion">Enviar</button>
+        </form>
+    </div>
+    <script src="../../js/validarNomCancha.js"></script>
     <script>
         function confirmModification() {
             var respuesta = confirm("¿Estás seguro de que deseas aplicar las modificaciones?");
@@ -210,4 +275,5 @@ if (isset($_POST['modificacion'])) {
         }
     </script>
 </body>
+
 </html>
