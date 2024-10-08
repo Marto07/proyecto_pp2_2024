@@ -1,7 +1,10 @@
 <?php
 session_start();
+<?php
+session_start();
 $id_sucursal = isset($_GET['id_sucursal']) ? $_GET['id_sucursal'] : die("falta GET de sucursal");
 require_once("../../config/database/conexion.php");
+require_once('../../config/root_path.php');
 require_once('../../config/root_path.php');
 
 $sqlSucursal = "SELECT 
@@ -22,13 +25,18 @@ $registrosSucursal = $conexion->query($sqlSucursal);
 
 $registrosTipoDocumento = $conexion->query($sqlTipoDocumento);
 ?>
+?>
 <!DOCTYPE html>
 <html lang="es">
+
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alta Empleado</title>
+    <link rel="stylesheet" href="<?php echo BASE_URL . 'css/aside/menu_aside_beterette.css'; ?>">
+    <link rel="stylesheet" href="<?php echo BASE_URL . 'css/header.css' ?>">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="<?php echo BASE_URL . 'css/aside/menu_aside_beterette.css'; ?>">
     <link rel="stylesheet" href="<?php echo BASE_URL . 'css/header.css' ?>">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -44,9 +52,31 @@ $registrosTipoDocumento = $conexion->query($sqlTipoDocumento);
             width: 60%;
             margin: auto;
             margin-top: 10px;
+            background-color: #161616;
+        }
+
+        /* Formulario Empleado/////////////////////////////////////77 */
+        /* Estilos generales para el contenedor del formulario */
+        .containerEmpleado {
+            width: 60%;
+            margin: auto;
+            margin-top: 10px;
             padding: 20px;
             background-color: #212121;
+            background-color: #212121;
             border-radius: 8px;
+            box-shadow: 0px 0px 10px rgb(128, 128, 128, 0.7);
+        }
+
+        .containerEmpleado h1 {
+            color: #fff;
+            text-align: center;
+        }
+
+        .containerEmpleado form {
+            margin-top: 10px;
+            color: white;
+            text-align: center;
             box-shadow: 0px 0px 10px rgb(128, 128, 128, 0.7);
         }
 
@@ -63,8 +93,11 @@ $registrosTipoDocumento = $conexion->query($sqlTipoDocumento);
 
         /* Estilos para las etiquetas de los campos */
         .containerEmpleado label {
+        /* Estilos para las etiquetas de los campos */
+        .containerEmpleado label {
             display: block;
             margin-bottom: 8px;
+            font-weight: bold;
             font-weight: bold;
         }
 
@@ -72,8 +105,14 @@ $registrosTipoDocumento = $conexion->query($sqlTipoDocumento);
         .containerEmpleado input[type="text"],
         .containerEmpleado input[type="date"],
         .containerEmpleado select {
+        /* Estilos para los campos de entrada de texto */
+        .containerEmpleado input[type="text"],
+        .containerEmpleado input[type="date"],
+        .containerEmpleado select {
             width: 100%;
             padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #2c2c2c;
             margin-bottom: 20px;
             border: 1px solid #2c2c2c;
             border-radius: 4px;
@@ -96,9 +135,28 @@ $registrosTipoDocumento = $conexion->query($sqlTipoDocumento);
             width: 40%;
             padding: 12px;
             background-color: #2c2c2c;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+
+        /* Estilos para cambiar el color del borde cuando el campo está enfocado */
+        .containerEmpleado input[type="text"]:focus,
+        .containerEmpleado input[type="date"]:focus,
+        .containerEmpleado select:focus {
+            border-color: grey;
+            box-shadow: 1px 0px 3px grey;
+            outline: none;
+        }
+
+        /* Estilos para el botón de enviar */
+        .containerEmpleado button {
+            width: 40%;
+            padding: 12px;
+            background-color: #2c2c2c;
             color: #fff;
             border: none;
             border-radius: 4px;
+            font-size: 16px;
             font-size: 16px;
             cursor: pointer;
             transition: background-color 0.3s ease;
@@ -140,6 +198,7 @@ $registrosTipoDocumento = $conexion->query($sqlTipoDocumento);
     </style>
 </head>
 
+
 <body>
     <?php include(RUTA . 'includes/header_tincho.php'); ?>
     <?php include(RUTA . 'includes/menu_aside_beterette.php'); ?>
@@ -150,14 +209,27 @@ $registrosTipoDocumento = $conexion->query($sqlTipoDocumento);
 
             <label for="nombre">Nombre:</label>
             <input type="text" id="nombre" name="nombre" value="">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" value="">
 
+            <label for="apellido">Apellido:</label>
+            <input type="text" id="apellido" name="apellido" value="" required>
             <label for="apellido">Apellido:</label>
             <input type="text" id="apellido" name="apellido" value="" required>
 
 
             <label for="documento">Documento:</label>
             <input type="text" id="documento" name="documento" value="" required>
+            <label for="documento">Documento:</label>
+            <input type="text" id="documento" name="documento" value="" required>
 
+            <label for="tipo_documento">Tipo de documento:</label>
+            <select name="tipo_documento" required>
+                <option value="" disabled selected>Seleccione una tipo de documento...</option>
+                <?php foreach ($registrosTipoDocumento as $reg) { ?>
+                    <option value="<?php echo $reg['id_tipo_documento']; ?>"><?php echo $reg['descripcion_tipo_documento']; ?></option>
+                <?php } ?>
+            </select>
             <label for="tipo_documento">Tipo de documento:</label>
             <select name="tipo_documento" required>
                 <option value="" disabled selected>Seleccione una tipo de documento...</option>
@@ -172,18 +244,33 @@ $registrosTipoDocumento = $conexion->query($sqlTipoDocumento);
                 <option value="Personal Administrativo">Personal Administrativo</option>
                 <option value="Portero">Portero</option>
             </select>
+            <label for="cargo">Cargo:</label>
+            <select name="cargo" required>
+                <option value="" disabled selected>Seleccione una Cargo...</option>
+                <option value="Personal Administrativo">Personal Administrativo</option>
+                <option value="Portero">Portero</option>
+            </select>
 
+            <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
+            <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" value="" required>
+            <p id="error_message" style="color: red; display: none;">Solo se permite mayores de 18 años</p>
             <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
             <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" value="" required>
             <p id="error_message" style="color: red; display: none;">Solo se permite mayores de 18 años</p>
 
             </select>
+            </select>
 
+            <button type="submit">Enviar</button>
+        </form>
+    </div>
             <button type="submit">Enviar</button>
         </form>
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="../../js/validacionForm.js"></script>
+    <script src="../../js/validarEdad.js"></script>
     <script src="../../js/validacionForm.js"></script>
     <script src="../../js/validarEdad.js"></script>
     <script>
@@ -199,8 +286,10 @@ $registrosTipoDocumento = $conexion->query($sqlTipoDocumento);
                 $('#notificationOverlay').show();
             <?php endif; ?>
         }); //FIN DOCUMENT READY
+        }); //FIN DOCUMENT READY
     </script>
 
 </body>
+
 
 </html>

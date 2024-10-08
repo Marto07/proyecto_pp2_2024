@@ -141,4 +141,30 @@
 			return false;
 		}
     }
+
+    //esta funcion seria para darle acceso si tiene complejo a su nombre
+    function obtenerAcessoGestionCanchas($id_persona) {
+        global $conexion;
+
+        $sql = "SELECT 
+                    zona.id_zona,
+                    zona.descripcion_zona,
+                    persona.nombre,
+                    persona.apellido
+                    FROM asignacion_persona_complejo apc
+                    JOIN complejo ON apc.rela_complejo = complejo.id_complejo
+                    JOIN sucursal ON sucursal.rela_complejo = complejo.id_complejo
+                    JOIN zona ON zona.rela_sucursal = sucursal.id_sucursal
+                    JOIN persona ON persona.id_persona = apc.rela_persona
+                    WHERE apc.rela_persona = ?";
+
+        $stmt = $conexion->prepare($sql);
+        $stmt->bind_param("i", $id_persona);
+        $registros = [];
+
+        if($stmt->execute()) {
+            $registros = $stmt->get_result();
+            return $registros;
+        } 
+    }
 ?>
