@@ -18,7 +18,7 @@ function fetchAndSetData(url, formData, targetElement) {
 
 function getTipoDeporte() {
     let deporte = idDeporte.value
-    let url = '../../../../getTipoDeporte.php'
+    let url = '../../../getTipoDeporte.php'
     let formData = new FormData()
     formData.append('id_deporte', deporte)
 

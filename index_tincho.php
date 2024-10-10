@@ -55,15 +55,15 @@ if ($registros = obtenerAcessoGestionCanchas($id_persona)) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Index</title>
-    <link rel="stylesheet" href="<?php echo BASE_URL . 'css/index.css' ?>">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL . 'css/index.css' ?>">
+    <link rel="stylesheet" href="<?php echo BASE_URL . 'headerGeneral.css' ?>">
 </head>
 
 <body>
     <div class="container">
         <header>
             <?php include(RUTA . 'modules/header/tituloWeb/php/tituloWeb.php'); ?>
-            <?php include(RUTA . 'modules/header/filtroBusqueda/php/filtroBusqueda.php'); ?>
             <?php include(RUTA . 'modules/header/btnPerfil/php/btnPerfil.php'); ?>
         </header>
         <main>

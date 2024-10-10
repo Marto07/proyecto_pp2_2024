@@ -1,23 +1,36 @@
+<?php
+$sucursales = [1, 2, 3];
+$sucursales_imploded = implode(",", $sucursales);
+
+$query_notificacion = "SELECT * FROM notificacion WHERE estado = 'no leido' AND rela_sucursal IN($sucursales_imploded)";
+
+$resultado = $conexion->query($query_notificacion);
+
+$hayNotificacion = $resultado->num_rows > 0;
+?>
+
 <div class="profile-dropdown">
     <div onclick="toggle()" class="profile-dropdown-btn">
         <div class="profile-img">
         </div>
 
-        <span>Messi
+        <span style="width: max-content;"><?php echo $_SESSION['usuario']; ?>
             <i class="fa-solid fa-angle-down"></i>
         </span>
     </div>
 
     <ul class="profile-dropdown-list">
         <li class="profile-dropdown-list-item">
-            <a href="#">
+            <a href="<?php echo BASE_URL; ?>login/miPerfil/mis_datos.php">
                 <i class="fa-regular fa-user"></i>
                 Perfil
             </a>
         </li>
 
         <li class="profile-dropdown-list-item">
-            <a href="#">
+            <a href="#" <?php if ($hayNotificacion) {
+                            echo 'style="background-color:red" class="hayNotificacion"';
+                        } ?>>
                 <i class="fa-regular fa-envelope"></i>
                 Notificacion
             </a>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+    <style>
+        .btn-confirm {
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 5px;
+            padding: 10px 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-confirm:hover {
+            background-color: #45a049;
+        }
+
+        .btn-deny {
+            background-color: #f44336;
+            color: white;
+            border-radius: 5px;
+            padding: 10px 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-deny:hover {
+            background-color: #e53935;
+        }
+
+        .btn-cancel {
+            background-color: #bbb;
+            color: white;
+            border-radius: 5px;
+            padding: 10px 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-cancel:hover {
+            background-color: #999;
+        }
+    </style>
+    <!-- <style>
+        /* Estilos generales */
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        /* Estilo del botón */
+        .btn_openModal {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn_openModal:hover {
+            background-color: #45a049;
+        }
+
+        /* Estilo del modal (oculto por defecto) */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            transition: opacity 0.5s ease;
+            opacity: 0;
+        }
+
+        /* Contenido del modal */
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 20px;
+            width: 60%;
+            border-radius: 10px;
+            transform: translateY(-50px);
+            transition: transform 0.5s ease, opacity 0.5s ease;
+            opacity: 0;
+        }
+
+        /* Botón de cerrar */
+        .close {
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: red;
+        }
+
+        /* Cuando el modal está visible */
+        .modal.show {
+            display: block;
+            opacity: 1;
+        }
+
+        .modal-content.show-content {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style> -->
+</head>
+
+<body>
+    <!-- <button id="openModal" class="btn_openModal">Abrir Modal</button>
+
+    <div id="modernModal" class="modal">
+        <div class="modal-content">
+            <span id="closeModal" class="close">&times;</span>
+            <h2>Título del Modal</h2>
+            <p>Este es el contenido de tu modal con transiciones y transformaciones.</p>
+        </div>
+    </div> -->
+    <script>
+        // // Elementos del DOM
+        // const openModalBtn = document.getElementById('openModal');
+        // const modal = document.getElementById('modernModal');
+        // const closeModalBtn = document.getElementById('closeModal');
+        // const modalContent = document.querySelector('.modal-content');
+
+        // // Abrir el modal con transiciones
+        // openModalBtn.addEventListener('click', () => {
+        //     modal.classList.add('show');
+        //     setTimeout(() => {
+        //         modalContent.classList.add('show-content');
+        //     }, 100); // Retardo para sincronizar la animación
+        // });
+
+        // // Cerrar el modal con transiciones
+        // closeModalBtn.addEventListener('click', () => {
+        //     modalContent.classList.remove('show-content');
+        //     setTimeout(() => {
+        //         modal.classList.remove('show');
+        //     }, 500); // Espera que termine la animación de cierre
+        // });
+
+        // // Cerrar el modal si haces clic fuera del contenido
+        // window.addEventListener('click', (event) => {
+        //     if (event.target === modal) {
+        //         modalContent.classList.remove('show-content');
+        //         setTimeout(() => {
+        //             modal.classList.remove('show');
+        //         }, 500);
+        //     }
+        // });
+
+        ///////////////////////////////////////////////////////////////
+
+        Swal.fire({
+            title: '¿Qué quieres hacer?',
+            html: `<p>Selecciona una acción para continuar</p>`,
+            iconHtml: '<img src="assets/ghost.png" alt="Icon" style="width:100px">',
+            background: 'black',
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: 'Aceptar',
+            denyButtonText: 'Rechazar',
+            cancelButtonText: 'Cancelar',
+            showClass: {
+                popup: 'animate__animated animate__zoomInDown' // Animación al mostrar el modal
+            },
+            hideClass: {
+                popup: 'animate__animated animate__zoomInUp'  // Animación al ocultar el modal
+            },
+            buttonsStyling: false,
+            customClass: {
+                confirmButton: 'btn-confirm',
+                denyButton: 'btn-deny',
+                cancelButton: 'btn-cancel'
+            },
+            preConfirm: () => {
+                // Acción para el botón de confirmar
+                console.log('Confirmado');
+                // Puedes retornar algo o usar una promesa
+            },
+            preDeny: () => {
+                // Acción para el botón de rechazar
+                console.log('Denegado');
+            }
+        });
+
+    </script>
+
+</body>
+
+</html>

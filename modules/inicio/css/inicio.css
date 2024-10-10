@@ -1,0 +1,249 @@
+@import url(filtroBusqueda.css);
+@import url(btnPerfil.css);
+@import url(asideMenu.css);
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+.contenedor_banner {
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+}
+
+.parte2 {
+  display: flex;
+  position: relative;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  width: 75vw;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: background-image 1s ease-in-out;
+  mask-image: linear-gradient(to left, black 80%, transparent);
+}
+
+.parte1 {
+  height: 100vh;
+  width: 25vw;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 10px;
+}
+
+.nombre_pagina {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 330px;
+  width: 230px;
+}
+
+.nombre_pagina h1 {
+  transform: rotate(-90deg); /* Rota el h1 90 grados en sentido antihorario */
+  position: absolute;
+  color: #427a35;
+  font-size: 2.3rem; /* Ajusta según tus necesidades */
+  font-weight: 900;
+  z-index: 2; /* Asegura que el texto esté encima de la imagen */
+  text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.6); /* Opcional: Agrega sombra para mejorar la visibilidad */
+  border: none; /* Elimina cualquier borde del h1 */
+  background: transparent; /* Asegura que el fondo sea transparente */
+  margin: 30px 150px 0px 0px; /* Elimina márgenes adicionales */
+  padding: 0; /* Elimina relleno adicional */
+}
+
+.nombre_pagina img {
+  height: 300px;
+}
+
+.nosotros_pagina {
+  background-color: rgba(255, 255, 255, 0.47);
+  margin: 0px 0px 0px 200px;
+  width: 500px;
+  z-index: 1;
+  border-radius: 10px;
+  position: relative;
+  display: flex;
+}
+
+.nosotros_pagina h1 {
+  color: #427a35;
+  font-weight: 700;
+}
+
+.redes_pagina {
+  height: 80px;
+  width: 300px;
+  margin: 0px;
+  padding-top: 6px;
+  border-radius: 10px 10px 0px 0px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.redes_pagina p {
+  padding: 0;
+  margin: 0;
+  font-weight: 600;
+  color: #427a35;
+}
+
+.social_icons i {
+  font-size: 25px; /* Ajusta este valor según el tamaño deseado */
+  padding: 0px;
+  margin: 0px 10px; /* Espacio entre los íconos */
+  color: #333; /* Cambia el color si es necesario */
+  transition: color 0.3s ease, 0.5s ease; /* Efecto de transición para el color */
+  cursor: pointer;
+}
+
+.social_icons i:hover {
+  transform: scale(1.2);
+  color: #007bff; /* Cambia el color al pasar el mouse por encima */
+}
+
+.social_icons {
+  position: relative;
+  padding-top: 10px;
+  padding-bottom: 15px;
+  display: flex;
+  gap: 10px;
+}
+
+.banner2 {
+  height: 100vh;
+  width: 50%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.inicia_sesion {
+  background-color: rgb(255, 255, 255, 0.47);
+  height: 70px;
+  width: 400px;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  bottom: 0;
+  margin-left: 130px;
+  gap: 1px;
+  border-radius: 10px 10px 0px 0px;
+}
+
+/* CSS */
+.button-87 {
+  background-color: #427a35;
+  margin: 10px;
+  padding: 15px 30px;
+  text-align: center;
+  text-transform: uppercase;
+  transition: 0.5s;
+  background-size: 200% auto;
+  color: white;
+  border-radius: 10px;
+  display: block;
+  border: 0px;
+  font-weight: 700;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  transition: all 0.6s ease;
+}
+
+.button-87:hover {
+  background-color: white;
+  box-shadow: 0px 0px 14px -7px #f09819;
+  color: #427a35;
+  text-decoration: none;
+  transform: scale(1.05);
+}
+
+.banner3 {
+  position: relative;
+  height: 100vh;
+  width: 50%;
+  z-index: 0;
+}
+
+.cards_inicio {
+  background-color: rgb(255, 255, 255, 0.6);
+  position: relative;
+  height: 450px;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  margin: 140px 00px 0px 170px;
+  border-radius: 10px;
+}
+
+/* From Uiverse.io by joe-watson-sbf */
+.btn_cards {
+  font-size: 20px;
+  font-weight: 700;
+  width: 90%;
+  background: transparent;
+  border: none;
+  padding: 1em 1.5em;
+  color: #427a35;
+  text-transform: uppercase;
+  position: relative;
+  transition: 0.5s ease;
+  cursor: pointer;
+}
+
+.btn_cards::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 0;
+  background-color: #427a35;
+  transition: 0.5s ease;
+}
+
+.btn_cards:hover {
+  color: white;
+  transition-delay: 0.5s;
+}
+
+.btn_cards:hover::before {
+  width: 100%;
+}
+
+.btn_cards::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 0;
+  width: 100%;
+  background-color: #427a35;
+  transition: 0.4s ease;
+  z-index: -1;
+}
+
+.btn_cards:hover::after {
+  height: 100%;
+  transition-delay: 0.4s;
+  color: aliceblue;
+}

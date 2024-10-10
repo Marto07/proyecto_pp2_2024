@@ -7,7 +7,7 @@ $superficie = $conexion->query("SELECT id_tipo_terreno, descripcion_tipo_terreno
 $horario = $conexion->query("SELECT id_horario, horario_inicio, horario_fin FROM horario");
 
 ?>
-<form id="filtro_deporte" method="get" action="getFiltroBusqueda.php">
+<form id="filtro_deporte" method="get" action="<?php echo BASE_URL . 'getFiltroBusqueda.php'; ?>">
 
     <!-- Selección del deporte -->
     <div class="form_filtro">
