@@ -5,7 +5,7 @@ $(document).ready(function(){
 	});
 
 	function toggleMenu() {
-	    var menu = document.getElementById("side-menu");
+	    var menu = document.getElementById("aside-menu");
 	    // var menu = $("#side-menu");
 	    if (menu.style.width === "250px") {
 	        menu.style.width = "0"; // Cerrar menú

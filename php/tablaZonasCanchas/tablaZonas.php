@@ -19,6 +19,9 @@ $registros = obtenerZonasFutbol($id_sucursal);
 	<link rel="stylesheet" href="<?php echo BASE_URL . 'css/header.css' ?>">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 	<style>
+		@import url(/../../../css/header.css);
+		@import url(/../../../css/aside.css);
+
 		body {
 			background: #161616;
 			font-family: Arial, Helvetica, sans-serif;
@@ -170,8 +173,11 @@ $registros = obtenerZonasFutbol($id_sucursal);
 </head>
 
 <body>
-	<?php include(RUTA . 'includes/header_tincho.php'); ?>
-	<?php include(RUTA . 'includes/menu_aside_beterette.php'); ?>
+
+	<?php include(RUTA. "includes/header.php"); ?>
+
+	<?php include(RUTA."includes/menu_aside.php") ?>
+
 	<script src="js/jquery-3.7.1.min.js"></script>
 	<div class="containerEmpleado">
 		<h1>Modulo Zonas de Complejos Deportivos</h1>
@@ -242,6 +248,11 @@ $registros = obtenerZonasFutbol($id_sucursal);
 			}
 		}
 	</script>
+	<script src="<?php echo BASE_URL . "libs/jquery-3.7.1.min.js"; ?>"></script>
+
+	<script src="<?php echo BASE_URL . "js/header.js"; ?>"></script>
+	<script src="<?php echo BASE_URL . "js/aside.js"; ?>"></script>
+
 </body>
 
 </html>

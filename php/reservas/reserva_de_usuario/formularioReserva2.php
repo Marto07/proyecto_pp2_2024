@@ -23,6 +23,9 @@
  	<meta name="viewport" content="width=device-width, initial-scale=1.0">
  	<title>RESERVA</title>
  	<style>
+        @import url(../../../css/header.css);
+        @import url(../../../css/aside.css);
+
  		body {
  			padding:0;
  			margin:0;
@@ -85,6 +88,11 @@
  	</style>
  </head>
  <body>
+    <?php include(RUTA. "includes/header.php"); ?>
+
+    <?php include(RUTA."includes/menu_aside.php") ?>
+
+
     <a href="<?php echo BASE_URL. 'index_tincho.php'; ?>" class="volver">Volver al inicio</a>
     <div class="navigation">
         <a href="formularioReserva2.php?fecha_reserva=<?php echo $fecha_anterior; ?>&cancha=<?php echo $cancha; ?>">Anterior</a>
@@ -125,7 +133,7 @@
         </tbody>
     </table>
  	
- </body>
+</body>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <script>
     let fecha       = <?php echo json_encode($fecha); ?>;
@@ -133,4 +141,7 @@
     let cancha      = <?php echo json_encode($cancha); ?>;
 </script>
 <script src="<?php echo BASE_URL.'js/horarios_disponibles.js'; ?>"></script>
+<script src="<?php echo BASE_URL . "js/header.js"; ?>"></script>
+<script src="<?php echo BASE_URL . "js/aside.js"; ?>"></script>
+
  </html>

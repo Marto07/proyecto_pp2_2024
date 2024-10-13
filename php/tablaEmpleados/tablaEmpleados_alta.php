@@ -33,6 +33,9 @@ $registrosTipoDocumento = $conexion->query($sqlTipoDocumento);
     <link rel="stylesheet" href="<?php echo BASE_URL . 'css/header.css' ?>">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        @import url(../../../css/header.css);
+        @import url(../../../css/aside.css);
+
         body {
             font-family: Arial, sans-serif;
             background-color: #161616;
@@ -179,9 +182,11 @@ $registrosTipoDocumento = $conexion->query($sqlTipoDocumento);
 </head>
 
 <body>
-    <?php include(RUTA . 'includes/header_tincho.php'); ?>
-    <?php include(RUTA . 'includes/menu_aside_beterette.php'); ?>
-    <script src="js/jquery-3.7.1.min.js"></script>
+    <?php include(RUTA. "includes/header.php"); ?>
+
+    <?php include(RUTA."includes/menu_aside.php") ?>
+
+    
     <div class="containerEmpleado">
 
         <!-- MODAL  -->
@@ -238,7 +243,7 @@ $registrosTipoDocumento = $conexion->query($sqlTipoDocumento);
         </form>
     </div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="<?php echo BASE_URL . "libs/jquery-3.7.1.min.js"; ?>"></script>
     <script src="../../js/validacionForm.js"></script>
     <script src="../../js/validarEdad.js"></script>
     <script>
@@ -255,6 +260,10 @@ $registrosTipoDocumento = $conexion->query($sqlTipoDocumento);
             <?php endif; ?>
         }); //FIN DOCUMENT READY
     </script>
+
+    <script src="<?php echo BASE_URL . "js/header.js"; ?>"></script>
+    <script src="<?php echo BASE_URL . "js/aside.js"; ?>"></script>
+
 
 </body>
 

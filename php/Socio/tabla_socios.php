@@ -53,10 +53,11 @@ $registros = obtenerRegistros($tabla, $campos, $join, $condicion);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $titulo_pagina; ?></title>
-    <link rel="stylesheet" href="<?php echo BASE_URL . 'css/aside/menu_aside_beterette.css'; ?>">
-    <link rel="stylesheet" href="<?php echo BASE_URL . 'css/header.css' ?>">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        @import url(../../css/header.css);
+        @import url(../../css/aside.css);
+
         body {
             background: #161616;
             font-family: Arial, Helvetica, sans-serif;
@@ -134,8 +135,11 @@ $registros = obtenerRegistros($tabla, $campos, $join, $condicion);
 </head>
 
 <body>
-    <?php include(RUTA . 'includes/header_tincho.php'); ?>
-    <?php include(RUTA . 'includes/menu_aside_beterette.php'); ?>
+    
+    <?php include(RUTA. "includes/header.php"); ?>
+
+    <?php include(RUTA."includes/menu_aside.php") ?>
+
     <div class="containerEmpleado">
         <h1>Socios</h1>
         <table>
@@ -228,6 +232,9 @@ $registros = obtenerRegistros($tabla, $campos, $join, $condicion);
             window.location.href = "eliminar.php?id=" + id + "&id_complejo=" + complejo;
         }
     </script>
+    <script src="<?php echo BASE_URL . "js/header.js"; ?>"></script>
+    <script src="<?php echo BASE_URL . "js/aside.js"; ?>"></script>
+
 </body>
 
 </html>

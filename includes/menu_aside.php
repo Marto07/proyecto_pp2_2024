@@ -1,6 +1,4 @@
 <?php  
-    require_once("../config/root_path.php");
-    require_once(RUTA. 'config/database/conexion.php');
     // session_start();
     // $_SESSION['id_perfil'] = 1;
     $id_perfil = isset($_SESSION['id_perfil']) ? $_SESSION['id_perfil'] : 2/*23*/; // perfil del usuario almacenado en sesión
@@ -34,55 +32,30 @@
 
 
 ?>
-
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menú Lateral</title>
-    <link rel="stylesheet" href="<?php echo BASE_URL . 'css/Aside/menu_aside.css'; ?>">
-</head>
-<body>
     <!-- Botón de menú (hamburguesa) -->
-    <div class="menu-btn" >
-        &#9776; <!-- Icono de las tres rayas -->
-    </div>
+    <!-- <div class="menu-btn" > -->
+        <!-- &#9776; <!-- Icono de las tres rayas --> 
+    <!-- </div> -->
+    <button class="menu-btn" id="toggle-menu">☰</button>
+    <aside id="aside-menu" class="menu_desplegable">
 
-    <!-- Contenido principal de la página -->
-    <div class="content">
-        <h1>Página Principal</h1>
-        <p>Este es el contenido de la página que se superpondrá cuando el menú se abra.</p>
-    </div>
-
-    <!-- Menú lateral (aside) -->
-    <aside id="side-menu" class="side-menu">
-        <!-- 
-            ESTATICO
-        <div class="indice">
-            <p>Índice (No clickeable)</p>
-            <a href="#">Opción 1</a>
-            <a href="#">Opción 2</a>
-            <a href="#">Opción 3</a>
-        </div>
-        -->
         <?php foreach ($modulos as $modulo => $data): ?>
+            
+            <div class="indice">
+                <p><?php echo $modulo; ?></p>
+                <ul>
+                    <?php foreach ($data['submodulos'] as $submodulo): ?>
+                        <li>
+                            <a href="<?php echo BASE_URL . $submodulo['ruta']; ?>"><?php echo $submodulo['nombre']; ?></a>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
 
-                        <div class="indice">
-                            <p><?php echo $modulo; ?></p>
-
-                                <?php foreach ($data['submodulos'] as $submodulo): ?>
-                                    <a href="<?php echo BASE_URL . $submodulo['ruta']; ?>"><?php echo $submodulo['nombre']; ?></a>
-                                <?php endforeach; ?>
-
-                        </div>
+            </div>
 
         <?php endforeach; ?>
     </aside>
 
 
 
-    <script src="<?php echo BASE_URL . 'js/jquery-3.7.1.min.js'; ?>"></script>
-    <script src="<?php echo BASE_URL . 'js/Aside/menu_aside.js'; ?>"></script>
-</body>
-</html>
+

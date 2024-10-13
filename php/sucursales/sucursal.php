@@ -119,9 +119,6 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title><?php echo $nombre_sucursal; ?></title>
-	<style type="text/css">
-		*{font-family: arial;}
-	</style>
 	<link rel="stylesheet" type="text/css" href="<?php echo BASE_URL. 'php/sucursales/css/sucursal.css'; ?>">
 	<script src="https://kit.fontawesome.com/03cc0c0d2a.js" crossorigin="anonymous"></script>
 	<link rel="stylesheet" href="<?php echo BASE_URL . 'css/aside/menu_aside_beterette.css'; ?>">
@@ -130,8 +127,11 @@
 
 </head>
 <body>
-	<?php include(RUTA. 'includes/header_tincho.php'); ?>
-	<?php include(RUTA. 'includes/menu_aside_beterette.php'); ?>
+
+	<?php include(RUTA. "includes/header.php"); ?>
+
+	<?php include(RUTA."includes/menu_aside.php") ?>
+
 
 	<div class="contenido">
 		
@@ -219,11 +219,12 @@
 					                    <small><?php echo htmlspecialchars($reg['descripcion_zona']); ?></small>
 					                    <small><?php echo htmlspecialchars($reg['descripcion_formato_deporte']); ?></small>
 					                    <small>techo, luz, camara</small>
-					                    <?php 
-					                    	if ($perfil == "empleado" || $perfil == "administrador") {
-					                    		echo '<a href="#"><i class="fa-solid fa-pen" style="color: #FFD43B;"></i></a>' . '<a href="#"><i class="fa-solid fa-trash" style="color: #c20000;"></i></a>';
-					                    	}
-					                    ?>
+					                    <div class="botones-espacio">
+										    <?php if ($perfil == 'administrador' || $perfil == 'empleado'): ?>
+										        <a href="editar.php" class="btn-editar">Editar</a>
+										        <a href="eliminar.php" class="btn-eliminar">Eliminar</a>
+										    <?php endif; ?>
+										</div>
 					                </div>
 
 					            </div>
@@ -248,5 +249,10 @@
 		</div>
 
 	</div>
+	
+	<script src="<?php echo BASE_URL . "libs/jquery-3.7.1.min.js"; ?>"></script>
+	<script src="<?php echo BASE_URL . "js/header.js"; ?>"></script>
+	<script src="<?php echo BASE_URL . "js/aside.js"; ?>"></script>
+
 </body>
 </html>

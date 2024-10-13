@@ -8,7 +8,7 @@
     position: fixed;
     top: 20px;
     left: 20px;
-    z-index: 1000; /* Asegura que el botón esté encima del contenido */
+    z-index: 1000; 
 }
 
 /* Estilos del menú lateral */

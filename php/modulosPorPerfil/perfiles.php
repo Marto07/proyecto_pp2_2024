@@ -7,7 +7,7 @@
 	$id_persona = 1;
 }*/
 
-$conexion = new mysqli("localhost","root", "","proyecto_pp2");
+// $conexion = new mysqli("localhost","root", "","proyecto_pp2");
 
 $sql = "SELECT id_perfil, descripcion_perfil FROM perfil";
 

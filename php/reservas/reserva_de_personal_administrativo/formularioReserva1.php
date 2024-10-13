@@ -11,6 +11,9 @@
 <head>
     <title>Buscar Reservas</title>
     <style>
+        @import url(../../../css/header.css);
+        @import url(../../../css/aside.css);
+
         body {
             font-family: Arial, sans-serif;
         }
@@ -43,6 +46,10 @@
     </style>
 </head>
 <body>
+    <?php include(RUTA. "includes/header.php"); ?>
+
+    <?php include(RUTA."includes/menu_aside.php") ?>
+
     <a href="<?php echo BASE_URL. 'index_tincho.php'; ?>" class="volver">Volver al inicio</a>
     <form action="formularioReserva2.php" method="get">
         <h2>Buscar reservas por fecha</h2>
@@ -65,5 +72,9 @@
         </select>
         <button type="submit">Buscar</button>
     </form>
+    <script src="<?php echo BASE_URL . "libs/jquery-3.7.1.min.js"; ?>"></script>
+    <script src="<?php echo BASE_URL . "js/header.js"; ?>"></script>
+    <script src="<?php echo BASE_URL . "js/aside.js"; ?>"></script>
+
 </body>
 </html>

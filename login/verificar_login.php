@@ -56,19 +56,41 @@ if($datos->num_rows == 1) {
             $id_perfil  = $reg['id_perfil'];
             $perfil     = $reg['descripcion_perfil'];
             $id_persona = $reg['id_persona'];
+        }
+        if ($perfil == "propietario" || $perfil == "administrador") {
+            $sql = "SELECT rela_complejo FROM asignacion_persona_complejo WHERE rela_persona = $id_persona";
+            $registros = $conexion->query($sql);
+            if($registros->num_rows >= 1){
+                $complejos = [];
+                foreach ($registros as $reg) {
+                    $complejos[] = $reg['rela_complejo'];
+                }
+            }
+        }
 
+        if ($perfil == "empleado" || $perfil == "administrador") {
+            $sql = "SELECT rela_sucursal FROM empleado WHERE rela_persona = $id_persona";
+            $registros = $conexion->query($sql);
+            if($registros->num_rows >= 1){ 
+                $sucursales = [];
+                foreach ($registros as $reg) {
+                    $sucursales[] = $reg['rela_sucursal'];
+                }
+            }
         }
 
         session_start();
 
-        $_SESSION['id_usuario'] =   $id_usuario;
-        $_SESSION['usuario']    =   $usuario;
-        $_SESSION['email']      =   $email;
-        $_SESSION['id_perfil']  =   $id_perfil;
-        $_SESSION['perfil']     =   $perfil;
-        $_SESSION['id_persona'] =   $id_persona;
+        $_SESSION['id_usuario']                             =   $id_usuario;
+        $_SESSION['usuario']                                =   $usuario;
+        $_SESSION['email']                                  =   $email;
+        $_SESSION['id_perfil']                              =   $id_perfil;
+        $_SESSION['perfil']                                 =   $perfil;
+        $_SESSION['id_persona']                             =   $id_persona;
+        if (isset($complejos)) {$_SESSION['complejos']      =   $complejos;}
+        if (isset($sucursales)) {$_SESSION['sucursales']    =   $sucursales;}
 
-        header('location: ../index_tincho.php');
+        header('location: ../index2.php');
         exit();
     }
     else {

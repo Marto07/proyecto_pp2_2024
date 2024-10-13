@@ -99,10 +99,11 @@ $modulo = "Alta de socios complejo {$regi['descripcion_complejo']}";
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title><?php echo $titulo_pagina; ?></title>
-	<link rel="stylesheet" href="<?php echo BASE_URL . 'css/aside/menu_aside_beterette.css'; ?>">
-	<link rel="stylesheet" href="<?php echo BASE_URL . 'css/header.css' ?>">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 	<style>
+		@import url(/../../../css/header.css);
+		@import url(/../../../css/aside.css);
+
 		body {
 			background: #161616;
 			font-family: Arial, Helvetica, sans-serif;
@@ -211,9 +212,11 @@ $modulo = "Alta de socios complejo {$regi['descripcion_complejo']}";
 </head>
 
 <body>
-	<?php include(RUTA . 'includes/header_tincho.php'); ?>
-	<?php include(RUTA . 'includes/menu_aside_beterette.php'); ?>
-	<script src="js/jquery-3.7.1.min.js"></script>
+	
+	<?php include(RUTA. "includes/header.php"); ?>
+
+	<?php include(RUTA."includes/menu_aside.php") ?>
+
 
 	<div class="containerEmpleado">
 		<h1>Modificar Socio</h1>
@@ -272,6 +275,10 @@ $modulo = "Alta de socios complejo {$regi['descripcion_complejo']}";
 			<button type="submit" id="formulario" name="formulario">Enviar</button>
 		</form>
 	</div>
+
+	<script src="<?php echo BASE_URL . "libs/jquery-3.7.1.min.js"; ?>"></script>
+	<script src="<?php echo BASE_URL . "js/header.js"; ?>"></script>
+	<script src="<?php echo BASE_URL . "js/aside.js"; ?>"></script>
 
 	<script src="<?php echo BASE_URL . 'libs/sweetalert2.all.min.js' ?>"></script>
 	<script src="../../js/validacionForm.js"></script>

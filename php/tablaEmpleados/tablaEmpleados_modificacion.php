@@ -121,6 +121,9 @@ if (isset($_POST['modificacion'])) {
     <link rel="stylesheet" href="<?php echo BASE_URL . 'css/header.css' ?>">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        @import url(/../../../css/header.css);
+        @import url(/../../../css/aside.css);
+
         body {
             background: #161616;
             font-family: Arial, Helvetica, sans-serif;
@@ -229,8 +232,10 @@ if (isset($_POST['modificacion'])) {
 </head>
 
 <body>
-    <?php include(RUTA . 'includes/header_tincho.php'); ?>
-    <?php include(RUTA . 'includes/menu_aside_beterette.php'); ?>
+    <?php include(RUTA. "includes/header.php"); ?>
+
+    <?php include(RUTA."includes/menu_aside.php") ?>
+
     <script src="js/jquery-3.7.1.min.js"></script>
     <div class="containerEmpleado">
         <h1>Modulo Modificacion de Empleado</h1>
@@ -262,6 +267,11 @@ if (isset($_POST['modificacion'])) {
     </div>
     <script src="../../js/validacionForm.js"></script>
     <script src="../../js/validarEdad.js"></script>
+    <script src="<?php echo BASE_URL . "libs/jquery-3.7.1.min.js"; ?>"></script>
+
+    <script src="<?php echo BASE_URL . "js/header.js"; ?>"></script>
+    <script src="<?php echo BASE_URL . "js/aside.js"; ?>"></script>
+
 </body>
 
 </html>

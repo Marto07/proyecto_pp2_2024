@@ -1,5 +1,5 @@
 <?php 
-$conexion = new mysqli("localhost","root", "","proyecto_pp2");
+// $conexion = new mysqli("localhost","root", "","proyecto_pp2");
 
 function obtenerModulosPorPerfil($id_perfil) {
 	global $conexion;

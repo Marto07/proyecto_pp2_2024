@@ -46,44 +46,56 @@ if (isset($_GET['id_reserva'])) {
 
 <script src="<?php echo BASE_URL; ?>libs/jquery-3.7.1.min.js"></script>
 <script src="<?php echo BASE_URL; ?>libs/sweetalert2.all.min.js"></script>
+<style>
+    @import url(/../../css/header.css);
+    @import url(/../../css/aside.css);
+
+</style>
 </head>
 <body>
+    <?php include(RUTA. "includes/header.php"); ?>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        <?php if ($puede_jugar): ?>
-            // Si puede jugar (monto pagado es igual o mayor al monto total)
-            Swal.fire({
-                title: 'Pago Completo',
-                text: "La persona puede jugar",
-                icon: 'success',
-                showCancelButton: true,
-                confirmButtonText: 'Confirmar Juego',
-                cancelButtonText: 'Cancelar',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Si confirma, redirigir a actualizar_reserva.php con pago completo
-                    window.location.href = 'actualizar_reserva.php?pago_completo=<?php echo $id_reserva; ?>';
-                }
-            });
-        <?php else: ?>
-            // Si no puede jugar (monto pagado es menor al monto total)
-            Swal.fire({
-                title: 'Pago Incompleto',
-                text: "El pago no está completo. ¿Desea completar el pago?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Completar Pago',
-                cancelButtonText: 'Cancelar',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Si confirma, redirigir a actualizar_reserva.php con completar pago
-                    window.location.href = 'actualizar_reserva.php?completar_pago=<?php echo $id_reserva; ?>';
-                }
-            });
-        <?php endif; ?>
-    });
-</script>
+    <?php include(RUTA."includes/menu_aside.php") ?>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            <?php if ($puede_jugar): ?>
+                // Si puede jugar (monto pagado es igual o mayor al monto total)
+                Swal.fire({
+                    title: 'Pago Completo',
+                    text: "La persona puede jugar",
+                    icon: 'success',
+                    showCancelButton: true,
+                    confirmButtonText: 'Confirmar Juego',
+                    cancelButtonText: 'Cancelar',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Si confirma, redirigir a actualizar_reserva.php con pago completo
+                        window.location.href = 'actualizar_reserva.php?pago_completo=<?php echo $id_reserva; ?>';
+                    }
+                });
+            <?php else: ?>
+                // Si no puede jugar (monto pagado es menor al monto total)
+                Swal.fire({
+                    title: 'Pago Incompleto',
+                    text: "El pago no está completo. ¿Desea completar el pago?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Completar Pago',
+                    cancelButtonText: 'Cancelar',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Si confirma, redirigir a actualizar_reserva.php con completar pago
+                        window.location.href = 'actualizar_reserva.php?completar_pago=<?php echo $id_reserva; ?>';
+                    }
+                });
+            <?php endif; ?>
+        });
+    </script>
+    <script src="<?php echo BASE_URL . "js/header.js"; ?>"></script>
+    <script src="<?php echo BASE_URL . "js/aside.js"; ?>"></script>
+
 
 </body>
 </html>

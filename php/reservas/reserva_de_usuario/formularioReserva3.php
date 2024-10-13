@@ -103,6 +103,8 @@ if ($tarifa_seleccionada) {
 <head>
     <title>Formulario de Reserva</title>
     <style>
+        @import url(../../../css/header.css);
+        @import url(../../../css/aside.css);
         body {
             font-family: Arial, sans-serif;
         }
@@ -151,6 +153,10 @@ if ($tarifa_seleccionada) {
     </style>
 </head>
 <body>
+    <?php include(RUTA. "includes/header.php"); ?>
+
+    <?php include(RUTA."includes/menu_aside.php") ?>
+
     <form action="formularioReserva4.php" method="post">
     	<h2>¿Quiere reservar la hora?</h2>
     	<div>
@@ -185,6 +191,8 @@ if ($tarifa_seleccionada) {
     });
 
 </script>
+<script src="<?php echo BASE_URL . "js/header.js"; ?>"></script>
+<script src="<?php echo BASE_URL . "js/aside.js"; ?>"></script>
 </html>
 
 <?php 

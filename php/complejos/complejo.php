@@ -1,6 +1,6 @@
 <?php 
     require_once("../../config/root_path.php");
-    $conexion = new mysqli("localhost","root","","proyecto_pp2");
+    require_once(RUTA . "config/database/conexion.php");
     session_start();
 
     if (isset($_GET['id_complejo'])) {
@@ -47,6 +47,9 @@
     <title>Sportplanner</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style type="text/css">
+        @import url(/../../../css/header.css);
+        @import url(/../../../css/aside.css);
+
        /* Estilos generales */
         * {
           font-family: Arial, sans-serif;
@@ -139,8 +142,10 @@
 </head>
 
 <body>
-    <?php include(RUTA. 'includes/header_tincho.php'); ?>
-    <?php include(RUTA. 'includes/menu_aside_beterette.php'); ?>
+
+    <?php include(RUTA. "includes/header.php"); ?>
+
+    <?php include(RUTA."includes/menu_aside.php") ?>
 
 
     <div class="conteiner_index">
@@ -200,9 +205,10 @@
           
         });///document ready
     </script>
+    <script src="<?php echo BASE_URL . "js/header.js"; ?>"></script>
+    <script src="<?php echo BASE_URL . "js/aside.js"; ?>"></script>
 
-    <!-- <script src="/pp2/modules/nav/filtro_busqueda/js/filtro_busqueda.js"></script> -->
-    <!-- <script src="/pp2/modules/menu_desplegable/js/menu_desplegable.js"></script> -->
+
 </body>
 
 </html>

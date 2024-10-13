@@ -1,0 +1,86 @@
+<head>
+    <link rel="stylesheet" href="archivo.css">
+</head>
+
+<form id="formulario-multipasos">
+        <!-- Paso 1 -->
+        <div class="paso" id="paso-1">
+            <h3>Paso 1: Datos del Complejo</h3>
+            <label for="iconoComplejo">Icono del Complejo</label>
+            <input type="file" id="iconoComplejo" accept="image/*" required>
+            <label for="nombreComplejo">Nombre del Complejo</label>
+            <input type="text" id="nombreComplejo" placeholder="Nombre" required>
+            <button type="button" onclick="mostrarPaso(2)">Siguiente</button>
+        </div>
+
+        <!-- Paso 2 -->
+        <div class="paso" id="paso-2" style="display:none;">
+            <h3>Paso 2: Datos de la Sucursal</h3>
+            <div class="input_form">
+                <label for="imagenesSucursal">Imágenes de la Sucursal (máx. 5):</label>
+                <input type="file" id="imagenesSucursal" accept="image/*" multiple required>
+            </div>
+            <div class="input_form">
+                <label for="nombreSucursal">Nombre de la Sucursal:</label>
+                <input type="text" id="nombreSucursal" placeholder="Nombre" required>
+            </div>
+            <div class="input_form">
+                <label for="direccionSucursal">Dirección:</label>
+                <input type="text" id="direccionSucursal" placeholder="Dirección" required>
+            </div>
+            <div class="input_form">
+                <label for="contactoSucursal">Contacto:</label>
+                <input type="text" id="contactoSucursal" placeholder="Telefono" required>
+            </div>
+            <div class="servicios_form">
+                <h4>Servicios</h4>
+                <label><input type="checkbox" id="servicioLuz"> Luz</label>
+                <label><input type="checkbox" id="servicioTecho"> Techo</label>
+                <label><input type="checkbox" id="servicioWifi"> Wi-Fi</label>
+            </div>
+            <div class="btn_form">
+                <button type="button" onclick="mostrarPaso(1)">Anterior</button>
+                <button type="button" onclick="mostrarPaso(3)">Siguiente</button>
+            </div>
+        </div>
+
+        <!-- Paso 3 -->
+        <div class="paso" id="paso-3" style="display:none;">
+            <h3>Paso 3: Cancha</h3>
+            <div class="input_form">
+                <label for="nombreCancha">Cancha:</label>
+                <input type="text" id="nombreCancha" placeholder="Nombre" required>
+            </div>
+            <div class="input_form">
+                <label for="deporte">Deporte:</label>
+                <select id="deporte" required>
+                    <option value="futbol">Fútbol</option>
+                    <option value="voley">Vóley</option>
+                    <option value="rugby">Rugby</option>
+                </select>
+            </div>
+            <div class="input_form">
+                <label for="formatoDeporte">Formato:</label>
+                <input type="text" id="formatoDeporte" placeholder="Fútbol 5, Vóley 6, etc."
+                    required>
+            </div>
+            <div class="input_form">
+                <label for="tipoTerreno">Tipo de Terreno:</label>
+                <select id="tipoTerreno" required>
+                    <option value="cesped">Césped</option>
+                    <option value="pasto">Pasto</option>
+                    <option value="piso">Piso</option>
+                </select>
+            </div>
+            <div class="servicios_form">
+                <h4>Servicios en la Cancha</h4>
+                <label><input type="checkbox" id="canchaTecho"> Techo</label>
+                <label><input type="checkbox" id="canchaLuz"> Luz</label>
+                <label><input type="checkbox" id="canchaCamaras"> Cámaras</label>
+            </div>
+            <div class="btn_form">
+                <button type="button" onclick="mostrarPaso(2)">Anterior</button>
+                <button type="submit">Finalizar</button>
+            </div>
+        </div>
+    </form>

@@ -1,66 +1,59 @@
 USE proyecto_pp2;
 
 
--- INSERT INTO `horario` (`id_horario`, `horario_inicio`, `horario_fin`, `fecha_alta`, `estado`) VALUES (NULL, '00:00:00', '01:00:00', CURRENT_DATE(), '1'), (NULL, '01:00:00', '02:00:00', CURRENT_DATE(), '1'), (NULL, '02:00:00', '03:00:00', CURRENT_DATE(), '1'), (NULL, '03:00:00', '04:00:00', CURRENT_DATE(), '1'), (NULL, '04:00:00', '05:00:00', CURRENT_DATE(), '1'), (NULL, '05:00:00', '06:00:00', CURRENT_DATE(), '1'), (NULL, '06:00:00', '07:00:00', CURRENT_DATE(), '1'), (NULL, '07:00:00', '08:00:00', CURRENT_DATE(), '1'), (NULL, '08:00:00', '09:00:00', CURRENT_DATE(), '1'), (NULL, '09:00:00', '10:00:00', CURRENT_DATE(), '1'), (NULL, '10:00:00', '11:00:00', CURRENT_DATE(), '1'), (NULL, '11:00:00', '12:00:00', CURRENT_DATE(), '1'), (NULL, '12:00:00', '13:00:00', CURRENT_DATE(), '1'), (NULL, '13:00:00', '14:00:00', CURRENT_DATE(), '1'), (NULL, '14:00:00', '15:00:00', CURRENT_DATE(), '1'), (NULL, '15:00:00', '16:00:00', CURRENT_DATE(), '1'), (NULL, '16:00:00', '17:00:00', CURRENT_DATE(), '1'), (NULL, '17:00:00', '18:00:00', CURRENT_DATE(), '1'), (NULL, '18:00:00', '19:00:00', CURRENT_DATE(), '1'), (NULL, '19:00:00', '20:00:00', CURRENT_DATE(), '1'), (NULL, '20:00:00', '21:00:00', CURRENT_DATE(), '1'), (NULL, '21:00:00', '22:00:00', CURRENT_DATE(), '1'), (NULL, '22:00:00', '23:00:00', CURRENT_DATE(), '1'), (NULL, '23:00:00', '00:00:00', CURRENT_DATE(), '1');
+-- SELECT 
+--                     horario.id_horario,
+--                     horario.horario_inicio,
+--                     horario.horario_fin,
+--                     reserva.id_reserva,
+--                     zona.descripcion_zona,
+--                     sucursal.descripcion_sucursal,
+--                     complejo.descripcion_complejo,
+--                     IF (reserva.id_reserva IS NULL, 'disponible', 'no-disponible') AS estado
+--                 FROM 
+--                     zona
+--                 JOIN 
+--                     sucursal
+--                 ON
+--                     zona.rela_sucursal = sucursal.id_sucursal
+--                 JOIN
+--                     complejo
+--                 ON
+--                     sucursal.rela_complejo = complejo.id_complejo
+--                 AND
+--                     id_zona = 3
+--                 JOIN 
+--                     reserva 
+--                 ON 
+--                     reserva.rela_zona = zona.id_zona
+--                 RIGHT JOIN 
+--                     horario
+--                 ON
+--                     horario.id_horario = reserva.rela_horario
+--                 AND
+--                     reserva.fecha_reserva = '2024-10-03'
+--             ORDER BY (horario.horario_inicio);
 
--- INSERT INTO `sucursal` (`id_sucursal`, `descripcion_sucursal`, `direccion`, `estado`, `rela_complejo`) VALUES (NULL, 'Sucursal YPF 1', 'Avenida avellaneda 235', '1', '1'), (NULL, 'Sucursal YPF 2', 'Avenida Napoleon 565', '1', '1'), (NULL, 'Sucursal YPF 3', 'Barrio Don Bosco calle sarmiento 277', '1', '1'), (NULL, 'LeClub 1', 'Avenida Gutniski', '1', '2'), (NULL, 'LeClub 2', 'Calle Domingo sarmiento 200', '1', '2'), (NULL, 'Sucursal FutBar1', 'Junin 728', '1', '3'), (NULL, 'Sucursal FutBar2', 'Avenida Uriburu 900', '1', '3');
 
-/*SELECT  id_persona, 
-                    nombre,
-                    apellido,
-                    descripcion_documento   AS documento,
-                    descripcion_sexo        AS sexo
-                FROM persona
-                JOIN documento
-                ON persona.rela_documento = documento.id_documento
-                JOIN sexo
-                ON persona.rela_sexo = sexo.id_sexo ;
+            SELECT 
+                    zona.id_zona,
+                    zona.descripcion_zona,
+                    sucursal.descripcion_sucursal,
+                    reserva.fecha_reserva,
+                    IF (reserva.id_reserva IS NULL, 'disponible', 'no-disponible') AS estado
+                FROM 
+                    zona
+                JOIN 
+                    sucursal ON zona.rela_sucursal = sucursal.id_sucursal
+                LEFT JOIN 
+                    reserva ON reserva.rela_zona = zona.id_zona 
+                              AND reserva.fecha_reserva = '2024-10-03' -- La fecha que pasas
+                              AND reserva.rela_horario = 1 -- El horario que pasas
+                WHERE
+                    zona.rela_tipo_terreno = 2
+                    AND rela_formato_deporte = 2
+                    and id_reserva is null
 
-CREATE TABLE membresia(
-    id_membresia INT AUTO_INCREMENT PRIMARY KEY,
-    beneficio_membresia VARCHAR(20),
-    descripcion_membresia VARCHAR(100),#si fuera necesario
-    precio_membrecia FLOAT,
-    estado BOOLEAN DEFAULT 1,
-);
-
-CREATE TABLE socio(
-    id_socio INT AUTO_INCREMENT PRIMARY KEY,
-    descripcion_socio VARCHAR(50),
-    rela_complejo INT,
-    rela_membresia INT,
-    fecha_afiliacion DATE,
-    fecha_expiracion DATE,
-    fecha_alta DATE,
-    estado BOOLEAN DEFAULT 1,
-    FOREIGN KEY (rela_complejo) REFERENCES complejo(id_complejo),
-    FOREIGN KEY (rela_membresia) REFERENCES membresia(id_membresia)
-);
-=======
-
-CREATE TABLE zona_tarifa(
-    id_zona_tarifa INT AUTO_INCREMENT PRIMARY KEY,
-    turno ENUM('dia','noche'),
-    precio FLOAT,
-    rela_zona INT,
-    estado BOOLEAN DEFAULT 1,
-    FOREIGN KEY (rela_zona) REFERENCES zona(id_zona)
-);
-
-CREATE TABLE beneficio(
-    id_beneficio INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(50),
-    descripcion VARCHAR(150),
-    tipo ENUM('descuento', 'gratis'),
-    valor DECIMAL(5,2) #descuento si es que corresponde
-);
-
-CREATE TABLE sucursal_beneficio(
-    id_sucursal_beneficio INT AUTO_INCREMENT PRIMARY KEY,
-    descripcion VARCHAR(50),
-    rela_complejo INT,
-    rela_beneficio INT,
-    estado BOOLEAN DEFAULT 1
-);*/
-
+                ORDER BY 
+                    (zona.id_zona);
 

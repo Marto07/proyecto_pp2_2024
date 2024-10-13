@@ -1,3 +1,6 @@
+@import url(../../../css/header.css);
+@import url(../../../css/aside.css);
+
 .contenido  {
   font-family: arial;
   position: relative;

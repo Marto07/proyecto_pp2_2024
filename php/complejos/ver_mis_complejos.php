@@ -52,14 +52,15 @@
     <link rel="stylesheet" type="text/css" href=
         "<?php echo BASE_URL . 'php/complejos/css/plantilla.css';?>"
     >
-    <link rel="stylesheet" href="<?php echo BASE_URL . 'css/aside/menu_aside_beterette.css'; ?>">
-    <link rel="stylesheet" href="<?php echo BASE_URL . 'css/header.css' ?>">
+
     <script src="https://kit.fontawesome.com/03cc0c0d2a.js" crossorigin="anonymous"></script>
     <title>Mis complejos</title>
 </head>
 <body>
-    <?php include(RUTA. 'includes/header_tincho.php'); ?>
-    <?php include(RUTA. 'includes/menu_aside_beterette.php'); ?>
+    <?php include(RUTA. "includes/header.php"); ?>
+
+    <?php include(RUTA."includes/menu_aside.php") ?>
+
 
     <div class="contenido">
 
@@ -113,6 +114,9 @@
     </div>
 
     <script src="<?php echo BASE_URL . "libs/jquery-3.7.1.min.js"; ?>"></script>
+    <script src="<?php echo BASE_URL . "js/header.js"; ?>"></script>
+    <script src="<?php echo BASE_URL . "js/aside.js"; ?>"></script>
+
     <script>
         $(document).ready(function () {
 

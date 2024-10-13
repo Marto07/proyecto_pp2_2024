@@ -1,6 +1,6 @@
 <?php 
     require_once("../../config/root_path.php");
-    $conexion = new mysqli("localhost","root","","proyecto_pp2");
+    require_once(RUTA . "config/database/conexion.php");
 
 
     // Procesar formulario

@@ -68,6 +68,45 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <style>
+        * {
+            padding:0;
+            margin:0;
+        }
+        /* CONTENEDOR PRINCIPAL */
+        main {
+/*            padding: 20px;*/
+        }
+
+        /* CARRUSEL */
+        .carousel-container {
+            width: 100%;
+/*            max-width: 800px;*/
+            margin: 0 auto;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .carousel-slide {
+            position: relative;
+            display: flex;
+            width: 100%;
+            height: 600px; /* Altura fija del carrusel */
+        }
+
+        .carousel-slide img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .carousel-slide img.active {
+            opacity: 1;
+        }
         
         .flatpickr-calendar {
             background-color: #fff;
@@ -90,7 +129,18 @@
 <body>
     <?php include(RUTA. 'includes/header_tincho.php'); ?>
     <?php include(RUTA. 'includes/menu_aside_beterette.php'); ?>
+    <main>
+        <!-- CARRUSEL -->
+        <div class="carousel-container">
+            <div class="carousel-slide">
+                <img src="<?php echo BASE_URL . "assets/img/carrusel_2.jpg"; ?>" alt="Imagen 1">
+                <img src="<?php echo BASE_URL . "assets/img/carrusel_3.jpg"; ?>" alt="Imagen 2">
+                <img src="<?php echo BASE_URL . "assets/img/carrusel_4.jpg"; ?>" alt="Imagen 3">
+            </div>
+        </div>
+    </main>
 <script src="js/jquery-3.7.1.min.js"></script>
+<script src="<?php echo BASE_URL . "js/carrusel.js"; ?>"></script>
 <script>
     $(document).ready(function () {
 

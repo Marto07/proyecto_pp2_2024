@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maquetación Simple</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header + Hero envueltos en una sección para hacer que el carrusel sea su fondo -->
+    <section class="hero-container">
+        <div class="carrusel-container">
+            <div class="carrusel-slide">
+                <img src="carrusel_2.jpg" alt="">
+                <img src="carrusel_3.jpg" alt="">
+                <img src="carrusel_4.jpg" alt="">
+            </div>
+        </div>
+        <header>
+            <button class="menu-btn">☰</button>
+            <button class="register-btn">Registrarse</button>
+        </header>
+
+        <section class="hero">
+            <div class="search-container">
+                <input type="text" placeholder="Deporte">
+                <input type="text" placeholder="Tipo de deporte">
+                <input type="date" placeholder="Fecha">
+                <input type="time" placeholder="Hora">
+                <button class="search-btn">Buscar</button>
+            </div>
+        </section>
+    </section>
+
+    <section class="info-section">
+        <p>Regístrate a nuestra página y accede a nuestros servicios de reservas y gestión de canchas</p>
+    </section>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            let images = $('.carrusel-slide img');
+            let currentIndex = 0;
+
+            function showNextImage() {
+                images.eq(currentIndex).removeClass('active');
+                currentIndex = (currentIndex + 1) % images.length;
+                images.eq(currentIndex).addClass('active');
+            }
+
+            setInterval(showNextImage, 7000);
+            images.eq(currentIndex).addClass('active');
+        });
+    </script>
+</body>
+</html>

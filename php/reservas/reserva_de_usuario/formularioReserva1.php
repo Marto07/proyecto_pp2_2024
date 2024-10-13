@@ -9,6 +9,9 @@
 <head>
     <title>Buscar Reservas</title>
     <style>
+        @import url(../../../css/header.css);
+        @import url(../../../css/aside.css);
+
         body {
             font-family: Arial, sans-serif;
         }
@@ -41,6 +44,10 @@
     </style>
 </head>
 <body>
+    <?php include(RUTA. "includes/header.php"); ?>
+
+    <?php include(RUTA."includes/menu_aside.php") ?>
+
     <a href="<?php echo BASE_URL. 'index_tincho.php'; ?>" class="volver">Volver al inicio</a>
     <h1 style="text-align: center; margin-top: 25px;">Modulo de Busqueda de Reservas</h1>
     <h2 align="center"><?php echo "Hola ". $_SESSION['usuario']. " tu ID: ". $_SESSION['id_usuario']; ?></h2>
@@ -56,6 +63,11 @@
             <?php endforeach; ?>
         </select>
         <button type="submit">Buscar</button>
+
+
     </form>
+    <script src="<?php echo BASE_URL . "libs/jquery-3.7.1.min.js"; ?>"></script>
+    <script src="<?php echo BASE_URL . "js/header.js"; ?>"></script>
+    <script src="<?php echo BASE_URL . "js/aside.js"; ?>"></script>
 </body>
 </html>

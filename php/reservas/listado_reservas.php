@@ -5,7 +5,7 @@ require_once("../../config/root_path.php");
 require_once(RUTA. "config/database/conexion.php");
 
 $consulta_reservas = "SELECT id_reserva, rela_persona, rela_zona, rela_estado_reserva, monto_pagado, monto_total FROM RESERVA";
-$resultado = $conexion->query($consulta_reservas);
+$reservas_hechas = $conexion->query($consulta_reservas);
 ?>
 <html lang="en">
 
@@ -14,6 +14,9 @@ $resultado = $conexion->query($consulta_reservas);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Reservas</title>
     <style>
+        @import url(/../../css/header.css);
+        @import url(/../../css/aside.css);
+
             /* Estilos para el contenedor principal de la tabla */
         .tabla-reservas {
             width: 100%;
@@ -90,8 +93,11 @@ $resultado = $conexion->query($consulta_reservas);
 
 </head>
 <body>
-    <?php include(RUTA. 'includes/header_tincho.php'); ?>
-    <?php include(RUTA. 'includes/menu_aside_beterette.php'); ?>
+
+    <?php include(RUTA. "includes/header.php"); ?>
+
+    <?php include(RUTA."includes/menu_aside.php") ?>
+
     <div class="contenedor-listado">
 
         <h1 class="titulo-listado">Listado de Reservas</h1>
@@ -108,7 +114,7 @@ $resultado = $conexion->query($consulta_reservas);
                 </tr>
             </thead>
             <tbody>
-                <?php while ($fila = $resultado->fetch_assoc()) : ?>
+                <?php while ($fila = $reservas_hechas->fetch_assoc()) : ?>
                     <tr>
                         <td><?= $fila['id_reserva'] ?></td>
                         <td><?= $fila['rela_persona'] ?></td>
@@ -124,5 +130,10 @@ $resultado = $conexion->query($consulta_reservas);
             </tbody>
         </table>
     </div>
+    <script src="<?php echo BASE_URL . "libs/jquery-3.7.1.min.js"; ?>"></script>
+
+    <script src="<?php echo BASE_URL . "js/header.js"; ?>"></script>
+    <script src="<?php echo BASE_URL . "js/aside.js"; ?>"></script>
+
 </body>
 </html>
