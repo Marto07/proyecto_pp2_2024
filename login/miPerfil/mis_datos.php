@@ -24,7 +24,7 @@
     		ON
     			persona.rela_sexo = sexo.id_sexo
     		WHERE
-				contacto.descripcion_contacto = ?
+				contacto.descripcion_contacto LIKE ?
     		";
 
     $stmt = $conexion->prepare($sql);
@@ -46,10 +46,9 @@
     $apellido = $datos_personales['apellido'];
     $documento = $datos_personales['descripcion_documento'];
     $sexo = $datos_personales['descripcion_sexo'];
+    unset($_SESSION['datos_personales']);
     $_SESSION['datos_personales'] = $datos_personales;
 
-    $stmt->close();
-    $conexion->close();
 
  ?>
 

@@ -15,7 +15,8 @@
     $perfil = $_SESSION['perfil'];
     validarAcceso($modulo, $perfil);
 
-    print_r($_SESSION);
+    
+
     
 ?>
 <!DOCTYPE html>
@@ -23,14 +24,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="maquetado inicio/style.css">
-
-    <link rel="stylesheet" href="<?php echo BASE_URL. "css/header.css"; ?>">
-
+    <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://kit.fontawesome.com/03cc0c0d2a.js" crossorigin="anonymous"></script>
-
     <title>Inicio</title>
 </head>
 
@@ -48,28 +45,33 @@
 
             <section class="hero">
 
-                <div class="search-container">
-                    <select name="deporte" id="deporte">
-                        <option value="" disabled selected>Deporte</option>
-                            <?php foreach ($deporte as $reg) :?>
-                                <option value="<?= $reg['id_deporte'] ?>"><?= $reg['descripcion_deporte'] ?></option>
-                            <?php endforeach; ?>
-                    </select>
+                <form action="<?php echo BASE_URL. "php/reservas/reserva_formulario/listado_canchas_disponibles.php"?>">
 
-                    <select name="tipoDeporte" id="tipoDeporte">
-                        <option value="">Tipo de deporte</option>
-                    </select>
+                    <div class="search-container">
+                        <select name="deporte" id="deporte">
+                            <option value="" disabled selected>Deporte</option>
+                                <?php foreach ($deporte as $reg) :?>
+                                    <option value="<?= $reg['id_deporte'] ?>"><?= $reg['descripcion_deporte'] ?></option>
+                                <?php endforeach; ?>
+                        </select>
 
-                    <input type="text" id="fecha" name="fecha" placeholder="fecha">
-                    <select name="horario" id="horario">
-                        <option value="" disabled selected>Hora</option>
-                            <?php foreach ($horario as $reg) :?>
-                                <option value="<?= $reg['id_horario'] ?>"><?= $reg['horario_inicio'] ?></option>
-                            <?php endforeach; ?>
+                        <select name="tipoDeporte" id="tipoDeporte">
+                            <option value="">Tipo de deporte</option>
+                        </select>
 
-                    </select>
-                    <button class="search-btn">Buscar</button>
-                </div>
+                        <input type="text" id="fecha" name="fecha" placeholder="fecha">
+                        <select name="horario" id="horario">
+                            <option value="" disabled selected>Hora</option>
+                                <?php foreach ($horario as $reg) :?>
+                                    <option value="<?= $reg['id_horario'] ?>"><?= $reg['horario_inicio'] ?></option>
+                                <?php endforeach; ?>
+
+                        </select>
+                        <button class="search-btn" type="submit">Buscar</button>
+                    </div>
+                    
+                </form>
+
 
             </section>
         </section>
@@ -89,19 +91,7 @@
     <!-- carrusel -->
     <script>
         $(document).ready(function () {
-            // let images = $('.carrusel-slide img');
-            // let currentIndex = 0;
-
-            // function showNextImage() {
-            //     images.eq(currentIndex).removeClass('active');
-            //     currentIndex = (currentIndex + 1) % images.length;
-            //     images.eq(currentIndex).addClass('active');
-            // }
-            // setInterval(showNextImage, 7000);
-            // images.eq(currentIndex).addClass('active');
-
-            // Arreglo con las URLs de las imágenes
-
+            
             let images = [
                 'url("maquetado inicio/carrusel_2.jpg")',
                 'url("maquetado inicio/carrusel_3.jpg")',

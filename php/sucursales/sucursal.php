@@ -121,7 +121,7 @@
 	<title><?php echo $nombre_sucursal; ?></title>
 	<link rel="stylesheet" type="text/css" href="<?php echo BASE_URL. 'php/sucursales/css/sucursal.css'; ?>">
 	<script src="https://kit.fontawesome.com/03cc0c0d2a.js" crossorigin="anonymous"></script>
-	<link rel="stylesheet" href="<?php echo BASE_URL . 'css/aside/menu_aside_beterette.css'; ?>">
+	<link rel="stylesheet" href="<?php echo BASE_URL . 'css/aside.css'; ?>">
     <link rel="stylesheet" href="<?php echo BASE_URL . 'css/header.css' ?>">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
@@ -220,7 +220,7 @@
 					                    <small><?php echo htmlspecialchars($reg['descripcion_formato_deporte']); ?></small>
 					                    <small>techo, luz, camara</small>
 					                    <div class="botones-espacio">
-										    <?php if ($perfil == 'administrador' || $perfil == 'empleado'): ?>
+										    <?php if ($perfil == 'asd' || $perfil == 'asd'): ?>
 										        <a href="editar.php" class="btn-editar">Editar</a>
 										        <a href="eliminar.php" class="btn-eliminar">Eliminar</a>
 										    <?php endif; ?>
@@ -240,7 +240,11 @@
 
 			        <div class="Altas">
 			        	<a href="../tablaEmpleados/tablaEmpleados.php?id_sucursal=<?php echo $id_sucursal; ?>">Gestionar Empleados</a>
-			        	<a href="../Socio/tabla_socios.php?id_complejo=<?php echo $id_complejo; ?>">Gestionar Socios</a><a href="<?php echo BASE_URL. "php/tablaZonasCanchas/tablaZonas.php?id_sucursal=$id_sucursal"; ?>">Gestionar canchas</a>
+
+			        	<a href="../Socio/tabla_socios.php?id_complejo=<?php echo $id_complejo; ?>">Gestionar Socios</a>
+
+			        	<a href="<?php echo BASE_URL. "php/tablaZonasCanchas/tablaZonas.php?id_sucursal=$id_sucursal"; ?>">Gestionar canchas</a>
+
 			        </div>
 			    </div>
 

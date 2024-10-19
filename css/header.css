@@ -133,7 +133,6 @@ header {
 /* Estilos del contenedor de notificaciones */
 .notifications-dropdown {
     display: none; /* Por defecto oculto */
-    position: absolute;
     top: 100%; 
     right: 0; 
     width: 250px; /* Tamaño adecuado para la bandeja de notificaciones */

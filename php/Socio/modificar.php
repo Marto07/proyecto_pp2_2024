@@ -101,8 +101,8 @@ $modulo = "Alta de socios complejo {$regi['descripcion_complejo']}";
 	<title><?php echo $titulo_pagina; ?></title>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 	<style>
-		@import url(/../../../css/header.css);
-		@import url(/../../../css/aside.css);
+		@import url(../../css/header.css);
+		@import url(../../css/aside.css);
 
 		body {
 			background: #161616;

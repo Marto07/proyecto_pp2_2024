@@ -17,7 +17,7 @@
     </a>
 
     <div class="profile-dropdown">
-        <div onclick="toggle()" class="profile-dropdown-btn">
+        <div class="profile-dropdown-btn">
             <div class="profile-img">
                 <!-- Imagen de perfil aquí -->
             </div>

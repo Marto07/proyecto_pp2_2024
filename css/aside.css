@@ -1,7 +1,7 @@
 /* Botón de menú flotante en la esquina superior izquierda */
 .menu-btn {
-position: absolute;
-/*  
+  position: absolute;
+  /*  
 
   top: 0.4125rem;
   left: 0.4125rem;*/
@@ -14,6 +14,11 @@ position: absolute;
   cursor: pointer;
 }
 
+.menu-btn:hover {
+  background-color: #009879; /* Oscurece ligeramente en hover */
+  opacity: .5;
+}
+
 /* Menú lateral */
 .menu_desplegable {
   position: absolute;
@@ -21,14 +26,14 @@ position: absolute;
   left: -18.75rem; /* Oculto inicialmente */
   width: 15.625rem;
   height: 100%;
-  background-color: rgba(78, 222, 92, 0.8);
-  /*  color: #d3c6c6;*/
-  color: white;
+  background-color: #f3f3f3; /* Gris claro, formal */
+  color: #333333; /* Gris oscuro para el texto */
   padding-top: 0;
   z-index: 11;
   border-radius: 0 0.625rem 0.625rem 0;
   transition: left 0.5s ease;
   overflow: auto;
+  box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.2); /* Sombra sutil */
 }
 
 .menu_desplegable.active {
@@ -37,11 +42,13 @@ position: absolute;
 
 /* Títulos de sección en el menú */
 .menu_desplegable p {
-  background-color: #1ea61e;
+  background-color: #009879; /* Verde deportivo */
+  color: #ffffff; /* Texto blanco */
   padding: 0.5rem;
-  font-weight: 500;
+  font-weight: bold;
   text-align: center;
   margin: 0.5rem 0;
+  border-radius: 5px; /* Bordes redondeados */
 }
 
 /* Estilos generales de listas y enlaces */
@@ -56,20 +63,21 @@ position: absolute;
 }
 
 .menu_desplegable ul li a {
-  color: white;
+  color: #333333; /* Gris oscuro para el texto */
   text-decoration: none;
   display: block;
   padding: 0.625rem 0.9375rem;
-  transition: all 0.5s ease;
+  transition: all 0.3s ease;
   border-radius: 0.625rem;
 }
 
 .menu_desplegable ul li a:hover {
-  background-color: #0b0b0b;
-  color: #e0d1d1;
+  background-color: #e2e2e2; /* Gris más claro en hover */
+  color: #009879; /* Verde deportivo para el texto */
 }
 
+/* Efecto hover en el link */
 .menu_desplegable a:hover {
   padding-left: 1.875rem;
+  transition: padding-left 0.3s ease;
 }
-

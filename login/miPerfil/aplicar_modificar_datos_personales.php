@@ -6,7 +6,7 @@
 		$nombre 	= $_POST['nombre'];
 		$apellido 	= $_POST['apellido'];
 		$documento 	= $_POST['documento'];
-		$sexo 		= $_POST['sexo'];
+		$sexo 		= (int)$_POST['sexo'];
 		$email      = $_SESSION['email'];
 
 		// echo $nombre."<br>".$apellido."<br>".$documento."<br>".$sexo."<br>".$email."<br>";die;
@@ -47,6 +47,7 @@
 
 
 		if($stmt1->execute() && $stmt2->execute()) {
+			unset($_SESSION['datos_personales']);
 			header("Location: mis_datos.php");
 		} else {
 			echo "error en el update de persona". $conexion->error;

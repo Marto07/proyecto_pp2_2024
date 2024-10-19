@@ -170,3 +170,34 @@ footer {
   justify-content: space-around;
   color: white;
 }
+
+.Altas {
+  display: flex;
+  justify-content: space-around; /* Distribuye los botones uniformemente */
+  align-items: center;
+  margin: 20px 0; /* Espacio entre el contenido y los botones */
+}
+
+.Altas a {
+  text-decoration: none; /* Elimina el subrayado de los enlaces */
+  padding: 10px 20px; /* Espaciado interno en los botones */
+  border-radius: 5px; /* Bordes redondeados */
+  background-color: #227c70; /* Color de fondo de los botones */
+  color: white; /* Color del texto */
+  font-size: 1rem; /* Tamaño de fuente */
+  font-weight: bold; /* Negrita en el texto */
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Animación suave */
+}
+
+.Altas a:hover {
+  background-color: #1a5d54; /* Color de fondo al pasar el mouse */
+  transform: scale(1.05); /* Aumenta ligeramente el tamaño */
+}
+
+.Altas a:active {
+  transform: scale(0.98); /* Reduce el tamaño cuando se presiona */
+}
+
+.Altas a:not(:last-child) {
+  margin-right: 10px; /* Añade margen entre los botones */
+}

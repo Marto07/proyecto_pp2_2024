@@ -7,26 +7,24 @@ require_once(RUTA . "php/functions/consulta_reutilizable_mysql.php");
 if (isset($_GET['id_complejo'])) {
     $id_complejo = $_GET['id_complejo'];
 } else {
-    echo "ha ocurrido un error :(" . "<br>";
-    echo "<a href='" . BASE_URL . "index_tincho.php" . "'>Volver</a>";
+    echo "ha ocurrido un error :( falta get de complejo" . "<br>";
+    echo "<a href='" . BASE_URL . "index2.php" . "'>Volver</a>";
     die;
 }
 
 
-// Incluye la función de obtener registros
 
 // Define las variables reutilizables
 $titulo_pagina = "Socios";
 $modulo = "Lista de socios de un complejo";
 
 // definimos los campos del encabezado
-$thead = ['ID', 'Nombre', 'Apellido', 'Documento', 'Membresia'];
+$thead = ['ID', 'Nombre', 'Apellido', 'Documento', 'Membresia', 'Eliminar'];
 
 // Define los campos a seleccionar
 $campos = ['id_socio as id', 'id_persona', 'nombre', 'apellido', 'descripcion_documento', 'descripcion_membresia'];
 $tabla = 'socio'; // La tabla principal
 
-// Define el JOIN con la tabla ciudades
 $join = 'JOIN persona
             ON socio.rela_persona = persona.id_persona
             JOIN documento
@@ -35,14 +33,11 @@ $join = 'JOIN persona
             ON socio.rela_membresia = membresia.id_membresia
 ';
 
-// Define la condición WHERE para buscar 
 $condicion = "rela_complejo = $id_complejo AND socio.estado IN(1)";
 
-//orden de la consulta
 $orden = '';
 
-// Obtén los registros de la base de datos con JOIN y WHERE
-$registros = obtenerRegistros($tabla, $campos, $join, $condicion);
+// $registros = obtenerRegistros($tabla, $campos, $join, $condicion);
 
 ?>
 
@@ -54,83 +49,9 @@ $registros = obtenerRegistros($tabla, $campos, $join, $condicion);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $titulo_pagina; ?></title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        @import url(../../css/header.css);
-        @import url(../../css/aside.css);
-
-        body {
-            background: #161616;
-            font-family: Arial, Helvetica, sans-serif;
-        }
-
-        /* Formulario Empleado/////////////////////////////////////77 */
-        /* Estilos generales para el contenedor del formulario */
-        .containerEmpleado {
-            margin: auto;
-            margin-top: 10px;
-            padding: 20px;
-            background-color: #212121;
-            border-radius: 8px;
-            box-shadow: 0px 0px 10px rgb(128, 128, 128, 0.7);
-        }
-
-        .containerEmpleado h1 {
-            color: #fff;
-            text-align: center;
-        }
-
-
-        /* Tabla Registro //////////////////////////////////////////7 */
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            margin: auto;
-            margin-top: 1%;
-            color: rgba(0, 0, 0, 0.6);
-            font-weight: bold;
-            font-size: 16px;
-            border: none;
-        }
-
-        th,
-        table td {
-            text-align: center;
-            padding: 10px;
-            color: white;
-
-        }
-
-        /* ESTILOS ESPECIALES A LOS THEAD */
-
-        body table thead tr {
-            background-color: #161616;
-            color: rgba(255, 255, 255, 0.9);
-            text-align: center;
-            padding: 8px;
-        }
-
-        /* RENGLONES DE COLORES DIFERENTES */
-        table tbody tr:nth-child(odd) {
-            background-color: #2c2c2c;
-        }
-
-        table tbody tr:nth-child(even) {
-            background-color: #161616;
-        }
-
-        .alta {
-            text-align: center;
-            color: #161616;
-        }
-
-        table tbody img {
-            height: 30px;
-        }
-
-        table tbody a:hover {
-            cursor: pointer;
-        }
-    </style>
+    <link rel="stylesheet" href="css/tabla_socio.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL . "css/header.css"; ?>">
+    <link rel="stylesheet" href="<?php echo BASE_URL . "css/aside.css"; ?>">
 
 </head>
 
@@ -142,57 +63,15 @@ $registros = obtenerRegistros($tabla, $campos, $join, $condicion);
 
     <div class="containerEmpleado">
         <h1>Socios</h1>
-        <table>
-            <thead>
-                <tr>
-
-                    <?php foreach ($thead as $th) : ?>
-                        <th><?php echo $th; ?></th>
-                    <?php endforeach; ?>
-                    <th></th>
-                    <th></th>
-
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                foreach ($registros as $registro) {
-                    $modificar = "<a href='modificar.php?id={$registro['id']}&id_complejo=$id_complejo'>
-                                <img src='" . BASE_URL . "/assets/icons/editar_azul.png'>
-                            </a>";
-
-                    $eliminar = "<a valor='{$registro['id']}' complejo='{$id_complejo}' class='eliminar'>
-                                            <img src='" . BASE_URL . "/assets/icons/eliminar.png'>
-                                        </a>";
-                ?>
-
-                    <tr>
-                        <td><?php echo $registro['id']; ?></td>
-                        <td><?php echo $registro['nombre']; ?></td>
-                        <td><?php echo $registro['apellido']; ?></td>
-                        <td><?php echo $registro['descripcion_documento']; ?></td>
-                        <td><?php echo $registro['descripcion_membresia']; ?></td>
-                        <td class="actions"><?php echo $modificar; ?></td>
-                        <td class="actions"><?php echo $eliminar; ?></td>
-                    </tr>
-
-                <?php } ?>
-
-                <tr>
-                    <td colspan="7" class="alta">
-                        <a href="agregar.php?id=<?php echo $id_complejo; ?>">
-                            <img src="<?php echo BASE_URL . '/assets/icons/agregar.png'; ?>">
-                        </a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <input type="text" id="buscador" placeholder="Buscar...">
+        <div id="tabla-container"></div>
+        <div id="paginacion-container"></div>
     </div>
+
     <script src="../../libs/jquery-3.7.1.min.js"></script>
     <script src="../../libs/sweetalert2.all.min.js"></script>
     <script>
-        $('.eliminar').on('click', function() {
-
+        $(document).on('click', '.eliminar', function() {
             let valor = $(this).attr('valor');
             let complejo = $(this).attr('complejo');
             // Mostrar SweetAlert con botones personalizados
@@ -215,18 +94,6 @@ $registros = obtenerRegistros($tabla, $campos, $join, $condicion);
 
         }); // #ELIMINAR ON CLICK
 
-        <?php if (isset($_GET['persona_repetida'])) : ?>  
-            Swal.fire({
-                title: '¿Seguro que desea eliminar este registro?',
-                text: "No podrás deshacer esta acción",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33', // Botón rojo
-                cancelButtonColor: '#aaa', // Botón gris
-                confirmButtonText: 'Eliminar',
-                cancelButtonText: 'Cancelar'
-            })
-        <?php endif; ?>
 
         function eliminar(id, complejo) {
             window.location.href = "eliminar.php?id=" + id + "&id_complejo=" + complejo;
@@ -234,7 +101,62 @@ $registros = obtenerRegistros($tabla, $campos, $join, $condicion);
     </script>
     <script src="<?php echo BASE_URL . "js/header.js"; ?>"></script>
     <script src="<?php echo BASE_URL . "js/aside.js"; ?>"></script>
+    <script>
+        $(document).ready(function() {
+            let id_complejo = <?php echo $id_complejo; ?>;
 
+            function cargarTabla(id_complejo,filtro = '', pagina = 1) {
+                $.ajax({
+                    url: 'ajax/obtenerSocios.php',
+                    type: 'GET',
+                    data: { filtro: filtro, pagina: pagina , id_complejo: id_complejo},
+                    dataType: 'json',
+                    success: function(data) {
+                        // Actualizar el contenedor de la tabla con el HTML generado
+                        $('#tabla-container').html(data.tabla);
+                        // Actualizar la paginación
+                        actualizarPaginacion(data.total_pages, data.current_page);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error en la solicitud AJAX: ", status, error);
+                    }
+                });
+            }
+
+            // Función para actualizar los controles de paginación
+            function actualizarPaginacion(total_pages, current_page) {
+                var paginacionHTML = '';
+
+                // Generar botones de paginación
+                for (var i = 1; i <= total_pages; i++) {
+                    if (i === current_page) {
+                        paginacionHTML += '<span class="pagina-activa">' + i + '</span>';
+                    } else {
+                        paginacionHTML += '<button class="pagina-boton" data-page="' + i + '">' + i + '</button>';
+                    }
+                }
+
+                $('#paginacion-container').html(paginacionHTML);
+            }
+
+            // Cargar la tabla inicialmente sin filtro
+            cargarTabla(id_complejo);
+
+            // Evento de búsqueda
+            $('#buscador').on('keyup', function() {
+                var filtro = $(this).val();
+                cargarTabla(id_complejo ,filtro); //llamar a la funcion con el termino de busqueda
+            });
+
+            // Evento para cambiar de página
+            $(document).on('click', '.pagina-boton', function() {
+                var filtro = $('#buscador').val();
+                var page = $(this).data('page');
+                cargarTabla(id_complejo,filtro, page);
+            });
+
+        }); // Cierre del DOCUMENT READY
+    </script>
 </body>
 
 </html>

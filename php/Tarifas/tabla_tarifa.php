@@ -55,8 +55,9 @@ $registros = obtenerRegistros($tabla, $campos, $join, $condicion);
 </head>
 
 <body>
-    <?php /*include(RUTA . 'includes/header_tincho.php');*/ ?>
-    <?php /*include(RUTA . 'includes/menu_aside_beterette.php');*/ ?>
+    <?php include(RUTA. "includes/header.php"); ?>
+
+    <?php include(RUTA."includes/menu_aside.php") ?>
 
     <div id="contenido">
         
@@ -132,8 +133,9 @@ $registros = obtenerRegistros($tabla, $campos, $join, $condicion);
 
     </div> <!-- Contenido -->
 
-
     <script src="<?php echo BASE_URL. 'libs/jquery-3.7.1.min.js'; ?>"></script>
+    <script src="<?php echo BASE_URL . "js/header.js"; ?>"></script>
+    <script src="<?php echo BASE_URL . "js/aside.js"; ?>"></script>
     <script src="<?php echo BASE_URL. 'libs/sweetalert2.all.min.js'; ?>"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>

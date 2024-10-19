@@ -1,7 +1,7 @@
 <?php  
     // session_start();
     // $_SESSION['id_perfil'] = 1;
-    $id_perfil = isset($_SESSION['id_perfil']) ? $_SESSION['id_perfil'] : 2/*23*/; // perfil del usuario almacenado en sesión
+    $id_perfil = isset($_SESSION['id_perfil']) ? $_SESSION['id_perfil'] : die("no hay perfil");/*23*/; // perfil del usuario almacenado en sesión
     /*
     $querySinRuta = "SELECT m.descripcion_modulo, sm.descripcion_submodulo
               FROM modulo m 

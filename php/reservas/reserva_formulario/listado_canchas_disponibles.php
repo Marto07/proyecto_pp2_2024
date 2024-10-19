@@ -10,7 +10,7 @@ if ($conexion->connect_error) {
 // Recibimos los parámetros del formulario (asegúrate de que los nombres coincidan con los del select en el form)
 $deporte 		= isset($_GET['deporte']) 		? $_GET['deporte'] 		: null;
 $tipo_deporte 	= isset($_GET['tipoDeporte']) 	? $_GET['tipoDeporte'] 	: null;
-$superficie 	= isset($_GET['superficie']) 	? $_GET['superficie'] 	: null;
+// $superficie 	= isset($_GET['superficie']) 	? $_GET['superficie'] 	: null;
 $fecha 			= isset($_GET['fecha'])			? $_GET['fecha'] 		: null;
 $horario 		= isset($_GET['horario']) 		? $_GET['horario'] 		: null;
 
@@ -27,11 +27,11 @@ $sql = "SELECT
                     sucursal ON zona.rela_sucursal = sucursal.id_sucursal
                 LEFT JOIN 
                     reserva ON reserva.rela_zona = zona.id_zona 
-                              AND reserva.fecha_reserva = '$fecha' -- La fecha que pasas
-                              AND reserva.rela_horario = $horario -- El horario que pasas
+                              AND reserva.fecha_reserva = '$fecha' 
+                              AND reserva.rela_horario = $horario 
                 WHERE
-                    zona.rela_tipo_terreno = $superficie
-                    AND rela_formato_deporte = $tipo_deporte
+                    
+                    rela_formato_deporte = $tipo_deporte
                     and id_reserva is null
 
                 ORDER BY 
