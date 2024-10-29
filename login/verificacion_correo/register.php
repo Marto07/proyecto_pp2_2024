@@ -17,7 +17,11 @@ try {
 
     function enviarVerificacion($email, $username, $token) {
          // Enviar correo de verificación
-        $verification_link = "http://localhost/proyecto_pp2_2024/login/verificacion_correo/verify.php?email=$email&token=$token&username=$username";
+        $verification_link = "http://localhost/proyecto_pp2_2024/login/verificacion_correo/verify.php?email=" . urlencode($email) . "&token=" . urlencode($token) . "&username=" . urlencode($username);
+
+
+        // $verification_link = "http://localhost/proyecto_pp2_2024/login/verificacion_correo/verify.php?email=$email&token=$token&username=$username";
+        
         $subject = '<h1>Verificación de Correo Electr&oacute;nico<h1>';
         $message = "<h2>Hola $username, haz clic en el siguiente enlace para verificar tu correo electr&oacute;nico: $verification_link"."</h2>";
 
@@ -50,46 +54,55 @@ try {
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-        $nombre     = $_POST['nombre'];
-        $apellido   = $_POST['apellido'];
-        $dni        = $_POST['dni'];
-        $sexo       = $_POST['sexo'];
-        $username   = $_POST['username'];
-        $email      = $_POST['email'];
-        $password   = $_POST['password'];
-        $contrasena_hasheada = password_hash($password, PASSWORD_DEFAULT);
+        try {
 
-        //inicializamos la transaccion
+            $pdo->beginTransaction();
 
-        //Insertar documento
-        $stmt = $pdo->prepare("INSERT INTO documento (descripcion_documento,rela_tipo_documento) VALUES ( ?, ?)");
-        $stmt->execute([$dni, 1]);
-        $id_documento = $pdo->lastInsertId();
+            $nombre         = $_POST['nombre'];
+            $apellido       = $_POST['apellido'];
+            $documento      = $_POST['documento'];
+            $tipo_documento = $_POST['tipo_documento'];
+            $sexo           = $_POST['sexo'];
+            $username       = $_POST['username'];
+            $email          = $_POST['email'];
+            $password       = $_POST['password'];
+            $contrasena_hasheada = password_hash($password, PASSWORD_DEFAULT);
 
-        //Insertar en persona
-        $stmt = $pdo->prepare("INSERT INTO persona (nombre, apellido, rela_documento,rela_sexo) VALUES (?, ?, ?,?)");
-        $stmt->execute([$nombre, $apellido, $id_documento, $sexo]);
-        $id_persona = $pdo->lastInsertId();
+            //inicializamos la transaccion
+
+            //Insertar en persona
+            $stmt = $pdo->prepare("INSERT INTO persona (nombre, apellido, rela_sexo, fecha_alta) VALUES (?, ?, ?, CURRENT_DATE())");
+            $stmt->execute([$nombre, $apellido, $sexo]);
+            $id_persona = $pdo->lastInsertId();
+
+            //Insertar documento
+            $stmt = $pdo->prepare("INSERT INTO documento (descripcion_documento,rela_tipo_documento,rela_persona) VALUES ( ?, ?, ?)");
+            $stmt->execute([$documento, $tipo_documento, $id_persona]);
 
 
-        //Insertar en contacto
-        $stmt = $pdo->prepare("INSERT INTO contacto (descripcion_contacto,rela_persona,rela_tipo_contacto) VALUES (?, ?, ?)");
-        $stmt->execute([$email, $id_persona, 1]);
-        $id_contacto = $pdo->lastInsertId();
 
-        // Insertar el usuario
-        $stmt = $pdo->prepare("INSERT INTO usuarios (username, password,token,expiry,rela_contacto, rela_perfil) VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt->execute([$username, $contrasena_hasheada,$token, $expiry,$id_contacto, 1]);
+            //Insertar en contacto
+            $stmt = $pdo->prepare("INSERT INTO contacto (descripcion_contacto,rela_persona,rela_tipo_contacto) VALUES (?, ?, ?)");
+            $stmt->execute([$email, $id_persona, 1]);
+            $id_contacto = $pdo->lastInsertId();
 
-        enviarVerificacion($email, $username, $token);
+            // Insertar el usuario
+            $stmt = $pdo->prepare("INSERT INTO usuarios (username, password,token,expiry,rela_contacto, rela_perfil) VALUES (?, ?, ?, ?, ?, ?)");
+            $stmt->execute([$username, $contrasena_hasheada,$token, $expiry,$id_contacto, 1]);
 
-       
+            enviarVerificacion($email, $username, $token);
+
+            $pdo->commit();
+        } catch (exception $e) {
+            $pdo->rollBack();
+            echo "Error en la transacción: " . $e->getMessage();
+        }
     }
 
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
         $email = $_GET['email'];
-        $username = $_GET['username'];
+        $username = $_GET['username']; //esto solo para enviarlo en el mail
         $sql = "UPDATE usuarios u
                 JOIN contacto c
                 SET u.token = ?, u.expiry = ?
@@ -101,20 +114,6 @@ try {
         } else {
             die("Ocurrio un error durante la creacion de credenciales");
         }
-        // $sql = "SELECT username 
-        //         FROM usuarios JOIN contacto 
-        //         ON id_contacto = rela_contacto WHERE descripcion_contacto = ?";
-
-        // $stmt = $pdo->prepare($sql);
-        // $stmt->execute([$email]);
-        // $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        // if ($resultado) {
-
-
-        // } else {
-        //     die("Error durante la solicitud de verificacion");
-        // }
 
     }
 

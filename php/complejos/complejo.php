@@ -1,20 +1,26 @@
 <?php 
     require_once("../../config/root_path.php");
     require_once(RUTA . "config/database/conexion.php");
+    require_once(RUTA. "php/functions/consulta_es_propietario_del_complejo.php");
     session_start();
 
     if (isset($_GET['id_complejo'])) {
         $id_complejo = $_GET['id_complejo'];
     } else {
-        echo "ha ocurrido un error :(";
+        echo "falta GET de complejo";
         die;
     }
 
-    if(isset($_GET['id_usuario'])) {
-        $id_usuario = $_GET['id_usuario'];
+    //verificamos si es propietario
+    $id_persona = isset($_SESSION['id_persona']) ? $_SESSION['id_persona'] : die("falta id persona");
+    $esPropietario = esPropietarioDelComplejo($id_persona, $id_complejo, $conexion);
+    if ($esPropietario) {
+        // die("usted es propietario");
     } else {
-        $id_usuario = 8;
+        // die("no es propietario");
     }
+
+
 
     $query_complejo = "SELECT * FROM complejo WHERE id_complejo = ? AND estado IN(1)";
     $stmt = $conexion->prepare($query_complejo);
@@ -162,7 +168,7 @@
                             <div class="complejoDescripcion">
                                 <h3><?php echo $descripcion_complejo; ?></h3>
                                 <h3>Fecha de Creacion: <?php echo $fecha_alta; ?></h3>
-                                <a href="hacerse_socio.php?id_usuario=<?php echo $id_usuario; ?>&id_complejo=<?php echo $id_complejo; ?>">Hazte Socios!</a>
+                                <a href="hacerse_socio.php?id_persona=<?php echo $id_persona; ?>&id_complejo=<?php echo $id_complejo; ?>">Hazte Socios!</a>
                             </div>
 
                             <div class="complejoSucursales">

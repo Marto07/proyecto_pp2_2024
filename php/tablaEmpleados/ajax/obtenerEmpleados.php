@@ -79,6 +79,7 @@ $tabla = '<table border="1">
                 <th>cargo</th>
                 <th>fecha_alta</th>
                 <th>sucursal</th>
+                <th colspan="2">acciones</th>
             </tr>';
 while ($row = $result->fetch_assoc()) {
     $tabla .= '<tr>';
@@ -90,8 +91,21 @@ while ($row = $result->fetch_assoc()) {
     $tabla .= '<td>' . htmlspecialchars($row['empleado_cargo']) . '</td>';
     $tabla .= '<td>' . htmlspecialchars($row['fecha_alta']) . '</td>';
     $tabla .= '<td>' . htmlspecialchars($row['descripcion_sucursal']) . '</td>';
+
+     $tabla .= '<td class="acciones">' . '<a href="tablaEmpleados_modificacion.php?id_empleado=' . $row['id_empleado'] . '&id_sucursal='. $id_sucursal .'">
+                    <img src="' . BASE_URL . 'assets/icons/icons8-editar.svg' . '"></a>' . 
+                '</td>';
+
+    $tabla .= '<td class="acciones">' . '<accion href="" class="eliminar" sucursal="' . $id_sucursal . '" valor="' . $row['id_empleado'] . '"><img src="' . BASE_URL . 'assets/icons/icons8-basura-llena.svg' . '"></accion>' . '</td>';
+
     $tabla .= '</tr>';
-}
+}   
+$tabla .= '<tr>
+                <td colspan="9" class="añadir">
+                    <a href="tablaEmpleados_alta.php?id_sucursal='. $id_sucursal .'">
+                    <img src="'. BASE_URL. 'assets/icons/icons8-añadir.png' .'">
+                </td>
+            </tr>';
 $tabla .= '</table>';
 
 // contar el número total de registros

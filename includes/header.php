@@ -4,9 +4,9 @@
 
     $query_notificacion = "SELECT * FROM notificacion WHERE estado = 'no leido' AND rela_sucursal IN($sucursales_imploded)";
 
-    $resultado = $conexion->query($query_notificacion);
+    $resultado_notificacion = $conexion->query($query_notificacion);
 
-    $hay_notificacion = $resultado->num_rows > 0;
+    $hay_notificacion = $resultado_notificacion->num_rows > 0;
 ?>
 <header>
     <a href="<?php echo BASE_URL . 'index2.php' ?>" style="text-decoration: none;">
@@ -47,11 +47,10 @@
                 <div class="notifications-dropdown">
                     <!-- Sublista oculta para notificaciones -->
                     <ul class="sub-notifications-list">
-                        <li>Notificación 1</li>
-                        <li>Notificación 2</li>
-                        <li>Notificación 3</li>
-                        <li>Notificación 4</li>
-                        <li>Notificación 5</li>
+                        <?php foreach ($resultado_notificacion as $reg) : ?>
+                            <li><?php echo $reg['mensaje']; ?></li>
+
+                        <?php endforeach; ?>
                     </ul>
                 </div>
             </li>

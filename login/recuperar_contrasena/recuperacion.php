@@ -57,6 +57,8 @@ try {
             // header("Location: ../inicio_sesion.php?correo_enviado");
             echo "TODO CORRECTO!";
 
+        } else {
+            echo "no se encontro usuario con ese correo <br> <a href='../../index2.php'>Volver al login</a>";
         }
 
         

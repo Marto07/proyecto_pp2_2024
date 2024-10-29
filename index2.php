@@ -14,10 +14,7 @@
     $modulo = "Inicio";
     $perfil = $_SESSION['perfil'];
     validarAcceso($modulo, $perfil);
-
-    
-
-    
+    print_r($_SESSION);
 ?>
 <!DOCTYPE html>
 <html lang="es">

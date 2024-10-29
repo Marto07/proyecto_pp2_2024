@@ -31,7 +31,6 @@ $registros = obtenerEmpleados($id_sucursal);
 
 	<?php include(RUTA."includes/menu_aside.php") ?>
 
-	<script src="js/jquery-3.7.1.min.js"></script>
 	<div class="containerEmpleado">
 		<h1>Modulo de Empleados de Complejos Deportivos</h1>
 		<input type="text" id="buscador" placeholder="Buscar...">
@@ -39,21 +38,44 @@ $registros = obtenerEmpleados($id_sucursal);
 	    <div id="paginacion-container"></div>
 	</div>
 
-	<script>
-		function confirmDelete(id, id_sucursal) {
-			var respuesta = confirm("¿Estás seguro de que deseas eliminar este registro?");
-			if (respuesta) {
-				// Si el usuario hace clic en "Aceptar", redirige a la página de eliminación
-				window.location.href = "tablaEmpleados_baja.php?id_empleado=" + id + "&id_sucursal=" + id_sucursal;
-			}
-		}
-	</script>
 	<script src="<?php echo BASE_URL . "libs/jquery-3.7.1.min.js"; ?>"></script>
+    <script src="<?php echo BASE_URL . "libs/sweetalert2.all.min.js"; ?>"></script>
+
+	<script>
+		
+        $(document).on('click', '.eliminar', function() {
+            let valor = $(this).attr('valor');
+            let complejo = $(this).attr('complejo');
+            // Mostrar SweetAlert con botones personalizados
+            Swal.fire({
+                title: '¿Seguro que desea eliminar este registro?',
+                text: "No podrás deshacer esta acción",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33', // Botón rojo
+                cancelButtonColor: '#aaa', // Botón gris
+                confirmButtonText: 'Eliminar',
+                cancelButtonText: 'Cancelar',
+                customClass: {
+                    popup: 'custom-swal-popup' // Añadir una clase personalizada al modal
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    eliminar(valor, complejo);
+                }
+            });
+
+        }); // #ELIMINAR ON CLICK
+
+        function eliminar(id_empleado, id_sucursal) {
+            window.location.href = "tablaEmpleados_baja.php?id_empleado=" + id_empleado + "&id_sucursal=" + id_sucursal;
+        }
+	</script>
 	<script src="<?php echo BASE_URL . "js/header.js"; ?>"></script>
 	<script src="<?php echo BASE_URL . "js/aside.js"; ?>"></script>
 	<script>
         $(document).ready(function() {
-        	let id_sucursal = <?php echo $id_sucursal; ?>;
+        	let id_sucursal = <?php echo json_encode($id_sucursal); ?>;
 
             function cargarTabla(id_sucursal,filtro = '', pagina = 1) {
                 $.ajax({

@@ -31,8 +31,8 @@
         </div>
 
         <div class="form-group">
-            <label for="dni">Dni</label>
-            <input type="text" id="dni" name="dni" >
+            <label for="documento">Documento</label>
+            <input type="text" id="documento" name="documento" >
         </div>
 
         <div class="form-group">

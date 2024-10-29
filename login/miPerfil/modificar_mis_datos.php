@@ -120,7 +120,7 @@
 
 		<?php 
 			if(isset($_GET['datos_personales'])) { 
-    	 	$registros_sexo = obtenerSexos(); 
+    	 		$registros_sexo = obtenerSexos(); 
     	?>
     	
     		<form action="aplicar_modificar_datos_personales.php" method="POST">
@@ -159,7 +159,7 @@
 				<input type="hidden" name="tipo_formulario" value="datos_de_usuario">
 
 				<label for="email">E-mail:</label>
-				<input type="text" id="email" name="email" value=" <?php echo $_SESSION['email'];?>">
+				<input type="text" id="email" name="email" value="<?php echo $_SESSION['email'];?>">
 				<br>
 
 	    		<label for="username">Usuario:</label>

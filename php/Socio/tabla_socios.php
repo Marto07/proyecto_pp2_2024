@@ -59,7 +59,7 @@ $orden = '';
     
     <?php include(RUTA. "includes/header.php"); ?>
 
-    <?php include(RUTA."includes/menu_aside.php") ?>
+    <?php include(RUTA."includes/menu_aside.php"); ?>
 
     <div class="containerEmpleado">
         <h1>Socios</h1>
