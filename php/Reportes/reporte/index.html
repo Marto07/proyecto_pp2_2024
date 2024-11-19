@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Reservas</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .dashboard {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .filters {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+
+        .filters label {
+            margin-right: 8px;
+        }
+
+        .charts {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .chart-container {
+            width: 48%;
+            margin-bottom: 20px;
+        }
+
+        .chart-container canvas {
+            width: 100% !important;
+            height: 300px !important;
+        }
+
+        .reservations-table {
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #ddd;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        thead {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dashboard">
+        <h1>Dashboard de Reservas de Canchas</h1>
+
+        <!-- Filtros -->
+        <div class="filters">
+            <label for="filter-period">Periodo:</label>
+            <select id="filter-period">
+                <option value="day">Día</option>
+                <option value="week">Semana</option>
+                <option value="month">Mes</option>
+                <option value="year">Año</option>
+            </select>
+        </div>
+
+        <!-- Gráficos -->
+        <div class="charts">
+            <div class="chart-container">
+                <h2>Canchas más reservadas y horas</h2>
+                <canvas id="reservationsChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <h2>Canchas más reservadas por periodo</h2>
+                <canvas id="popularCourtsChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Tabla de reservas -->
+        <div class="reservations-table">
+            <h2>Historial de Reservas</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID Reserva</th>
+                        <th>Cancha</th>
+                        <th>Fecha</th>
+                        <th>Hora</th>
+                        <th>Deporte</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody id="reservation-data">
+                    <!-- Datos de reservas cargados dinámicamente -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            // Inicializar los gráficos
+            const reservationsChartCtx = document.getElementById('reservationsChart').getContext('2d');
+            const popularCourtsChartCtx = document.getElementById('popularCourtsChart').getContext('2d');
+
+            let reservationsChart = new Chart(reservationsChartCtx, {
+                type: 'bar',
+                data: {
+                    labels: [], // Rellenar con nombres de canchas
+                    datasets: [
+                        {
+                            label: 'Horas más reservadas',
+                            data: [], // Rellenar con las horas más reservadas
+                            backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+
+            let popularCourtsChart = new Chart(popularCourtsChartCtx, {
+                type: 'bar',
+                data: {
+                    labels: [], // Rellenar con fechas
+                    datasets: [
+                        {
+                            label: 'Canchas más reservadas',
+                            data: [], // Rellenar con el total de reservas
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+
+            // Cargar datos iniciales (mockup) en los gráficos
+            function loadData(period = 'week') {
+                // Aquí se deberían hacer llamadas AJAX para obtener datos reales desde el servidor
+                const labels = period === 'day' ? ['9am', '10am', '11am', '12pm'] : ['Lunes', 'Martes', 'Miércoles'];
+                const dataReservations = [5, 10, 8, 12];
+                const dataPopularCourts = [20, 15, 18, 22];
+
+                reservationsChart.data.labels = labels;
+                reservationsChart.data.datasets[0].data = dataReservations;
+                reservationsChart.update();
+
+                popularCourtsChart.data.labels = labels;
+                popularCourtsChart.data.datasets[0].data = dataPopularCourts;
+                popularCourtsChart.update();
+
+                // Cargar datos en la tabla
+                $('#reservation-data').html(`
+      <tr>
+        <td>1</td>
+        <td>Cancha 1</td>
+        <td>2024-11-01</td>
+        <td>10:00</td>
+        <td>Fútbol</td>
+        <td>Reservada</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>Cancha 2</td>
+        <td>2024-11-01</td>
+        <td>11:00</td>
+        <td>Pádel</td>
+        <td>Reservada</td>
+      </tr>
+    `);
+            }
+
+            // Actualizar datos en función del filtro seleccionado
+            $('#filter-period').change(function () {
+                loadData($(this).val());
+            });
+
+            // Cargar datos iniciales
+            loadData();
+        });
+
+    </script>
+</body>
+
+</html>

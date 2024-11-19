@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Reservas</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .chart-container {
+            width: 80%;
+            max-width: 800px;
+            margin: 20px 0;
+        }
+
+        .reservas-details {
+            width: 80%;
+            max-width: 800px;
+            margin-top: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .reservas-details table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .reservas-details th,
+        .reservas-details td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .reservas-details th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .reservas-details tr:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Dashboard de Reservas por Sucursal</h1>
+    </header>
+
+    <main>
+        <section class="filter-container">
+            <form id="filterForm">
+                <label for="sucursal">Sucursal:</label>
+                <select id="sucursal" name="sucursal">
+                    <option value="">Todas</option>
+                    <option value="Sucursal 1">Sucursal 1</option>
+                    <option value="Sucursal 2">Sucursal 2</option>
+                    <!-- Agrega más sucursales -->
+                </select>
+
+                <label for="cancha">Cancha:</label>
+                <select id="cancha" name="cancha">
+                    <option value="">Todas</option>
+                    <option value="Fútbol">Fútbol</option>
+                    <option value="Pádel">Pádel</option>
+                    <option value="Tenis">Tenis</option>
+                    <!-- Agrega más tipos de canchas -->
+                </select>
+
+                <label for="fecha_desde">Fecha Desde:</label>
+                <input type="date" id="fecha_desde" name="fecha_desde">
+
+                <label for="fecha_hasta">Fecha Hasta:</label>
+                <input type="date" id="fecha_hasta" name="fecha_hasta">
+
+                <label for="estado">Estado:</label>
+                <select id="estado" name="estado">
+                    <option value="">Todos</option>
+                    <option value="Reservado">Reservado</option>
+                    <option value="Disponible">Disponible</option>
+                </select>
+
+                <button type="button" onclick="fetchReservas()">Filtrar</button>
+
+            </form>
+        </section>
+
+        <section class="chart-container">
+            <canvas id="reservasChart"></canvas>
+        </section>
+
+        <section class="reservas-details">
+            <h2>Reservas Detalladas</h2>
+            <table id="reservasTable">
+                <thead>
+                    <tr>
+                        <th>Sucursal</th>
+                        <th>Cancha</th>
+                        <th>Fecha</th>
+                        <th>Hora</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Los datos se cargarán dinámicamente aquí -->
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <script>
+        async function fetchReservas() {
+            const sucursal = document.getElementById('sucursal').value;
+            const cancha = document.getElementById('cancha').value;
+            const fecha_desde = document.getElementById('fecha_desde').value;
+            const fecha_hasta = document.getElementById('fecha_hasta').value;
+            const estado = document.getElementById('estado').value;
+
+            const params = new URLSearchParams({
+                sucursal,
+                cancha,
+                fecha_desde,
+                fecha_hasta,
+                estado
+            });
+
+            const response = await fetch(`api_reservas.php?${params}`);
+            const reservas = await response.json();
+            updateChart(reservas);
+            updateTable(reservas);
+        }
+
+        function updateChart(reservas) {
+            const sucursales = [...new Set(reservas.map(r => r.sucursal))];
+            const deportes = [...new Set(reservas.map(r => r.cancha))];
+
+            const data = deportes.map(deporte => {
+                return sucursales.map(sucursal => {
+                    return reservas.filter(r => r.cancha === deporte && r.sucursal === sucursal).length;
+                });
+            });
+
+            // Verificar si reservasChart existe y es una instancia de Chart antes de destruirla
+            if (window.reservasChart instanceof Chart) {
+                window.reservasChart.destroy();
+            }
+
+            const ctx = document.getElementById('reservasChart').getContext('2d');
+            window.reservasChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: sucursales,
+                    datasets: deportes.map((deporte, index) => ({
+                        label: deporte,
+                        data: data[index],
+                        backgroundColor: `rgba(${index * 50 + 75}, ${index * 50 + 75}, 192, 0.6)`,
+                        borderColor: `rgba(${index * 50 + 75}, ${index * 50 + 75}, 192, 1)`,
+                        borderWidth: 1
+                    }))
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+
+        function updateTable(reservas) {
+            const tableBody = document.getElementById('reservasTable').getElementsByTagName('tbody')[0];
+            tableBody.innerHTML = '';
+
+            reservas.forEach(reserva => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+            <td>${reserva.sucursal}</td>
+            <td>${reserva.cancha}</td>
+            <td>${reserva.fecha}</td>
+            <td>${reserva.hora}</td>
+            <td>${reserva.estado}</td>
+        `;
+                tableBody.appendChild(row);
+            });
+        }
+        // Llamada inicial para cargar datos sin filtros
+        fetchReservas();
+    </script>
+</body>
+
+</html>

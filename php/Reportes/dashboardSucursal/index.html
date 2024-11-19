@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Reservas Mejorado</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1,
+        h2 {
+            text-align: center;
+        }
+
+        .filters {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+
+        select {
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .containerGraficos {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .chart-container {
+            margin: 20px 0;
+            width: 50dvw;
+            height: 50dvh;
+        }
+
+        .table-container {
+            margin-top: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Reporte de Reservas Diarias/Semanales/Mensuales</h1>
+        <div class="filters">
+            <label for="timeFrame">Filtrar por:</label>
+            <select id="timeFrame" onchange="updateCharts()">
+                <option value="daily">Diario</option>
+                <option value="weekly">Semanal</option>
+                <option value="monthly">Mensual</option>
+            </select>
+        </div>
+
+        <div class="containerGraficos">
+            <div class="chart-container">
+                <canvas id="reservasPorDia"></canvas>
+            </div>
+            <div class="chart-container">
+                <canvas id="horariosPopulares"></canvas>
+            </div>
+            <div class="chart-container">
+                <canvas id="porcentajeOcupacion"></canvas>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <h2>Datos Detallados</h2>
+            <table id="reservasTable">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Total de Reservas</th>
+                        <th>Ocupación (%)</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <!-- Filas generadas dinámicamente -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const ctxReservas = document.getElementById('reservasPorDia').getContext('2d');
+            const ctxHorarios = document.getElementById('horariosPopulares').getContext('2d');
+            const ctxOcupacion = document.getElementById('porcentajeOcupacion').getContext('2d');
+
+            const reservasChart = new Chart(ctxReservas, {
+                type: 'bar',
+                data: getReservasData('daily'),
+                options: { responsive: true, scales: { y: { beginAtZero: true } } }
+            });
+
+            const horariosChart = new Chart(ctxHorarios, {
+                type: 'line',
+                data: getHorariosData(),
+                options: { responsive: true, scales: { y: { beginAtZero: true } } }
+            });
+
+            const ocupacionChart = new Chart(ctxOcupacion, {
+                type: 'doughnut',
+                data: getOcupacionData(),
+                options: { responsive: true }
+            });
+
+            populateTable('daily');
+
+            document.getElementById('timeFrame').addEventListener('change', (event) => {
+                const value = event.target.value;
+                reservasChart.data = getReservasData(value);
+                reservasChart.update();
+                populateTable(value);
+            });
+
+            function getReservasData(timeFrame) {
+                const dataSets = {
+                    daily: [15, 20, 25, 30, 45, 50, 60],
+                    weekly: [150, 200, 180, 210, 300],
+                    monthly: [600, 750, 890, 1000, 1200]
+                };
+                const labels = timeFrame === 'daily' ? ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'] :
+                    timeFrame === 'weekly' ? ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4', 'Semana 5'] :
+                        ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'];
+
+                return {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Total de Reservas',
+                        data: dataSets[timeFrame],
+                        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                };
+            }
+
+            function getHorariosData() {
+                return {
+                    labels: ['8:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00'],
+                    datasets: [{
+                        label: 'Horarios Populares',
+                        data: [5, 15, 10, 30, 50, 45, 25],
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 2,
+                        fill: false
+                    }]
+                };
+            }
+
+            function getOcupacionData() {
+                return {
+                    labels: ['Ocupado', 'Disponible'],
+                    datasets: [{
+                        label: 'Porcentaje de Ocupación',
+                        data: [75, 25],
+                        backgroundColor: ['rgba(54, 162, 235, 0.6)', 'rgba(201, 203, 207, 0.6)']
+                    }]
+                };
+            }
+
+            function populateTable(timeFrame) {
+                const dataSets = {
+                    daily: ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'],
+                    weekly: ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4', 'Semana 5'],
+                    monthly: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo']
+                };
+                const totals = {
+                    daily: [15, 20, 25, 30, 45, 50, 60],
+                    weekly: [150, 200, 180, 210, 300],
+                    monthly: [600, 750, 890, 1000, 1200]
+                };
+
+                const tableBody = document.getElementById('tableBody');
+                tableBody.innerHTML = '';
+
+                dataSets[timeFrame].forEach((label, index) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                <td>${label}</td>
+                <td>${totals[timeFrame][index]}</td>
+                <td>${(totals[timeFrame][index] / 100 * 75).toFixed(2)}</td>
+            `;
+                    tableBody.appendChild(row);
+                });
+            }
+        });
+
+    </script>
+</body>
+
+</html>

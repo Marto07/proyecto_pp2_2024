@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Reservas</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        /* Estilos de la página */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .dashboard {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .filters {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+
+        .filters label {
+            margin-right: 8px;
+        }
+
+        .charts {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .chart-container {
+            width: 48%;
+            margin-bottom: 20px;
+        }
+
+        .chart-container canvas {
+            width: 100% !important;
+            height: 300px !important;
+        }
+
+        .reservations-table {
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #ddd;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        thead {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .pagination button {
+            margin: 0 5px;
+            padding: 5px 10px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .pagination button.disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dashboard">
+        <h1>Dashboard de Reservas de Canchas</h1>
+
+        <!-- Filtros -->
+        <button id="exportarpdf">Exportar a PDF</button>
+
+        <div class="filters">
+            <label for="filter-period">Periodo:</label>
+            <select id="filter-period">
+                <option value="day">Día</option>
+                <option value="week">Semana</option>
+                <option value="month">Mes</option>
+                <option value="year">Año</option>
+                <option value="custom">Personalizado</option>
+            </select>
+
+            <!-- Selección de fechas para el periodo personalizado -->
+            <div id="custom-date-range" style="display: none;">
+                <label for="start-date">Desde:</label>
+                <input type="date" id="start-date">
+                <label for="end-date">Hasta:</label>
+                <input type="date" id="end-date">
+                <button id="apply-custom-range">Aplicar</button>
+            </div>
+        </div>
+
+        <!-- Gráficos -->
+        <div class="charts">
+            <div class="chart-container">
+                <h2>Reservas por Día de la Semana</h2>
+                <canvas id="reservationsChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <h2>Canchas Más Reservadas por Horario</h2>
+                <canvas id="popularCourtsChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Tabla de reservas -->
+        <div class="reservations-table">
+            <h2>Historial de Reservas</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Cancha</th>
+                        <th>Fecha</th>
+                        <th>Hora Inicio</th>
+                        <th>Hora Fin</th>
+                        <th>Deporte</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody id="reservation-data">
+                    <!-- Datos de reservas cargados dinámicamente -->
+                </tbody>
+            </table>
+            <div class="pagination" id="pagination-controls">
+                <button id="prev-page" class="disabled">Anterior</button>
+                <span id="current-page">1</span>
+                <button id="next-page">Siguiente</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            let currentPage = 1;
+            const recordsPerPage = 10;
+
+            const reservationsChartCtx = document.getElementById('reservationsChart').getContext('2d');
+            const popularCourtsChartCtx = document.getElementById('popularCourtsChart').getContext('2d');
+
+            let reservationsChart = new Chart(reservationsChartCtx, {
+                type: 'bar',
+                data: { labels: [], datasets: [{ label: 'Reservas por Día', data: [], backgroundColor: 'rgba(54, 162, 235, 0.5)' }] },
+                options: { responsive: true, scales: { y: { beginAtZero: true } } }
+            });
+
+            let popularCourtsChart = new Chart(popularCourtsChartCtx, {
+                type: 'bar',
+                data: { labels: [], datasets: [{ label: 'Canchas por Horario', data: [], backgroundColor: 'rgba(75, 192, 192, 0.2)' }] },
+                options: { responsive: true, scales: { y: { beginAtZero: true } } }
+            });
+
+            function loadData(period = 'week', startDate = null, endDate = null, page = 1) {
+                let requestData = { period, page, recordsPerPage };
+                if (startDate && endDate) {
+                    requestData.startDate = startDate;
+                    requestData.endDate = endDate;
+                }
+
+                $.ajax({
+                    url: 'get_reservation_data.php',  // URL de tu archivo PHP
+                    type: 'GET',
+                    dataType: 'json',
+                    data: requestData,  // Enviar los datos de filtro y paginación
+                    success: function (response) {
+                        // Ver la respuesta completa en la consola
+                        console.log(response);
+
+                        // Verificar si se devolvieron reservas
+                        if (response.reservations && response.reservations.length > 0) {
+                            // Mostrar los datos en la tabla de reservas
+                            const reservationTableBody = $('#reservation-data');
+                            reservationTableBody.empty(); // Limpiar tabla
+
+                            response.reservations.forEach(function (reservation) {
+                                const row = `
+                            <tr>
+                                <td>${reservation.descripcion_sucursal}</td>
+                                <td>${reservation.fecha_reserva}</td>
+                                <td>${reservation.horario_inicio}</td>
+                                <td>${reservation.horario_fin}</td>
+                                <td>${reservation.descripcion_deporte}</td>
+                                <td>${reservation.descripcion_estado_reserva}</td>
+                            </tr>
+                        `;
+                                reservationTableBody.append(row); // Agregar fila a la tabla
+                            });
+                        } else {
+                            $('#reservation-data').html('<tr><td colspan="6">No hay reservas.</td></tr>');
+                        }
+
+                        // Actualizar los gráficos
+                        if (response.days && response.days.labels.length > 0) {
+                            generateReservationsChart(response.days);
+                        }
+
+                        if (response.courts && response.courts.labels.length > 0) {
+                            generatePopularCourtsChart(response.courts);
+                        }
+
+                        // Controlar la paginación
+                        $('#current-page').text(currentPage);
+                        if (response.hasMorePages) {
+                            $('#next-page').removeClass('disabled');
+                        } else {
+                            $('#next-page').addClass('disabled');
+                        }
+                    },
+                    error: function () {
+                        console.log("Error al cargar los datos.");
+                    }
+                });
+            }
+
+            // Función para generar el gráfico de reservas por día de la semana
+            function generateReservationsChart(days) {
+                reservationsChart.data.labels = days.labels;
+                reservationsChart.data.datasets[0].data = days.values;
+                reservationsChart.update();
+            }
+
+            // Función para generar el gráfico de canchas más populares por horario
+            function generatePopularCourtsChart(courts) {
+                popularCourtsChart.data.labels = courts.labels;
+                popularCourtsChart.data.datasets[0].data = courts.values;
+                popularCourtsChart.update();
+            }
+
+            // Cargar los datos iniciales
+            loadData();
+        });
+
+    </script>
+</body>
+
+</html>
